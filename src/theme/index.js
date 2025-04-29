@@ -26,50 +26,16 @@ const theme = extendTheme({
   styles: {
     global: {
       body: {
-        bg: 'var(--bg-color)',
+        bg: 'var(--background-color)',
         color: 'var(--text-color)',
         transition: 'background-color 0.3s, color 0.3s',
       },
-      '.auth-container': {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100vw',
-        height: '100vh',
-        padding: '16px',
-        backgroundColor: 'var(--secondary-color)',
-        boxSizing: 'border-box',
-      },
-      '.auth-card': {
-        width: '100%',
-        maxWidth: '400px',
-        padding: '20px',
-        backgroundColor: 'white',
-        borderRadius: '8px',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        transition: 'background-color 0.3s, color 0.3s',
-      },
-      '[data-theme="dark"] .auth-card': {
-        backgroundColor: 'var(--secondary-color)',
-        color: 'var(--text-color)',
-      },
-      '.auth-heading': {
-        color: 'var(--primary-color)',
-        textAlign: 'center',
-        marginBottom: '16px',
-      },
-      '.auth-alert': {
-        marginBottom: '16px',
-      },
-      '.auth-form': {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
-      },
-      '.auth-footer': {
-        textAlign: 'center',
-        marginTop: '16px',
+      button: {
+        bg: 'var(--button-bg-color)',
+        color: 'var(--button-text-color)',
+        _hover: {
+          bg: 'var(--button-hover-bg-color)',
+        },
       },
     },
   },

@@ -1,107 +1,98 @@
 import React, { useState } from 'react';
-import {
-  Flex,
-  Heading,
-  Input,
-  Button,
-  InputGroup,
-  Stack,
-  InputLeftElement,
-  chakra,
-  Box,
-  FormControl,
-  FormHelperText,
-  InputRightElement,
-} from '@chakra-ui/react';
-import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { login } from '../services/api';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { validateEmail, validateEmailMessage } from '../shared/hooks/validators/validateEmail';
+import { validatecontrasenaT, validatecontrasenaTMessage } from '../shared/hooks/validators/validatePassword';
 
-const CFaUserAlt = chakra(FaUserAlt);
-const CFaLock = chakra(FaLock);
-
-const Login = ({ switchAuthHandler }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+const Login = ({ switchAuthHandler, onLoginSuccess }) => {
+  const [correoT, setcorreoT] = useState('');
+  const [contrasenaT, setcontrasenaT] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
-  const handleShowClick = () => setShowPassword(!showPassword);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+
+    // Validate email
+    if (!validateEmail(correoT)) {
+      setError(validateEmailMessage);
+      return;
+    }
+
+    // Validate password
+    if (!validatecontrasenaT(contrasenaT)) {
+      setError(validatecontrasenaTMessage);
+      return;
+    }
+
     try {
-      const response = await login({ email, password });
+      const response = await login({ correoT, contrasenaT });
       if (response.error) {
-        setError('Login failed. Please check your credentials.');
+        setError('Inicio de sesión fallido. Verifica tus credenciales.');
       } else {
-        setSuccess('Login successful!');
+        setSuccess('¡Inicio de sesión exitoso!');
         localStorage.setItem('Trabajador', JSON.stringify(response.data));
-        window.location.href = '/'; // Redirige al home después del login
+        onLoginSuccess(); // Notify parent component of successful login
       }
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
+      setError('Ocurrió un error inesperado. Intenta de nuevo.');
     }
   };
 
   return (
-    <Flex
-      flexDirection="column"
-      width="100wh"
-      height="100vh"
-      backgroundColor="gray.200"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <Stack spacing={4} p="1rem" backgroundColor="whiteAlpha.900" boxShadow="md">
-        <Heading color="teal.400">Login</Heading>
-        {error && <Box color="red.500">{error}</Box>}
-        {success && <Box color="green.500">{success}</Box>}
-        <form onSubmit={handleLogin}>
-          <FormControl>
-            <InputGroup>
-              <InputLeftElement pointerEvents="none" children={<CFaUserAlt color="gray.300" />} />
-              <Input
-                type="email"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </InputGroup>
-          </FormControl>
-          <FormControl>
-            <InputGroup>
-              <InputLeftElement pointerEvents="none" children={<CFaLock color="gray.300" />} />
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <InputRightElement width="4.5rem">
-                <Button h="1.75rem" size="sm" onClick={handleShowClick}>
-                  {showPassword ? 'Hide' : 'Show'}
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-            <FormHelperText textAlign="right">Forgot password?</FormHelperText>
-          </FormControl>
-          <Button type="submit" colorScheme="teal" width="full">
-            Login
-          </Button>
+    <div className="login-container">
+      <div className="login-content">
+        <h1 className="login-title">Almacenadora Virtual</h1>
+        {error && <p style={{ color: 'red', marginBottom: '1rem' }}>{error}</p>}
+        {success && <p style={{ color: 'green', marginBottom: '1rem' }}>{success}</p>}
+        <form className="login-form" onSubmit={handleLogin}>
+          <div className="input-group">
+            <input
+              type="text"
+              placeholder="Correo Electrónico"
+              value={correoT}
+              onChange={(e) => setcorreoT(e.target.value)}
+              required
+            />
+          </div>
+          <div className="input-group" style={{ position: 'relative' }}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Contraseña"
+              value={contrasenaT}
+              onChange={(e) => setcontrasenaT(e.target.value)}
+              required
+            />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                cursor: 'pointer',
+                color: '#9ca3af',
+                fontSize: '1.5rem',
+              }}
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </span>
+          </div>
+          <button type="submit" className="login-button">
+            Iniciar Sesión
+          </button>
         </form>
-        <Box>
-          Don't have an account?{' '}
-          <Button variant="link" colorScheme="teal" onClick={switchAuthHandler}>
-            Register
-          </Button>
-        </Box>
-      </Stack>
-    </Flex>
+        <p className="register-text">
+          ¿No tienes cuenta?{' '}
+          <span className="register-link" onClick={switchAuthHandler}>
+            Regístrate
+          </span>
+        </p>
+      </div>
+    </div>
   );
 };
 

@@ -1,19 +1,30 @@
-import React, { useState } from 'react';
-import Login from '../../components/Login';
-import Register from '../../components/Register';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import navigation hook
+import Login from "../../components/Login";
+import Register from "../../components/Register";
+
+import "./Login.css";
 
 const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const navigate = useNavigate(); // Initialize navigation
 
   const handleAuthPageToggle = () => {
     setIsLogin((prevState) => !prevState);
   };
 
+  const handleLoginSuccess = () => {
+    navigate("/"); // Redirect to homepage after successful login
+  };
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <div style={{ width: '100%', maxWidth: '400px', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
+    <div className="login-page-container">
+      <div className="auth-card">
         {isLogin ? (
-          <Login switchAuthHandler={handleAuthPageToggle} />
+          <Login
+            switchAuthHandler={handleAuthPageToggle}
+            onLoginSuccess={handleLoginSuccess}
+          />
         ) : (
           <Register switchAuthHandler={handleAuthPageToggle} />
         )}
