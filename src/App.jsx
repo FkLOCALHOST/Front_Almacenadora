@@ -21,7 +21,7 @@ function App() {
         }}
         onClick={toggleTheme}
       >
-        {theme === "light" ? <FaMoon size={24} /> : <FaSun size={24} />}
+        {theme === "light"  ?  <FaSun size={24} />:  <FaMoon size={24} />}
       </div>
       <div id="root">
         <Routes>

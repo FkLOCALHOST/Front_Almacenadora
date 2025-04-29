@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { login } from '../services/api';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { validateEmail, validateEmailMessage } from '../shared/hooks/validators/validateEmail';
 import { validatecontrasenaT, validatecontrasenaTMessage } from '../shared/hooks/validators/validatePassword';
+import { ThemeContext } from '../themeContext'; // Import ThemeContext
 
 const Login = ({ switchAuthHandler, onLoginSuccess }) => {
+  const { theme } = useContext(ThemeContext); // Get current theme
   const [correoT, setcorreoT] = useState('');
   const [contrasenaT, setcontrasenaT] = useState('');
   const [error, setError] = useState('');
@@ -43,7 +45,7 @@ const Login = ({ switchAuthHandler, onLoginSuccess }) => {
   };
 
   return (
-    <div className="login-container">
+    <div className={`login-container ${theme}`}> {/* Apply theme class */}
       <div className="login-content">
         <h1 className="login-title">Almacenadora Virtual</h1>
         {error && <p style={{ color: 'red', marginBottom: '1rem' }}>{error}</p>}

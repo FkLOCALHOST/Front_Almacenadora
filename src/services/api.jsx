@@ -36,3 +36,5 @@ export const login = async (data) => {
     return { error: true, message: error.message };
   }
 };
+
+// aqui se añaden los endpoints de la api
