@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Flex,
   Heading,
@@ -14,14 +14,21 @@ import {
 } from '@chakra-ui/react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { register } from '../services/api';
+import { ThemeContext } from '../themeContext'; 
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
 const Register = ({ switchAuthHandler }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { theme } = useContext(ThemeContext);
+  const [nombreT, setName] = useState('');
+  const [dpi, setDpi] = useState('');
+  const [apellidoT, setApellido] = useState('');
+  const [correoT, setEmail] = useState('');
+  const [telefonoT, setTelefono] = useState('');
+  const [constraseñaT, setPassword] = useState('');
+  const [role, setRole] = useState('');
+  const [rendimientoT, setRendimiento] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -32,7 +39,8 @@ const Register = ({ switchAuthHandler }) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-    const response = await register({ name, email, password });
+    const response = await register({nombreT: nombreT, apellidoT: apellidoT, dpi: dpi, correoT: correoT, telefonoT: telefonoT, contrasenaT: constraseñaT, role: role, rendimientoT: rendimientoT, });
+   
 
     if (response.error) {
       setError('Registration failed. Please try again.');
@@ -41,20 +49,26 @@ const Register = ({ switchAuthHandler }) => {
       setName('');
       setEmail('');
       setPassword('');
+      setRole('');
+      setTelefono('');
+      setDpi('');
+      setApellido('');
+      setRendimiento('');
     }
   };
 
   return (
     <Flex
+      className={`login-container ${theme}`}
       flexDirection="column"
       width="100wh"
       height="100vh"
-      backgroundColor="gray.200"
+      backgroundColor={theme === 'dark' ? 'gray.800' : 'gray.200'}
       justifyContent="center"
       alignItems="center"
     >
-      <Stack spacing={4} p="1rem" backgroundColor="whiteAlpha.900" boxShadow="md">
-        <Heading color="teal.400">Register</Heading>
+      <Stack spacing={4} p="1rem" backgroundColor={theme === 'dark' ? 'gray.700' : 'whiteAlpha.900'} boxShadow="md">
+      <Heading color={theme === 'dark' ? 'teal.300' : 'teal.400'}>Register</Heading>
         {error && <Box color="red.500">{error}</Box>}
         {success && <Box color="green.500">{success}</Box>}
         <form onSubmit={handleRegister}>
@@ -64,8 +78,32 @@ const Register = ({ switchAuthHandler }) => {
               <Input
                 type="text"
                 placeholder="Name"
-                value={name}
+                value={nombreT}
                 onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </InputGroup>
+          </FormControl>
+          <FormControl>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none" children={<CFaUserAlt color="gray.300" />} />
+              <Input
+                type="text"
+                placeholder="Surname"
+                value={apellidoT}
+                onChange={(e) => setApellido(e.target.value)}
+                required
+              />
+            </InputGroup>
+          </FormControl>
+          <FormControl>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none" children={<CFaUserAlt color="gray.300" />} />
+              <Input
+                type="text"
+                placeholder="DPI"
+                value={dpi}
+                onChange={(e) => setDpi(e.target.value)}
                 required
               />
             </InputGroup>
@@ -76,8 +114,20 @@ const Register = ({ switchAuthHandler }) => {
               <Input
                 type="email"
                 placeholder="Email address"
-                value={email}
+                value={correoT}
                 onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </InputGroup>
+          </FormControl>
+          <FormControl>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none" children={<CFaUserAlt color="gray.300" />} />
+              <Input
+                type="text"
+                placeholder="Phone number"
+                value={telefonoT}
+                onChange={(e) => setTelefono(e.target.value)}
                 required
               />
             </InputGroup>
@@ -88,7 +138,7 @@ const Register = ({ switchAuthHandler }) => {
               <Input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Password"
-                value={password}
+                value={constraseñaT}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
@@ -97,6 +147,30 @@ const Register = ({ switchAuthHandler }) => {
                   {showPassword ? 'Hide' : 'Show'}
                 </Button>
               </InputRightElement>
+            </InputGroup>
+          </FormControl>
+          <FormControl>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none" children={<CFaUserAlt color="gray.300" />} />
+              <Input
+                type="text"
+                placeholder="Role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                required
+              />
+            </InputGroup>
+          </FormControl>
+          <FormControl>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none" children={<CFaUserAlt color="gray.300" />} />
+              <Input
+                type="text"
+                placeholder="rendimiento"
+                value={rendimientoT}
+                onChange={(e) => setRendimiento(e.target.value)}
+                required
+              />
             </InputGroup>
           </FormControl>
           <Button type="submit" colorScheme="teal" width="full">
@@ -111,6 +185,7 @@ const Register = ({ switchAuthHandler }) => {
         </Box>
       </Stack>
     </Flex>
+
   );
 };
 
