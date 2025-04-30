@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { ThemeContext } from "./themeContext";
 import { FaSun, FaMoon } from "react-icons/fa";
 import LoginPage from "./pages/auth/loginPage";
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/homePage/HomePage";
 import Register from "./components/Register";
 
 function App() {
@@ -21,15 +21,16 @@ function App() {
         }}
         onClick={toggleTheme}
       >
-        {theme === "light"  ?  <FaSun size={24} />:  <FaMoon size={24} />}
+        {theme === "light" ? <FaSun size={24} /> : <FaMoon size={24} />}
       </div>
       <div id="root">
         <Routes>
           <Route
             path="/"
-            element={isLoggedIn ? <HomePage /> : <Navigate to="/auth/login" />}
+            element={<Navigate to={isLoggedIn ? "/auth/login": "/home"} />}
           />
           <Route path="/auth/login" element={<LoginPage />} />
+          <Route path="/home" element={isLoggedIn ? <HomePage /> : <Navigate to="/auth/login" />} />
           <Route
             path="/auth/register"
             element={<Register switchAuthHandler={() => {}} />}
