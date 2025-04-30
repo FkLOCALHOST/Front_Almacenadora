@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import ProductCard from '../../components/product/productcard'; // Import ProductCard component
-import { listarProductos } from '../../services/api'; // Import API service
-import './ProductPage.css'; // Import CSS for ProductPage
+import ProductCard from '../../components/product/productcard'; 
+import { listarProductos } from '../../services/api'; 
+import './ProductPage.css'; 
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
@@ -9,18 +9,15 @@ const ProductPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await listarProductos();
-      if (!response.error) {
-        setProducts(response.data); // Assuming response.data contains the product list
-      } else {
-        console.error('Error fetching products:', response.message);
-      }
+      if (!response.error && response.data.success) {
+        setProducts(response.data.productos); // Access the 'productos' array from the response
+      }git 
     };
 
     fetchProducts();
   }, []);
 
   const handleAddProduct = () => {
-    // Logic for adding a product
     console.log('Add product button clicked');
   };
 

@@ -1,11 +1,15 @@
 /* Existing styles for ProductPage... */
 
 .product-card {
-  background-color: var(--card-background-color);
+  background-color: #0EA5E9; /* Fondo rojo para las tarjetas */
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 1rem;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+[data-theme='dark'] .product-card {
+  background-color: #059669; /* Fondo azul para las tarjetas en tema oscuro */
 }
 
 .product-card:hover {
