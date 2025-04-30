@@ -14,7 +14,7 @@ const LoginPage = () => {
   };
 
   const handleLoginSuccess = () => {
-    navigate("/"); // Redirect to homepage after successful login
+    navigate("/home"); // Redirect to /home after successful login
   };
 
   return (
