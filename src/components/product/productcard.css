@@ -1,0 +1,37 @@
+.product-card {
+  background-color: var(--card-background-color); /* Dynamically apply the variable */
+  border-radius: 8px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+  padding: 1rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+}
+
+.product-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.product-details {
+  margin-top: 1rem;
+}
+
+.product-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.product-description,
+.product-category,
+.product-price {
+  margin: 0.5rem 0;
+}
+
+.inactive {
+  opacity: 0.5;
+}

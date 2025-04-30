@@ -11,7 +11,7 @@ const ProductPage = () => {
       const response = await listarProductos();
       if (!response.error && response.data.success) {
         setProducts(response.data.productos); // Access the 'productos' array from the response
-      }git 
+      }
     };
 
     fetchProducts();
