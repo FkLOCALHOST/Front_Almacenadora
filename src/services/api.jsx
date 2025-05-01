@@ -41,7 +41,9 @@ export const login = async (data) => {
 
 export const agregarClientes = async (data) => {
   try {
-    return await apiAlmacenadora.post("/agregarClientes", data);
+
+    return await apiAlmacenadora.post("clientes/agregarClientes", data);
+
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -49,7 +51,8 @@ export const agregarClientes = async (data) => {
 
 export const obtenerClientePorId = async (id) => {
   try {
-    return await apiAlmacenadora.get(`/obtenerClientePorId/${id}`);
+    return await apiAlmacenadora.get(`clientes/obtenerClientePorId/${id}`);
+
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -57,7 +60,8 @@ export const obtenerClientePorId = async (id) => {
 
 export const listarClientes = async () => {
   try {
-    return await apiAlmacenadora.get("/");
+    return await apiAlmacenadora.get("clientes/");
+
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -65,7 +69,8 @@ export const listarClientes = async () => {
 
 export const eliminarClientes = async (id) => {
   try {
-    return await apiAlmacenadora.delete(`/eliminarClientes/${id}`);
+    return await apiAlmacenadora.delete(`clientes/eliminarClientes/${id}`);
+
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -73,7 +78,8 @@ export const eliminarClientes = async (id) => {
 
 export const actualizarClientes = async (id, data) => {
   try {
-    return await apiAlmacenadora.put(`/actualizarClientes/${id}`, data);
+    return await apiAlmacenadora.put(`clientes/actualizarClientes/${id}`, data);
+
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -129,6 +135,7 @@ export const buscarProveedor = async (id) => {
 
 export const obtenerTrabajadores = async () => {
   try {
+
     return await apiAlmacenadora.get("/trabajadores/obtenerTrabajadores");
   } catch (error) {
     return { error: true, message: error.message };
