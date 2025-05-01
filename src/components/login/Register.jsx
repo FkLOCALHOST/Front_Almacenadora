@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+
 import {
   Flex,
   Heading,
@@ -17,6 +18,7 @@ import { register } from '../../services/api';
 import { ThemeContext } from '../../themeContext'; 
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
+
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
@@ -29,6 +31,7 @@ const Register = ({ switchAuthHandler }) => {
   const [telefonoT, setTelefono] = useState('');
   const [constraseñaT, setPassword] = useState('');
   const [rendimientoT, setRendimiento] = useState('');
+
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -40,7 +43,7 @@ const Register = ({ switchAuthHandler }) => {
     setError('');
     setSuccess('');
     const response = await register({nombreT: nombreT, apellidoT: apellidoT, dpi: dpi, correoT: correoT, telefonoT: telefonoT, contrasenaT: constraseñaT, rendimientoT: rendimientoT });
-   
+
 
     if (response.error) {
       setError('Registration failed. Please try again.');
@@ -53,6 +56,7 @@ const Register = ({ switchAuthHandler }) => {
       setDpi('');
       setApellido('');
       setRendimiento('');
+
     }
   };
 
@@ -78,6 +82,7 @@ const Register = ({ switchAuthHandler }) => {
                 type="text"
                 placeholder="Name"
                 value={nombreT}
+
                 onChange={(e) => setName(e.target.value)}
                 required
               />
@@ -143,12 +148,14 @@ const Register = ({ switchAuthHandler }) => {
               <InputRightElement width="4.5rem">
                 <Button h="1.75rem" size="sm" onClick={handleShowClick}  variant="unstyled" display="flex" alignItems="center" justifyContent="center">
                 {showPassword ? <FiEyeOff /> : <FiEye />}
+
                 </Button>
               </InputRightElement>
             </InputGroup>
           </FormControl>
         </Flex>
           <Button type="submit" colorScheme="teal" width="full" mt={4}>
+
             Register
           </Button>
         </form>
@@ -160,7 +167,6 @@ const Register = ({ switchAuthHandler }) => {
         </Box>
       </Stack>
     </Flex>
-
   );
 };
 

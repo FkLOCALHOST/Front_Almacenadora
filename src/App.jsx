@@ -8,6 +8,7 @@ import NavBar from "./components/navs/navBar";
 import ProductPage from './pages/products/ProductPage';
 import ClientPage from "./pages/clients/ClientPage";
 
+
 function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const isLoggedIn = !!localStorage.getItem("Trabajador"); // Check if user is logged in
@@ -29,6 +30,7 @@ function App() {
           />
           <Route path="/productos/listarProductos" element={<ProductPage />} />
           <Route path="/clientes/listarClientes" element={<ClientPage/>}/>
+
         </Routes>
         
       </div>

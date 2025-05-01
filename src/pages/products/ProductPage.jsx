@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ProductCard from '../../components/product/ProductCard'; // Import ProductCard component
+import ProductCard from '../../components/product/productcard'; // Import ProductCard component
 import { listarProductos } from '../../services/api'; // Import API service
 import './ProductPage.css'; // Import CSS for ProductPage
 
