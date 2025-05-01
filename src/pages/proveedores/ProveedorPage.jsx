@@ -55,6 +55,7 @@ const ProveedorPage = () => {
             nombre={proveedor.nombre}
             direccion={proveedor.direccion}
             telefono={proveedor.telefono}
+            estado={proveedor.estado}
           />
         ))}
       </div>
