@@ -10,7 +10,7 @@ import React from 'react';
          <p className="store-entryDate"><b>Fecha de Ingreso:</b> {fechaIngreso.slice(0,10)}</p>
          <p className="store-departureDate"><b>Fecha de Salida:</b> {fechaSalida.slice(0,10)}</p>
          <p className="store-lote"><b>Cantidad Lote:</b> {lote.cantidad}</p>
-         <p className="store-lote"> <b>Fecha de Caducidad:</b> {lote.fechaCaducidad.slice(0,10)}</p>
+         <p className="store-lote"> <b>Fecha de Caducidad:</b> {lote.fechaCaducidad}</p>
          <p className="store-worker"><b>Trabajador asignado:</b> {`${trabajador.nombreT} ${trabajador.apellidoT}`}</p>
          <p className="store-worker"><b>DPI:</b> {trabajador.dpi}</p>
          <p className="store-worker"><b>Telefono del trabajador:</b> {trabajador.telefonoT}</p>
