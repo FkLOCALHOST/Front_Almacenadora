@@ -17,7 +17,7 @@ const NavBar = ({ theme, toggleTheme }) => {
           <div className="navbar-links">
             <Link to="/trabajadores">Trabajadores</Link>
             <Link to="/proveedores">Proveedores</Link>
-            <Link to="/bodega">Bodega</Link>
+            <Link to="/bodegas/listarBodegas">Bodega</Link>
             <Link to="/productos/listarProductos">Producto</Link>
             <Link to="/clientes">Clientes</Link>
           </div>
