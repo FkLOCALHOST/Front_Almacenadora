@@ -11,26 +11,6 @@ const ClientPage = () => {
             const response = await listarClientes();
             if (!response.error){
                 setClients(response.data.clientes);
-            }else{
-                console.error('Error fetching clients:', response.message);
-                setClients([
-                    {
-                        _id: '1',
-                        nombre: 'Nombre ',
-                        apellido: 'Apellido ',
-                        correo: 'Correo ',
-                        telefono: 'Telefono ',
-                        estado: true,
-                    },
-                    {
-                        _id: '2',
-                        nombre: 'Nombre ',
-                        apellido: 'Apellido ',
-                        correo: 'Correo ',
-                        telefono: 'Telefono ',
-                        estado: false,
-                    },
-                ]);
             }
         };
 

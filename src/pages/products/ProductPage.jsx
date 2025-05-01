@@ -11,29 +11,6 @@ const ProductPage = () => {
       const response = await listarProductos();
       if (!response.error) {
         setProducts(response.data.productos); // Assuming response.data contains the product list
-      } else {
-        console.error('Error fetching products:', response.message);
-        // Mock data in case of an error
-        setProducts([
-          {
-            _id: '1',
-            nombreProducto: 'Producto 1',
-            descripcion: 'Descripción del producto 1',
-            precio: 100.0,
-            categoria: 'Categoría 1',
-            urlImagen: 'https://via.placeholder.com/150',
-            estado: true,
-          },
-          {
-            _id: '2',
-            nombreProducto: 'Producto 2',
-            descripcion: 'Descripción del producto 2',
-            precio: 200.0,
-            categoria: 'Categoría 2',
-            urlImagen: 'https://via.placeholder.com/150',
-            estado: false,
-          },
-        ]);
       }
     };
 
