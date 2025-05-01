@@ -19,7 +19,7 @@ const NavBar = ({ theme, toggleTheme }) => {
             <Link to="/proveedores">Proveedores</Link>
             <Link to="/bodega">Bodega</Link>
             <Link to="/productos/listarProductos">Producto</Link>
-            <Link to="/clientes">Clientes</Link>
+            <Link to="/clientes/listarClientes">Clientes</Link>
           </div>
         )}
         <div
