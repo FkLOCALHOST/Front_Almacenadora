@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ProveedorCard = ({ nombre, direccion, telefono,estado }) => {
+const ProveedorCard = ({ nombre, direccion, telefono, estado = true }) => {
   return (
     <div className={`proveedor-card${estado ? '' : ' proveedor-inactive'}`}>
       <div className="proveedor-details">
@@ -16,8 +16,8 @@ const ProveedorCard = ({ nombre, direccion, telefono,estado }) => {
 ProveedorCard.propTypes = {
   nombre: PropTypes.string.isRequired,
   direccion: PropTypes.string.isRequired,
-  telefono: PropTypes.string.isRequired,
-  estado: PropTypes.bool.isRequired,
+  telefono: PropTypes.number.isRequired,
+  estado: PropTypes.bool,
 };
 
 export default ProveedorCard;

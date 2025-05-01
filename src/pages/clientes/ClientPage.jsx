@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import ClientCard from "../../components/client/ClientCard";
+import ClientCard from "../../components/cliente/ClientCard";
 import { listarClientes } from "../../services/api";
 import './ClientPage.css';
 

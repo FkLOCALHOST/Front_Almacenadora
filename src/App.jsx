@@ -7,7 +7,7 @@ import Register from "./components/login/Register";
 import NavBar from "./components/navs/navBar";
 import ProductPage from './pages/products/ProductPage';
 import ProveedorPage from './pages/proveedores/ProveedorPage';
-import ClientPage from "./pages/clients/ClientPage";
+import ClientPage from "./pages/clientes/ClientPage";
 
 function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
