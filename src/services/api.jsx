@@ -198,3 +198,11 @@ export const eliminarProducto = async (idProducto) => {
     return { error: true, message: error.message };
   }
 };
+
+export const obtenerBodegas = async () => {
+  try {
+    return await apiAlmacenadora.get("/bodega/");
+  }catch(error) {
+    return { error: true, message: error.message };
+  }
+};
