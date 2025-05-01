@@ -5,7 +5,6 @@ const HomePage = () => {
   return (
     <div>
       <h1>Welcome to Almacenadora</h1>
-      
     </div>
   );
 };
