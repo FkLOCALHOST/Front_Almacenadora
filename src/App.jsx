@@ -6,8 +6,8 @@ import HomePage from "./pages/homePage/HomePage";
 import Register from "./components/login/Register";
 import NavBar from "./components/navs/navBar";
 import ProductPage from './pages/products/ProductPage';
+import ProveedorPage from './pages/proveedores/ProveedorPage';
 import ClientPage from "./pages/clients/ClientPage";
-
 
 function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -29,8 +29,8 @@ function App() {
             element={<Register switchAuthHandler={() => {}} />}
           />
           <Route path="/productos/listarProductos" element={<ProductPage />} />
+          <Route path="/proveedores" element={<ProveedorPage />} />
           <Route path="/clientes/listarClientes" element={<ClientPage/>}/>
-
         </Routes>
         
       </div>

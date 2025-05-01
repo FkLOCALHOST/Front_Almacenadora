@@ -119,7 +119,7 @@ export const eliminarProveedor = async (id) => {
 
 export const listarProveedores = async () => {
   try {
-    return await apiAlmacenadora.get("/listar");
+    return await apiAlmacenadora.get("proveedor/listar");
   } catch (error) {
     return { error: true, message: error.message };
   }
