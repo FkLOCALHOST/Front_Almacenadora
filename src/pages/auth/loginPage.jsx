@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import navigation hook
-import Login from "../../components/Login";
-import Register from "../../components/Register";
+import Login from "../../components/login/Login";
+import Register from "../../components/login/Register";
 
 import "./Login.css";
 
@@ -14,7 +14,7 @@ const LoginPage = () => {
   };
 
   const handleLoginSuccess = () => {
-    navigate("/"); // Redirect to homepage after successful login
+    navigate("/home"); // Redirect to /home after successful login
   };
 
   return (

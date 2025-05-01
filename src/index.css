@@ -13,11 +13,12 @@
   -moz-osx-font-smoothing: grayscale;
 
   --background-color: #779200; /* Light background */
-  --text-color: #003f5e; /* Dark text */
-  --card-background-color: #ffffff;
+  --text-color: #000000; /* Updated text color */
+  --card-background-color: #ffffff; /* Updated card background color */
   --button-bg-color: #0088cc;
   --button-text-color: #ffffff;
-  --button-hover-bg-color: #005885;
+  --button-hover-bg-color: #0ea5e9; /* Updated button hover background color */
+  transition: all 0.3s ease; /* Global transition */
 }
 
 [data-theme='dark'] {
@@ -26,6 +27,12 @@
   --card-background-color: #000000;
   --button-bg-color: #47a9da;
   --button-hover-bg-color: #006ba1;
+}
+
+.dark-theme {
+  --card-background-color: #111827;
+  --button-hover-bg-color: #10b981;
+  --text-color: #ffffff;
 }
 
 a {
