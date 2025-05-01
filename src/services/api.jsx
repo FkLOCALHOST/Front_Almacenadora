@@ -159,7 +159,7 @@ export const agregarProducto = async (data) => {
 
 export const listarProductos = async () => {
   try {
-    const response = await apiAlmacenadora.get("/productos/listarProductos"); // Corrected endpoint
+    const response = await apiAlmacenadora.get("productos/listarProductos"); // Corrected endpoint
     return response; // Ensure response.data contains the product list
   } catch (error) {
     return { error: true, message: error.message };
