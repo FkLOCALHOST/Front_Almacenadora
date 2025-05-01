@@ -6,7 +6,6 @@ import {
   Button,
   InputGroup,
   Stack,
-  InputLeftElement,
   chakra,
   Box,
   FormControl,
@@ -16,6 +15,14 @@ import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { register } from '../../services/api';
 import { ThemeContext } from '../../themeContext'; 
 import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { validateEmail, validateEmailMessage } from '../../shared/hooks/validators/validateEmail';
+import { validatecontrasenaT, validatecontrasenaTMessage } from '../../shared/hooks/validators/validatePassword';
+import { validateDPI, validateDPIMessage } from '../../shared/hooks/validators/validateDpi';
+import { validatePhone, validatePhoneMessage } from '../../shared/hooks/validators/validatePhone';
+import { validateMayuscula, validateMayusculaMessage } from '../../shared/hooks/validators/validatePasswordMayus';
+import { validateMinuscula, validateMinusculaMessage } from '../../shared/hooks/validators/validatePasswordMinus';
+import { validateNumero, validateNumeroMessage } from '../../shared/hooks/validators/validatePasswordNumber';
+import { validateSigno, validateSignoMessage } from '../../shared/hooks/validators/validatePasswordSymbol';
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
@@ -27,8 +34,7 @@ const Register = ({ switchAuthHandler }) => {
   const [apellidoT, setApellido] = useState('');
   const [correoT, setEmail] = useState('');
   const [telefonoT, setTelefono] = useState('');
-  const [constraseñaT, setPassword] = useState('');
-  const [rendimientoT, setRendimiento] = useState('');
+  const [contraseñaT, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -39,9 +45,51 @@ const Register = ({ switchAuthHandler }) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-    const response = await register({nombreT: nombreT, apellidoT: apellidoT, dpi: dpi, correoT: correoT, telefonoT: telefonoT, contrasenaT: constraseñaT, rendimientoT: rendimientoT });
-   
 
+    console.log('Correo ingresado:', correoT);
+
+    if (!validateEmail(correoT)) {
+          setError(validateEmailMessage);
+          return;
+        }
+  
+    if (!validatecontrasenaT(contraseñaT)) {
+          setError(validatecontrasenaTMessage);
+          return;
+        }
+
+    if (!validateDPI(dpi)) {
+      setError(validateDPIMessage);
+      return;
+    }
+
+    if (!validatePhone(telefonoT)) {
+      setError(validatePhoneMessage);
+      return;
+    }
+
+    if (!validateMayuscula(contraseñaT)) {
+      setError(validateMayusculaMessage);
+      return;
+    }
+    
+    if (!validateMinuscula(contraseñaT)) {
+      setError(validateMinusculaMessage);
+      return;
+    }
+
+    if (!validateNumero(contraseñaT)) {
+      setError(validateNumeroMessage);
+      return;
+    }
+
+    if (!validateSigno(contraseñaT)) {
+      setError(validateSignoMessage);
+      return;
+    }
+
+    const response = await register({nombreT: nombreT, apellidoT: apellidoT, dpi: dpi, correoT: correoT, telefonoT: telefonoT, contrasenaT: contraseñaT });
+   
     if (response.error) {
       setError('Registration failed. Please try again.');
     } else {
@@ -52,7 +100,6 @@ const Register = ({ switchAuthHandler }) => {
       setTelefono('');
       setDpi('');
       setApellido('');
-      setRendimiento('');
     }
   };
 
@@ -110,7 +157,7 @@ const Register = ({ switchAuthHandler }) => {
           <FormControl>
             <InputGroup>
               <Input
-                type="email"
+                type="text"
                 placeholder="Email address"
                 value={correoT}
                 onChange={(e) => setEmail(e.target.value)}
@@ -136,7 +183,7 @@ const Register = ({ switchAuthHandler }) => {
               <Input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Password"
-                value={constraseñaT}
+                value={contraseñaT}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
