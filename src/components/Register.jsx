@@ -15,6 +15,7 @@ import {
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { register } from '../services/api';
 import { ThemeContext } from '../themeContext'; 
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
@@ -27,7 +28,6 @@ const Register = ({ switchAuthHandler }) => {
   const [correoT, setEmail] = useState('');
   const [telefonoT, setTelefono] = useState('');
   const [constraseñaT, setPassword] = useState('');
-  const [role, setRole] = useState('');
   const [rendimientoT, setRendimiento] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -39,7 +39,7 @@ const Register = ({ switchAuthHandler }) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-    const response = await register({nombreT: nombreT, apellidoT: apellidoT, dpi: dpi, correoT: correoT, telefonoT: telefonoT, contrasenaT: constraseñaT, role: role, rendimientoT: rendimientoT, });
+    const response = await register({nombreT: nombreT, apellidoT: apellidoT, dpi: dpi, correoT: correoT, telefonoT: telefonoT, contrasenaT: constraseñaT, rendimientoT: rendimientoT });
    
 
     if (response.error) {
@@ -49,7 +49,6 @@ const Register = ({ switchAuthHandler }) => {
       setName('');
       setEmail('');
       setPassword('');
-      setRole('');
       setTelefono('');
       setDpi('');
       setApellido('');
@@ -67,14 +66,14 @@ const Register = ({ switchAuthHandler }) => {
       justifyContent="center"
       alignItems="center"
     >
-      <Stack spacing={4} p="1rem" backgroundColor={theme === 'dark' ? 'gray.700' : 'whiteAlpha.900'} boxShadow="md">
+      <Stack spacing={4} p="2rem" backgroundColor={theme === 'dark' ? 'gray.700' : 'whiteAlpha.900'} boxShadow="md">
       <Heading color={theme === 'dark' ? 'teal.300' : 'teal.400'}>Register</Heading>
         {error && <Box color="red.500">{error}</Box>}
         {success && <Box color="green.500">{success}</Box>}
         <form onSubmit={handleRegister}>
+        <Flex flexDirection="row" gap={4}>
           <FormControl>
             <InputGroup>
-              <InputLeftElement pointerEvents="none" children={<CFaUserAlt color="gray.300" />} />
               <Input
                 type="text"
                 placeholder="Name"
@@ -86,7 +85,6 @@ const Register = ({ switchAuthHandler }) => {
           </FormControl>
           <FormControl>
             <InputGroup>
-              <InputLeftElement pointerEvents="none" children={<CFaUserAlt color="gray.300" />} />
               <Input
                 type="text"
                 placeholder="Surname"
@@ -96,9 +94,10 @@ const Register = ({ switchAuthHandler }) => {
               />
             </InputGroup>
           </FormControl>
+        </Flex>
+        <Flex flexDirection="row" gap={4} mt={4}>
           <FormControl>
             <InputGroup>
-              <InputLeftElement pointerEvents="none" children={<CFaUserAlt color="gray.300" />} />
               <Input
                 type="text"
                 placeholder="DPI"
@@ -110,7 +109,6 @@ const Register = ({ switchAuthHandler }) => {
           </FormControl>
           <FormControl>
             <InputGroup>
-              <InputLeftElement pointerEvents="none" children={<CFaUserAlt color="gray.300" />} />
               <Input
                 type="email"
                 placeholder="Email address"
@@ -120,9 +118,10 @@ const Register = ({ switchAuthHandler }) => {
               />
             </InputGroup>
           </FormControl>
+        </Flex>
+        <Flex flexDirection="row" gap={4} mt={4}>
           <FormControl>
             <InputGroup>
-              <InputLeftElement pointerEvents="none" children={<CFaUserAlt color="gray.300" />} />
               <Input
                 type="text"
                 placeholder="Phone number"
@@ -134,7 +133,6 @@ const Register = ({ switchAuthHandler }) => {
           </FormControl>
           <FormControl>
             <InputGroup>
-              <InputLeftElement pointerEvents="none" children={<CFaLock color="gray.300" />} />
               <Input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Password"
@@ -143,37 +141,14 @@ const Register = ({ switchAuthHandler }) => {
                 required
               />
               <InputRightElement width="4.5rem">
-                <Button h="1.75rem" size="sm" onClick={handleShowClick}>
-                  {showPassword ? 'Hide' : 'Show'}
+                <Button h="1.75rem" size="sm" onClick={handleShowClick}  variant="unstyled" display="flex" alignItems="center" justifyContent="center">
+                {showPassword ? <FiEyeOff /> : <FiEye />}
                 </Button>
               </InputRightElement>
             </InputGroup>
           </FormControl>
-          <FormControl>
-            <InputGroup>
-              <InputLeftElement pointerEvents="none" children={<CFaUserAlt color="gray.300" />} />
-              <Input
-                type="text"
-                placeholder="Role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                required
-              />
-            </InputGroup>
-          </FormControl>
-          <FormControl>
-            <InputGroup>
-              <InputLeftElement pointerEvents="none" children={<CFaUserAlt color="gray.300" />} />
-              <Input
-                type="text"
-                placeholder="rendimiento"
-                value={rendimientoT}
-                onChange={(e) => setRendimiento(e.target.value)}
-                required
-              />
-            </InputGroup>
-          </FormControl>
-          <Button type="submit" colorScheme="teal" width="full">
+        </Flex>
+          <Button type="submit" colorScheme="teal" width="full" mt={4}>
             Register
           </Button>
         </form>
