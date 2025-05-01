@@ -1,10 +1,11 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { ThemeContext } from "./themeContext";
-import { FaSun, FaMoon } from "react-icons/fa";
 import LoginPage from "./pages/auth/loginPage";
-import HomePage from "./pages/HomePage";
-import Register from "./components/Register";
+import HomePage from "./pages/homePage/HomePage";
+import Register from "./components/login/Register";
+import NavBar from "./components/navs/navBar";
+import ProductPage from './pages/products/ProductPage';
 
 function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -12,28 +13,20 @@ function App() {
 
   return (
     <>
-      <div
-        style={{
-          position: "absolute",
-          top: "10px",
-          right: "10px",
-          cursor: "pointer",
-        }}
-        onClick={toggleTheme}
-      >
-        {theme === "light"  ?  <FaSun size={24} />:  <FaMoon size={24} />}
-      </div>
+      <NavBar theme={theme} toggleTheme={toggleTheme} />
       <div id="root">
         <Routes>
           <Route
             path="/"
-            element={isLoggedIn ? <HomePage /> : <Navigate to="/auth/login" />}
+            element={<Navigate to="/auth/login" />}
           />
           <Route path="/auth/login" element={<LoginPage />} />
+          <Route path="/home" element={isLoggedIn ? <HomePage /> : <Navigate to="/auth/login" />} />
           <Route
             path="/auth/register"
             element={<Register switchAuthHandler={() => {}} />}
           />
+          <Route path="/productos/listarProductos" element={<ProductPage />} />
         </Routes>
       </div>
     </>

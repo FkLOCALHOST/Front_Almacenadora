@@ -13,8 +13,8 @@ import {
   InputRightElement,
 } from '@chakra-ui/react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
-import { register } from '../services/api';
-import { ThemeContext } from '../themeContext'; 
+import { register } from '../../services/api';
+import { ThemeContext } from '../../themeContext'; 
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 const CFaUserAlt = chakra(FaUserAlt);
