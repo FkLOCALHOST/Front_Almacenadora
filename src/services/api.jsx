@@ -7,16 +7,18 @@ const apiAlmacenadora = axios.create({
 
 apiAlmacenadora.interceptors.request.use(
   (config) => {
-    const trabajadorDetails = localStorage.getItem("Trabajador");
-
-    if (trabajadorDetails) {
-      const token = JSON.parse(trabajadorDetails).token;
-      config.headers.Authorization = `Bearer ${token}`;
+    if (!config.url.includes("/auth/login") && !config.url.includes("/auth/register")) {
+      const trabajadorDetails = localStorage.getItem("Trabajador");
+      if (trabajadorDetails) {
+        const token = JSON.parse(trabajadorDetails).token;
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   },
   (error) => Promise.reject(error)
 );
+
 
 export const register = async (data) => {
   try {
@@ -159,7 +161,7 @@ export const agregarProducto = async (data) => {
 
 export const listarProductos = async () => {
   try {
-    const response = await apiAlmacenadora.get("productos/listarProductos"); // Corrected endpoint
+    const response = await apiAlmacenadora.get("/productos/listarProductos"); // Corrected endpoint
     return response; // Ensure response.data contains the product list
   } catch (error) {
     return { error: true, message: error.message };
