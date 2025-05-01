@@ -127,7 +127,7 @@ export const buscarProveedor = async (id) => {
 
 export const obtenerTrabajadores = async () => {
   try {
-    return await apiAlmacenadora.get("/obtenerTrabajadores");
+    return await apiAlmacenadora.get("/trabajadores/obtenerTrabajadores");
   } catch (error) {
     return { error: true, message: error.message };
   }

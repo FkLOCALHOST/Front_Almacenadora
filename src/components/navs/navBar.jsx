@@ -15,7 +15,7 @@ const NavBar = ({ theme, toggleTheme }) => {
       <div className="navbar-right">
         {!isLoginPage && ( // Hide links if on login page
           <div className="navbar-links">
-            <Link to="/trabajadores">Trabajadores</Link>
+            <Link to="/trabajadores/obtenerTrabajadores">Trabajadores</Link>
             <Link to="/proveedores">Proveedores</Link>
             <Link to="/bodega">Bodega</Link>
             <Link to="/productos/listarProductos">Producto</Link>
