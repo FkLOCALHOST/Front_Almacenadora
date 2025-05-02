@@ -90,7 +90,6 @@ const Register = ({ switchAuthHandler }) => {
       return;
     }
 
-   
     if (response.error) {
       setError('Registration failed. Please try again.');
     } else {
