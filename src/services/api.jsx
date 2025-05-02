@@ -89,6 +89,17 @@ export const actualizarClientes = async (id, data) => {
   }
 };
 
+export const generarPDFClientes = async () => {
+  try {
+    const response = await apiAlmacenadora.get("clientes/generarPDFClientes", {
+      responseType: "blob", // Ensure the response is treated as a file
+    });
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
 export const agregarProveedor = async (data) => {
   try {
     return await apiAlmacenadora.post("/proveedor/agregar", data);

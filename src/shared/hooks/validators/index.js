@@ -1,5 +1,6 @@
-export * from './validateEmail'
-export * from './validatePassword'
-export * from './validateUsername'
-export * from './validateConfirmPassword'
+export * from './validateEmail';
+export * from './validatePassword';
+export * from './validateUsername';
+export * from './validateConfirmPassword';
+export * from './validatePhone'; // Added phone validator
 
