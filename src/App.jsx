@@ -10,6 +10,7 @@ import StorePage from "./pages/store/StorePage";
 import ProveedorPage from './pages/proveedores/ProveedorPage';
 import ClientPage from "./pages/clientes/ClientPage";
 import WorkerPage from "./pages/trabajadores/WorkerPage";
+import PaginaNoEncontrada from "./pages/Error/404";
 
 function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -35,6 +36,7 @@ function App() {
           <Route path="/proveedores" element={<ProveedorPage />} />
           <Route path="/clientes/listarClientes" element={<ClientPage/>}/>
           <Route path="/trabajadores/obtenerTrabajadores" element={<WorkerPage />} />
+          <Route path="/*" element={<PaginaNoEncontrada/>}/>
         </Routes>
       </div>
     </>
