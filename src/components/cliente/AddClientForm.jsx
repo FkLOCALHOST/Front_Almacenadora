@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { agregarClientes } from '../../services/api';
+import { agregarClientes, actualizarClientes } from '../../services/api';
 import './AddClientForm.css';
 
 const AddClientForm = ({ 
   onClose, 
   onSubmit, 
-  initialData = null 
+  initialData = null, 
+  isAdmin 
 }) => {
   const [formData, setFormData] = useState({
     nombre: '',
@@ -18,7 +19,13 @@ const AddClientForm = ({
 
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData);
+      setFormData({
+        nombre: initialData.nombre || '',
+        apellido: initialData.apellido || '',
+        correo: initialData.correo || '',
+        telefono: initialData.telefono || '',
+        estado: initialData.estado !== undefined ? initialData.estado : true,
+      });
     }
   }, [initialData]);
 
@@ -33,11 +40,20 @@ const AddClientForm = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await agregarClientes(formData);
-      if (!response.error) {
-        onSubmit(); // Notificar al componente padre para actualizar la lista
+      let response;
+      if (initialData && initialData._id) {
+        // Validar que initialData._id esté definido antes de llamar a actualizarClientes
+        response = await actualizarClientes(initialData._id, formData);
       } else {
-        console.error('Error al agregar cliente:', response.message);
+        // Llamar a agregar si no hay datos iniciales o _id
+        response = await agregarClientes(formData);
+      }
+
+      if (!response.error) {
+        onSubmit(formData); // Notificar al componente padre para actualizar la lista
+        onClose(); // Cerrar el formulario
+      } else {
+        console.error('Error al procesar cliente:', response.message);
       }
     } catch (error) {
       console.error('Error al conectar con el servidor:', error);
@@ -89,9 +105,11 @@ const AddClientForm = ({
               required
             />
           </div>
-          <button type="submit" className="form-button">
-            {initialData ? 'Actualizar' : 'Agregar'}
-          </button>
+          {isAdmin && (
+            <button type="submit" className="form-button">
+              {initialData ? 'Actualizar' : 'Agregar'}
+            </button>
+          )}
           <button type="button" className="form-button cancel-button" onClick={onClose}>
             Cancelar
           </button>
@@ -105,6 +123,7 @@ AddClientForm.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   initialData: PropTypes.object,
+  isAdmin: PropTypes.bool.isRequired,
 };
 
 export default AddClientForm;

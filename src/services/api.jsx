@@ -43,7 +43,12 @@ export const register = async (data) => {
 
 export const login = async (data) => {
   try {
-    return await apiAlmacenadora.post("/auth/login", data);
+    const response = await apiAlmacenadora.post("/auth/login", data);
+    if (response.data && response.data.trabajadorDetails) {
+      // Guardar token y rol en localStorage
+      localStorage.setItem("Trabajador", JSON.stringify(response.data));
+    }
+    return response;
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -83,7 +88,7 @@ export const eliminarClientes = async (id) => {
 
 export const actualizarClientes = async (id, data) => {
   try {
-    return await apiAlmacenadora.put(`clientes/actualizarClientes/${id}`, data);
+    return await apiAlmacenadora.put(`/clientes/actualizarClientes/${id}`, data);
   } catch (error) {
     return { error: true, message: error.message };
   }

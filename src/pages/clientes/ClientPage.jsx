@@ -12,6 +12,15 @@ const ClientPage = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [clientToDelete, setClientToDelete] = useState(null);
   const [clientToEdit, setClientToEdit] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false); // Estado para almacenar si el usuario es admin
+
+  useEffect(() => {
+    const trabajadorDetails = localStorage.getItem("Trabajador");
+    if (trabajadorDetails) {
+      const { role } = JSON.parse(trabajadorDetails);
+      setIsAdmin(role === "ADMIN_ROLE"); // Verificar si el rol es admin
+    }
+  }, []);
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -36,8 +45,8 @@ const ClientPage = () => {
   };
 
   const handleEditClient = (client) => {
-    setClientToEdit(client); // Set the client to be edited
-    setShowForm(true);
+    setClientToEdit(client); // Establecer el cliente a editar
+    setShowForm(true); // Mostrar el formulario
   };
 
   const handleFormClose = () => {
@@ -48,7 +57,7 @@ const ClientPage = () => {
   const handleFormSubmit = async (clientData) => {
     try {
       if (clientToEdit) {
-        // Update existing client
+        // Actualizar cliente existente
         const response = await actualizarClientes(clientToEdit._id, clientData);
         if (!response.error) {
           setClients((prevClients) =>
@@ -60,10 +69,10 @@ const ClientPage = () => {
           setErrorMessage("Error al actualizar el cliente.");
         }
       } else {
-        // Add new client
-        const response = await agregarClientes(clientData); // Llamar a la API para agregar el cliente
+        // Agregar nuevo cliente
+        const response = await agregarClientes(clientData);
         if (!response.error) {
-          setClients((prevClients) => [...prevClients, response.data]); // Agregar el nuevo cliente directamente a la lista
+          setClients((prevClients) => [...prevClients, response.data]);
         } else {
           setErrorMessage("Error al agregar el cliente.");
         }
@@ -71,8 +80,8 @@ const ClientPage = () => {
     } catch (error) {
       setErrorMessage("Error al conectar con el servidor.");
     }
-    setShowForm(false);
-    setClientToEdit(null);
+    setShowForm(false); // Cerrar el formulario
+    setClientToEdit(null); // Limpiar el cliente a editar
   };
 
   const handleDeleteClient = (id) => {
@@ -124,9 +133,11 @@ const ClientPage = () => {
       <div className="clients-header">
         <h1 className="clients-title">Clientes</h1>
         <div className="clients-header-buttons">
-          <button className="add-client-button" onClick={handleAddCliente}>
-            Agregar Cliente
-          </button>
+          {isAdmin && ( // Mostrar el botón de agregar solo si es admin
+            <button className="add-client-button" onClick={handleAddCliente}>
+              Agregar Cliente
+            </button>
+          )}
           <button className="report-button" onClick={handleGenerateReport}>
             Informe
           </button>
@@ -147,18 +158,19 @@ const ClientPage = () => {
                 correo={client.correo}
                 telefono={client.telefono}
                 estado={client.estado}
-                isAdmin={true} // Replace with actual logic to determine admin status
+                isAdmin={isAdmin} // Pasar el estado de admin al componente
                 onDelete={handleDeleteClient}
                 onEdit={() => handleEditClient(client)}
               />
             ))
         )}
       </div>
-      {showForm && (
+      {showForm && isAdmin && (
         <AddClientForm
           onClose={handleFormClose}
           onSubmit={handleFormSubmit}
           initialData={clientToEdit} // Pass initial data if editing
+          isAdmin={isAdmin} // Pasar el estado de admin al formulario
         />
       )}
       {showConfirmDialog && (

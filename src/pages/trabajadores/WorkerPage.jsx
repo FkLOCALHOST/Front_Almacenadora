@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import WorkerCard from '../../components/worker/WorkerCard';
-import { obtenerTrabajadores } from '../../services/api';
-import './WorkerPage.css';
+import React, { useEffect, useState } from "react";
+import WorkerCard from "../../components/worker/WorkerCard";
+import { obtenerTrabajadores } from "../../services/api";
+import "./WorkerPage.css";
 
 const WorkerPage = () => {
   const [workers, setWorkers] = useState([]);
@@ -17,7 +17,9 @@ const WorkerPage = () => {
           setWorkers(response.data.trabajadores);
         }
       } else {
-        setErrorMessage(response.message || "Error al cargar los trabajadores.");
+        setErrorMessage(
+          response.message || "Error al cargar los trabajadores."
+        );
       }
     };
 
@@ -25,7 +27,7 @@ const WorkerPage = () => {
   }, []);
 
   const handleAddWorker = () => {
-    console.log('Add worker button clicked');
+    console.log("Add worker button clicked");
   };
 
   return (

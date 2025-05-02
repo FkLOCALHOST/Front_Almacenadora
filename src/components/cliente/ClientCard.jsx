@@ -8,9 +8,9 @@ const ClientCard = ({
     correo, 
     telefono, 
     estado, 
-    isAdmin = false, // Valor predeterminado
-    onDelete = () => {}, // Valor predeterminado
-    onEdit = () => {} // Valor predeterminado
+    isAdmin, 
+    onEdit, 
+    onDelete 
 }) => {
     return ( 
         <div className={ `client-card ${ estado ? '' : 'inactive'}`}>
@@ -20,20 +20,9 @@ const ClientCard = ({
                 <p className="client-phone">Telefono: {telefono}</p>
             </div>
             {isAdmin && (
-                <div className="client-card-actions">
-                    <button 
-                        className="edit-client-button" 
-                        onClick={onEdit}
-                    >
-                        Editar
-                    </button>
-                    <button 
-                        className="delete-client-button" 
-                        onClick={() => onDelete(id)}
-                        style={{ backgroundColor: 'red', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}
-                    >
-                        Eliminar
-                    </button>
+                <div className="admin-actions">
+                    <button className="edit-button" onClick={onEdit}>Editar</button>
+                    <button className="delete-button" onClick={() => onDelete(id)}>Eliminar</button>
                 </div>
             )}
         </div>
@@ -47,9 +36,9 @@ ClientCard.propTypes = {
     correo: PropTypes.string.isRequired,
     telefono: PropTypes.string.isRequired,
     estado: PropTypes.bool.isRequired,
-    isAdmin: PropTypes.bool,
-    onDelete: PropTypes.func,
-    onEdit: PropTypes.func
+    isAdmin: PropTypes.bool.isRequired,
+    onEdit: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired
 };
 
 export default ClientCard;
