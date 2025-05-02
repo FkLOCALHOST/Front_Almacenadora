@@ -48,7 +48,7 @@ const Register = ({ switchAuthHandler }) => {
     setError('');
     setSuccess('');
 
-    const response = await register({nombreT: nombreT, apellidoT: apellidoT, dpi: dpi, correoT: correoT, telefonoT: telefonoT, contrasenaT: constraseñaT });
+    const response = await register({nombreT: nombreT, apellidoT: apellidoT, dpi: dpi, correoT: correoT, telefonoT: telefonoT, contrasenaT: contraseñaT });
 
     if (!validateEmail(correoT)) {
           setError(validateEmailMessage);
