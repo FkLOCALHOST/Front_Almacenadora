@@ -1,5 +1,5 @@
 export const validateEmail = (correoT) => {
-    const regex = /\S+@\S+\.\S+/
+    const regex = /\S+@\S+\.\S+/;
 
     return regex.test(correoT)
 }

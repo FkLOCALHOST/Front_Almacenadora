@@ -6,8 +6,11 @@ import HomePage from "./pages/homePage/HomePage";
 import Register from "./components/login/Register";
 import NavBar from "./components/navs/navBar";
 import ProductPage from './pages/products/ProductPage';
+import StorePage from "./pages/store/StorePage";
 import ProveedorPage from './pages/proveedores/ProveedorPage';
-import ClientPage from "./pages/clients/ClientPage";
+import ClientPage from "./pages/clientes/ClientPage";
+import WorkerPage from "./pages/trabajadores/WorkerPage";
+import PaginaNoEncontrada from "./pages/Error/404";
 
 function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -29,10 +32,12 @@ function App() {
             element={<Register switchAuthHandler={() => {}} />}
           />
           <Route path="/productos/listarProductos" element={<ProductPage />} />
+          <Route path = "/bodegas/listarBodegas" element = { <StorePage />} />
           <Route path="/proveedores" element={<ProveedorPage />} />
           <Route path="/clientes/listarClientes" element={<ClientPage/>}/>
+          <Route path="/trabajadores/obtenerTrabajadores" element={<WorkerPage />} />
+          <Route path="/*" element={<PaginaNoEncontrada/>}/>
         </Routes>
-        
       </div>
     </>
   );
