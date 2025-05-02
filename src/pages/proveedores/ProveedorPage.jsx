@@ -48,6 +48,7 @@ const ProveedorPage = () => {
             />
           ))
         )}
+
       </div>
     </div>
   );
