@@ -5,7 +5,7 @@ const ProveedorCard = ({ nombre, direccion, telefono, estado = true }) => {
   return (
     <div className={`proveedor-card${estado ? '' : ' proveedor-inactive'}`}>
       <div className="proveedor-details">
-        <h3 className="proveedor-title">Nombre: {nombre}</h3>
+        <h3 className="proveedor-title">{nombre}</h3>
         <p className="proveedor-description">Dirección: {direccion}</p>
         <p className="proveedor-telefono">Teléfono: {telefono}</p>
       </div>

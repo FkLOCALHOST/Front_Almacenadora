@@ -1,30 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const WorkerCard = ({ nombre, apellido, correo, telefono, rendimiento, role, fotoDePerfil, estado }) => {
+const WorkerCard = ({nombreT, dpi, apellidoT, correoT, telefonoT, rendimientoT, role, fotoDePerfil, estadoT }) => {
   return (
-    <div className={`worker-card ${estado ? '' : 'inactive'}`}>
-      <img src={fotoDePerfil || 'https://via.placeholder.com/150'} alt={`${nombre} ${apellido}`} className="worker-image" />
+    <div className={`worker-card ${estadoT ? '' : 'inactive'}`}>
+      <img src={fotoDePerfil || 'https://via.placeholder.com/150'} alt={`${nombreT} ${apellidoT}`} className="worker-image" />
       <div className="worker-details">
-        <h3 className="worker-title">{`${nombre} ${apellido}`}</h3>
-        <p className="worker-description">Correo: {correo}</p>
-        <p className="worker-contact">Teléfono: {telefono}</p>
+        <h3 className="worker-title">{`${nombreT} ${apellidoT}`}</h3>
+        <p className="worker-description">Correo: {correoT}</p>
+        <p className="worker-contact">Teléfono: {telefonoT}</p>
         <p className="worker-role">Rol: {role}</p>
-        <p className="worker-performance">Rendimiento: {rendimiento}</p>
+        <p className="worker-role">DPI: {dpi}</p>
+        <p className="worker-performance">Rendimiento: {rendimientoT}</p>
       </div>
     </div>
   );
 };
 
 WorkerCard.propTypes = {
-  nombre: PropTypes.string.isRequired,
-  apellido: PropTypes.string.isRequired,
-  correo: PropTypes.string.isRequired,
-  telefono: PropTypes.string.isRequired,
-  rendimiento: PropTypes.number.isRequired,
+  nombreT: PropTypes.string.isRequired,
+  apellidoT: PropTypes.string.isRequired,
+  dpi: PropTypes.string.isRequired,
+  correoT: PropTypes.string.isRequired,
+  telefonoT: PropTypes.string.isRequired,
+  rendimientoT: PropTypes.number.isRequired,
   role: PropTypes.oneOf(['EMPLEADO_ROLE', 'ADMIN_ROLE']).isRequired,
   fotoDePerfil: PropTypes.string,
-  estado: PropTypes.bool.isRequired,
+  estadoT: PropTypes.bool.isRequired,
 };
 
 export default WorkerCard;

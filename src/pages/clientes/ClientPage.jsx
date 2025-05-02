@@ -2,8 +2,14 @@ import React, { useEffect, useState } from "react";
 import ClientCard from "../../components/cliente/ClientCard";
 import AddClientForm from "../../components/cliente/AddClientForm";
 import ConfirmDialog from "../../components/cliente/ConfirmDialog";
-import { listarClientes, eliminarClientes, actualizarClientes, agregarClientes, generarPDFClientes } from "../../services/api";
-import './ClientPage.css';
+import {
+  listarClientes,
+  eliminarClientes,
+  actualizarClientes,
+  agregarClientes,
+  generarPDFClientes,
+} from "../../services/api";
+import "./ClientPage.css";
 
 const ClientPage = () => {
   const [clients, setClients] = useState([]);
@@ -17,8 +23,11 @@ const ClientPage = () => {
   useEffect(() => {
     const trabajadorDetails = localStorage.getItem("Trabajador");
     if (trabajadorDetails) {
-      const { role } = JSON.parse(trabajadorDetails);
-      setIsAdmin(role === "ADMIN_ROLE"); // Verificar si el rol es admin
+      const userDetails = JSON.parse(trabajadorDetails);
+      if (userDetails && userDetails.userDetails) {
+        const { role } = userDetails.userDetails;
+        setIsAdmin(role === "ADMIN_ROLE");
+      }
     }
   }, []);
 
@@ -62,7 +71,9 @@ const ClientPage = () => {
         if (!response.error) {
           setClients((prevClients) =>
             prevClients.map((client) =>
-              client._id === clientToEdit._id ? { ...client, ...clientData } : client
+              client._id === clientToEdit._id
+                ? { ...client, ...clientData }
+                : client
             )
           );
         } else {
@@ -93,7 +104,9 @@ const ClientPage = () => {
     try {
       const response = await eliminarClientes(clientToDelete);
       if (!response.error) {
-        setClients((prevClients) => prevClients.filter(client => client._id !== clientToDelete));
+        setClients((prevClients) =>
+          prevClients.filter((client) => client._id !== clientToDelete)
+        );
       } else {
         setErrorMessage("Error al eliminar el cliente.");
       }
