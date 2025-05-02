@@ -44,15 +44,16 @@ const WorkerPage = () => {
         ) : (
           workers.map((worker) => (
             <WorkerCard
-              key={worker._id}
-              nombre={worker.nombre}
-              apellido={worker.apellido}
-              correo={worker.correo}
-              telefono={worker.telefono}
-              rendimiento={worker.rendimiento}
+              key={worker.dpi}
+              nombreT={worker.nombreT}
+              dpi={worker.dpi}
+              apellidoT={worker.apellidoT}
+              correoT={worker.correoT}
+              telefonoT={worker.telefonoT}
+              rendimientoT={worker.rendimientoT}
               role={worker.role}
               fotoDePerfil={worker.fotoDePerfil}
-              estado={worker.estado}
+              estadoT={worker.estadoT}
             />
           ))
         )}
