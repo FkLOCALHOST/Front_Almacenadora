@@ -1,39 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import ProductCard from '../../components/product/ProductCard'; // Import ProductCard component
-import { listarProductos } from '../../services/api'; // Import API service
-import './ProductPage.css'; // Import CSS for ProductPage
+import ProductCard from '../../components/product/productcard';
+import { listarProductos } from '../../services/api';
+import './ProductPage.css';
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
 
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await listarProductos();
       if (!response.error) {
-        setProducts(response.data.productos); // Assuming response.data contains the product list
+        if (response.data.productos.length === 0) {
+          setErrorMessage("Sin datos en la base de datos.");
+        } else {
+          setProducts(response.data.productos);
+        }
       } else {
-        console.error('Error fetching products:', response.message);
-        // Mock data in case of an error
-        setProducts([
-          {
-            _id: '1',
-            nombreProducto: 'Producto 1',
-            descripcion: 'Descripción del producto 1',
-            precio: 100.0,
-            categoria: 'Categoría 1',
-            urlImagen: 'https://via.placeholder.com/150',
-            estado: true,
-          },
-          {
-            _id: '2',
-            nombreProducto: 'Producto 2',
-            descripcion: 'Descripción del producto 2',
-            precio: 200.0,
-            categoria: 'Categoría 2',
-            urlImagen: 'https://via.placeholder.com/150',
-            estado: false,
-          },
-        ]);
+        setErrorMessage("Error al cargar los productos.");
       }
     };
 
@@ -41,7 +25,6 @@ const ProductPage = () => {
   }, []);
 
   const handleAddProduct = () => {
-    // Logic for adding a product
     console.log('Add product button clicked');
   };
 
@@ -54,17 +37,21 @@ const ProductPage = () => {
         </button>
       </div>
       <div className="products-grid">
-        {products.map((product) => (
-          <ProductCard
-            key={product._id}
-            nombreProducto={product.nombreProducto}
-            descripcion={product.descripcion}
-            precio={product.precio}
-            categoria={product.categoria}
-            urlImagen={product.urlImagen}
-            estado={product.estado}
-          />
-        ))}
+        {errorMessage ? (
+          <p className="error-message">{errorMessage}</p>
+        ) : (
+          products.map((product) => (
+            <ProductCard
+              key={product._id}
+              nombreProducto={product.nombreProducto}
+              descripcion={product.descripcion}
+              precio={product.precio}
+              categoria={product.categoria}
+              urlImagen={product.urlImagen}
+              estado={product.estado}
+            />
+          ))
+        )}
       </div>
     </div>
   );

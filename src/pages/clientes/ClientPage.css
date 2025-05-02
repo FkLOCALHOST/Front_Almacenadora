@@ -84,3 +84,56 @@
   .client-card-wrapper {
     position: relative;
   }
+
+.delete-client-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-client-button:hover {
+    background-color: darkred;
+}
+
+.client-card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-client-button {
+  background-color: blue;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-client-button:hover {
+  background-color: darkblue;
+}
+
+.clients-header-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.report-button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: orange;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.report-button:hover {
+  background-color: darkorange;
+}

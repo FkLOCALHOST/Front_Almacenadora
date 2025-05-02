@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+
 import {
   Flex,
   Heading,
@@ -24,6 +25,7 @@ import { validateMinuscula, validateMinusculaMessage } from '../../shared/hooks/
 import { validateNumero, validateNumeroMessage } from '../../shared/hooks/validators/validatePasswordNumber';
 import { validateSigno, validateSignoMessage } from '../../shared/hooks/validators/validatePasswordSymbol';
 
+
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
@@ -46,7 +48,7 @@ const Register = ({ switchAuthHandler }) => {
     setError('');
     setSuccess('');
 
-    console.log('Correo ingresado:', correoT);
+    const response = await register({nombreT: nombreT, apellidoT: apellidoT, dpi: dpi, correoT: correoT, telefonoT: telefonoT, contrasenaT: constraseñaT });
 
     if (!validateEmail(correoT)) {
           setError(validateEmailMessage);
@@ -125,6 +127,7 @@ const Register = ({ switchAuthHandler }) => {
                 type="text"
                 placeholder="Name"
                 value={nombreT}
+
                 onChange={(e) => setName(e.target.value)}
                 required
               />
@@ -190,12 +193,14 @@ const Register = ({ switchAuthHandler }) => {
               <InputRightElement width="4.5rem">
                 <Button h="1.75rem" size="sm" onClick={handleShowClick}  variant="unstyled" display="flex" alignItems="center" justifyContent="center">
                 {showPassword ? <FiEyeOff /> : <FiEye />}
+
                 </Button>
               </InputRightElement>
             </InputGroup>
           </FormControl>
         </Flex>
           <Button type="submit" colorScheme="teal" width="full" mt={4}>
+
             Register
           </Button>
         </form>
@@ -207,7 +212,6 @@ const Register = ({ switchAuthHandler }) => {
         </Box>
       </Stack>
     </Flex>
-
   );
 };
 

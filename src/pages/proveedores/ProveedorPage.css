@@ -1,0 +1,175 @@
+/* Estilos para ProveedorPage, igual que ProductPage */
+
+.product-card {
+  background-color: #0EA5E9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+[data-theme='dark'] .product-card {
+  background-color: #059669;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+}
+
+.product-details {
+  margin-top: 1rem;
+}
+
+.product-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.product-description,
+.product-category,
+.product-price {
+  margin: 0.5rem 0;
+}
+
+.inactive {
+  opacity: 0.5;
+}
+
+.product-page-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.products-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.add-product-button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-product-button:hover {
+  background-color: var(--primary-color-hover, #0056b3);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.product-card-wrapper {
+  position: relative;
+}
+
+/* Estilos para ProveedorPage, solo los atributos necesarios */
+
+.proveedor-card {
+  background-color: #0EA5E9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+}
+
+[data-theme='dark'] .proveedor-card {
+  background-color: #059669;
+}
+
+.proveedor-card:hover {
+  transform: scale(1.05);
+}
+
+.proveedor-details {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.proveedor-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.proveedor-telefono,
+.proveedor-correo {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.proveedor-estado {
+  font-size: 0.95rem;
+  color: #444;
+  font-weight: 500;
+}
+
+.proveedor-inactive {
+  opacity: 0.5;
+}
+
+.proveedor-page-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.proveedores-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.proveedores-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.add-proveedor-button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-proveedor-button:hover {
+  background-color: var(--primary-color-hover, #0056b3);
+}
+
+.proveedores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.proveedor-card-wrapper {
+  position: relative;
+}
