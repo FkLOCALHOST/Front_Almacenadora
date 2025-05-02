@@ -90,7 +90,6 @@ const Register = ({ switchAuthHandler }) => {
       return;
     }
 
-    const response = await register({nombreT: nombreT, apellidoT: apellidoT, dpi: dpi, correoT: correoT, telefonoT: telefonoT, contrasenaT: contraseñaT });
    
     if (response.error) {
       setError('Registration failed. Please try again.');
