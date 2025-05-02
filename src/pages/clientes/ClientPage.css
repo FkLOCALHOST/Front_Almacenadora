@@ -86,26 +86,7 @@
   }
 
 .delete-client-button {
-    background-color: red;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.delete-client-button:hover {
-    background-color: darkred;
-}
-
-.client-card-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.edit-client-button {
-  background-color: blue;
+  background-color: rgb(253, 25, 25);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -114,8 +95,28 @@
   transition: background-color 0.3s ease;
 }
 
+.delete-client-button:hover {
+  background-color: rgb(172, 2, 2);
+}
+
+.edit-client-button {
+  background-color: rgb(55, 55, 255);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 3%
+}
+
 .edit-client-button:hover {
   background-color: darkblue;
+}
+
+.client-card-actions {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .clients-header-buttons {

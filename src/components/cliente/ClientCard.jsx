@@ -21,8 +21,8 @@ const ClientCard = ({
             </div>
             {isAdmin && (
                 <div className="admin-actions">
-                    <button className="edit-button" onClick={onEdit}>Editar</button>
-                    <button className="delete-button" onClick={() => onDelete(id)}>Eliminar</button>
+                    <button className="edit-client-button" onClick={onEdit}>Editar</button>
+                    <button className="delete-client-button" onClick={() => onDelete(id)}>Eliminar</button>
                 </div>
             )}
         </div>
