@@ -5,38 +5,25 @@ import './ProveedorPage.css';
 
 const ProveedorPage = () => {
   const [proveedores, setProveedores] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
 
   useEffect(() => {
     const fetchProveedores = async () => {
       const response = await listarProveedores();
       if (!response.error) {
-        setProveedores(response.data.proveedores);
+        if (response.data.proveedores.length === 0) {
+          setErrorMessage("Sin datos en la base de datos.");
+        } else {
+          setProveedores(response.data.proveedores);
+        }
       } else {
-        setProveedores([
-          {
-            _id: '1',
-            nombreProveedor: 'Proveedor 1',
-            direccion: 'Dirección 1',
-            telefono: '123456789',
-            correo: 'proveedor1@email.com',
-            estado: true,
-          },
-          {
-            _id: '2',
-            nombreProveedor: 'Proveedor 2',
-            direccion: 'Dirección 2',
-            telefono: '987654321',
-            correo: 'proveedor2@email.com',
-            estado: false,
-          },
-        ]);
+        setErrorMessage("Error al cargar los proveedores.");
       }
     };
     fetchProveedores();
   }, []);
 
   const handleAddProveedor = () => {
-    // Lógica para agregar proveedor
     console.log('Add proveedor button clicked');
   };
 
@@ -49,14 +36,18 @@ const ProveedorPage = () => {
         </button>
       </div>
       <div className="proveedores-grid">
-        {proveedores.map((proveedor) => (
-          <ProveedorCard
-            key={proveedor._id}
-            nombre={proveedor.nombre}
-            direccion={proveedor.direccion}
-            telefono={proveedor.telefono}
-          />
-        ))}
+        {errorMessage ? (
+          <p className="error-message">{errorMessage}</p>
+        ) : (
+          proveedores.map((proveedor) => (
+            <ProveedorCard
+              key={proveedor._id}
+              nombre={proveedor.nombre}
+              direccion={proveedor.direccion}
+              telefono={proveedor.telefono}
+            />
+          ))
+        )}
       </div>
     </div>
   );

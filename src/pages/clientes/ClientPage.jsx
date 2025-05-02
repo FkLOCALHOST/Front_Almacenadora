@@ -1,16 +1,23 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import ClientCard from "../../components/cliente/ClientCard";
 import { listarClientes } from "../../services/api";
 import './ClientPage.css';
 
 const ClientPage = () => {
     const [clients, setClients] = useState([]);
+    const [errorMessage, setErrorMessage] = useState(""); // State for error message
 
     useEffect(() => {
         const fetchClients = async () => {
             const response = await listarClientes();
-            if (!response.error){
-                setClients(response.data.clientes);
+            if (!response.error) {
+                if (response.data.clientes.length === 0) {
+                    setErrorMessage("Sin datos en la base de datos.");
+                } else {
+                    setClients(response.data.clientes);
+                }
+            } else {
+                setErrorMessage("Error al cargar los clientes.");
             }
         };
 
@@ -30,19 +37,23 @@ const ClientPage = () => {
                 </button>
             </div>
             <div className="clients-grid">
-                {clients.map((client)=>(
-                    <ClientCard
-                    key={client._id}
-                    nombre={client.nombre}
-                    apellido={client.apellido}
-                    correo={client.correo}
-                    telefono={client.telefono}
-                    estado={client.estado}
-                    />
-                ))}
+                {errorMessage ? (
+                    <p className="error-message">{errorMessage}</p>
+                ) : (
+                    clients.map((client) => (
+                        <ClientCard
+                            key={client._id}
+                            nombre={client.nombre}
+                            apellido={client.apellido}
+                            correo={client.correo}
+                            telefono={client.telefono}
+                            estado={client.estado}
+                        />
+                    ))
+                )}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ClientPage
+export default ClientPage;
