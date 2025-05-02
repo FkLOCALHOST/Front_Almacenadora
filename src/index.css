@@ -18,11 +18,13 @@
   --button-bg-color: #0088cc;
   --button-text-color: #ffffff;
   --button-hover-bg-color: #0ea5e9; /* Updated button hover background color */
+  --bacbackground-color-404: rgba(255, 253, 0, 0.9);
   transition: all 0.3s ease; /* Global transition */
 }
 
 [data-theme='dark'] {
   --background-color: #003f5e; /* Dark background */
+  --bacbackground-color-404:#003f5e;
   --text-color: #e3f2f9; /* Light text */
   --card-background-color: #000000;
   --button-bg-color: #47a9da;
