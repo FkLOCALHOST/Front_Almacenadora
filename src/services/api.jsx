@@ -119,7 +119,7 @@ export const agregarProveedor = async (data) => {
 
 export const actualizarProveedor = async (id, data) => {
   try {
-    return await apiAlmacenadora.put(`/proveedor/modificar/${id}`, data);
+    return await apiAlmacenadora.put(`/proveedor/actualizar/${id}`, data);
   } catch (error) {
     return {
       error: true,

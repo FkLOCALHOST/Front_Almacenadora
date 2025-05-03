@@ -15,7 +15,7 @@ const AddProveedorForm = ({
     direccion: "",
     telefono: "",
   });
-  const [errorMessage, setErrorMessage] = useState(""); // Estado para el mensaje de error
+  const [errorMessage, setErrorMessage] = useState(""); 
 
   useEffect(() => {
     if (initialData) {
@@ -62,13 +62,12 @@ const AddProveedorForm = ({
         await fetchProveedores();
         onSubmit(response.data);
         onClose();
-        setErrorMessage(""); // Limpiar el mensaje de error si la solicitud es exitosa
+        setErrorMessage(""); 
       } else {
         setErrorMessage(response.message || "Error al procesar la solicitud.");
       }
     } catch (error) {
       setErrorMessage("Error al conectar con el servidor: " + error.message);
-
     }
   };
 
@@ -79,7 +78,6 @@ const AddProveedorForm = ({
           {initialData ? "Actualizar Proveedor" : "Agregar Proveedor"}
         </h2>
         {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Mostrar el mensaje de error */}
-
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <input

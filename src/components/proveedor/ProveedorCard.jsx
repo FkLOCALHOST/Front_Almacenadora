@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ProveedorCard = ({ nombre, direccion, telefono, estado = true }) => {
+const ProveedorCard = ({ id, nombre, direccion, telefono, estado = true, isAdmin, onEdit, onDelete }) => {
 
   return (
     <div className="proveedor-card"> {/* Clase CSS fija */}
@@ -26,6 +26,9 @@ ProveedorCard.propTypes = {
   direccion: PropTypes.string.isRequired,
   telefono: PropTypes.number.isRequired,
   estado: PropTypes.bool,
+  isAdmin: PropTypes.bool.isRequired,
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func
 };
 
 export default ProveedorCard;

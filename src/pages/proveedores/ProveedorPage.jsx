@@ -31,6 +31,18 @@ const ProveedorPage = () => {
     }
   };
 
+  useEffect(() => {
+    const trabajadorDetails = localStorage.getItem("Trabajador");
+    if (trabajadorDetails) {
+      const userDetails = JSON.parse(trabajadorDetails);
+      if (userDetails && userDetails.userDetails) {
+        const { role } = userDetails.userDetails;
+        setIsAdmin(role === "ADMIN_ROLE");
+      }
+    }
+  }, []);
+
+
 
   useEffect(() => {
     const fetchProveedores = async () => {
@@ -157,9 +169,14 @@ const ProveedorPage = () => {
           proveedores.map((proveedor) => (
             <ProveedorCard
               key={proveedor._id}
+              id={proveedor._id}
+              isAdmin={isAdmin}
               nombre={proveedor.nombre}
               direccion={proveedor.direccion}
               telefono={proveedor.telefono}
+              onDelete={handleDeleteProveedor}
+              onEdit={() => handleEditProveedor(proveedor)}
+              estado={proveedor.estado}
             />
           ))
         )}
