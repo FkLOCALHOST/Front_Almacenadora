@@ -31,18 +31,26 @@ const ProveedorPage = () => {
     }
   };
 
+
   useEffect(() => {
-    const trabajadorDetails = localStorage.getItem("Trabajador");
-    if (trabajadorDetails) {
-      const userDetails = JSON.parse(trabajadorDetails);
-      if (userDetails?.userDetails?.role) {
-        setIsAdmin(userDetails.userDetails.role === "ADMIN_ROLE");
+    const fetchProveedores = async () => {
+      const response = await listarProveedores();
+      if (!response.error) {
+        if (response.data.proveedores.length === 0) {
+          setErrorMessage("Sin datos en la base de datos.");
+        } else {
+          setProveedores(response.data.proveedores);
+        }
+      } else {
+        setErrorMessage("Error al cargar los proveedores.");
+
       }
     }
     fetchProveedores(); 
   }, []);
 
   const handleAddProveedor = () => {
+
     setProveedorToEdit(null);
     setShowForm(true);
   };
@@ -143,19 +151,15 @@ const ProveedorPage = () => {
 
       <div className="proveedores-grid">
         {errorMessage && proveedores.length === 0 ? (
+
           <p className="error-message">{errorMessage}</p>
         ) : (
           proveedores.map((proveedor) => (
             <ProveedorCard
               key={proveedor._id}
-              id={proveedor._id}
               nombre={proveedor.nombre}
               direccion={proveedor.direccion}
               telefono={proveedor.telefono}
-              estado={proveedor.estado}
-              isAdmin={isAdmin}
-              onDelete={handleDeleteProveedor}
-              onEdit={() => handleEditProveedor(proveedor)}
             />
           ))
         )}

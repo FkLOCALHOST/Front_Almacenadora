@@ -44,7 +44,6 @@ const StorePage = () => {
     fetchStores();
   }, []);
 
-
   const handleAddStore = () => {
     setStoreToEdit(null); 
     setShowForm(true);
@@ -141,16 +140,15 @@ const StorePage = () => {
         }
       };
 
+
   return (
     <div className="store-page-container">
       <div className="store-header">
         <h1 className="store-title">Bodegas</h1>
-        <div className="store-header-buttons">
-          {isAdmin && ( // Mostrar el botón de agregar solo si es admin
-            <button className="add-client-button" onClick={handleAddStore}>
-              Agregar Bodega
-            </button>
-          )}
+        <button className="add-store-button" onClick={handleAddWStore}>
+          Agregar Bodega
+        </button>
+
           <button className="report-button" onClick={handleGenerateReport}>
             Informe
           </button>

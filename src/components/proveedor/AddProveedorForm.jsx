@@ -68,6 +68,7 @@ const AddProveedorForm = ({
       }
     } catch (error) {
       setErrorMessage("Error al conectar con el servidor: " + error.message);
+
     }
   };
 
@@ -78,6 +79,7 @@ const AddProveedorForm = ({
           {initialData ? "Actualizar Proveedor" : "Agregar Proveedor"}
         </h2>
         {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Mostrar el mensaje de error */}
+
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <input

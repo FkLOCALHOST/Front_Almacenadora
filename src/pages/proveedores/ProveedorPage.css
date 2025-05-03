@@ -1,12 +1,12 @@
 .proveedor-card {
-  background-color: #0EA5E9; /* Fondo rojo para las tarjetas */
+  background-color: #0ea5e9; /* Fondo azul para las tarjetas */
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 1rem;
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-[data-theme='dark'] .proveedor-card {
+[data-theme="dark"] .proveedor-card {
   background-color: #059669;
 }
 
@@ -19,8 +19,8 @@
 }
 
 .proveedor-title {
-    font-size: 1.2rem;
-    font-weight: bold;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 .proveedor-phone,
@@ -79,7 +79,9 @@
 
 .proveedor-card-actions {
   display: flex;
-  gap: 0.5rem;
+  justify-content: space-between; /* Distribuye los botones */
+  align-items: center;
+  gap: 1rem; /* Agrega un espacio entre los botones */
 }
 
 .edit-proveedor-button {
@@ -90,7 +92,7 @@
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-right: 3%;
+  margin-right: 3%; /* Si quieres separar aún más el botón de editar */
 }
 
 .edit-proveedor-button:hover {
@@ -130,4 +132,3 @@
 .report-proveedor-button:hover {
   background-color: darkorange;
 }
-
