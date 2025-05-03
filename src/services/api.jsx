@@ -206,6 +206,26 @@ export const buscarProducto = async (idProducto) => {
   }
 };
 
+export const generarPDFProductos = async () => {
+  try {
+    const response = await apiAlmacenadora.get("/generarPDFProductos", {
+      responseType: "blob", // Ensure the response is treated as a file
+    });
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+}
+
+export const listarPorCantidadVentas = async () => {
+  try {
+    return await apiAlmacenadora.get("/listarPorCantidadVentas");
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+}
+  
+
 export const actualizarProducto = async (idProducto, data) => {
   try {
     return await apiAlmacenadora.put(`/actualizarProducto/${idProducto}`, data);
