@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import WorkerCard from "../../components/worker/WorkerCard";
-import { obtenerTrabajadores, generarPDFTrabajadores, eliminarEmpleado } from "../../services/api";
+import { obtenerTrabajadores, generarPDFTrabajadores, eliminarEmpleado, actualizarEmpleado, register } from "../../services/api";
 import ConfirmDialog from "../../components/worker/ConfirmDialog";
+import AddWorkerForm from "../../components/worker/AddWorkerForm";
 import "./WorkerPage.css";
 
 const WorkerPage = () => {
@@ -10,6 +11,8 @@ const WorkerPage = () => {
   const [isAdmin, setIsAdmin] = useState(false); // Estado para admin
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [workerToDelete, setWorkerToDelete] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [workerToEdit, setWorkerToEdit] = useState(null);
 
   useEffect(() => {
     const trabajadorDetails = localStorage.getItem("Trabajador");
@@ -40,7 +43,6 @@ const WorkerPage = () => {
 
     fetchWorkers();
   }, []);
-
 
   const handleDeleteWorker = (tid) => {
     setWorkerToDelete(tid);
@@ -88,6 +90,51 @@ const WorkerPage = () => {
     }
   };
 
+  const handleAddWorker = () => {
+    setWorkerToEdit(null);
+    setShowForm(true);
+  };
+
+  const handleEditWorker = (worker) => {
+    setWorkerToEdit(worker);
+    setShowForm(true);
+  };
+
+  const handleFormClose = () => {
+    setShowForm(false);
+    setWorkerToEdit(null);
+  };
+
+  const handleFormSubmit = async (workerData) => {
+    try {
+      if (workerToEdit) {
+        // Actualizar trabajador existente
+        const response = await actualizarEmpleado(workerToEdit.tid, workerData);
+        if (!response.error) {
+          setWorkers((prevWorkers) =>
+            prevWorkers.map((worker) =>
+              worker.tid === workerToEdit.tid ? { ...worker, ...workerData } : worker
+            )
+          );
+        } else {
+          setErrorMessage("Error al actualizar el trabajador.");
+        }
+      } else {
+        // Agregar nuevo trabajador
+        const response = await register(workerData);
+        if (!response.error) {
+          setWorkers((prevWorkers) => [...prevWorkers, response.data]);
+        } else {
+          setErrorMessage("Error al agregar el trabajador.");
+        }
+      }
+    } catch (error) {
+      setErrorMessage("Error al conectar con el servidor.");
+    }
+    setShowForm(false);
+    setWorkerToEdit(null);
+  };
+
   return (
     <div className="worker-page-container">
       <div className="workers-header">
@@ -95,10 +142,9 @@ const WorkerPage = () => {
         <div className="workers-header-buttons">
           {isAdmin && (
             <button className="report-button" onClick={handleGenerateReport}>
-            Informe
-          </button>
+              Informe
+            </button>
           )}
-          
         </div>
       </div>
       <div className="workers-grid">
@@ -120,19 +166,26 @@ const WorkerPage = () => {
               estadoT={worker.estadoT}
               isAdmin={isAdmin}
               onDelete={handleDeleteWorker}
+              onEdit={() => handleEditWorker(worker)}
             />
           ))
         )}
       </div>
-    
       {showConfirmDialog && (
         <ConfirmDialog
           message="¿Está seguro de que desea eliminar este trabajador?"
           onConfirm={confirmDeleteWorker}
           onCancel={cancelDeleteWorker}
         />
-      )
-      }
+      )}
+      {showForm && isAdmin && (
+        <AddWorkerForm
+          onClose={handleFormClose}
+          onSubmit={handleFormSubmit}
+          initialData={workerToEdit}
+          isAdmin={isAdmin}
+        />
+      )}
     </div>
   );
 };

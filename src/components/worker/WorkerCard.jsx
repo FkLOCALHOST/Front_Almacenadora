@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const WorkerCard = ({tid, nombreT, dpi, apellidoT, correoT, telefonoT, rendimientoT, role, fotoDePerfil, estadoT, isAdmin, onDelete}) => {
+const WorkerCard = ({tid, nombreT, dpi, apellidoT, correoT, telefonoT, rendimientoT, role, fotoDePerfil, estadoT, isAdmin, onDelete, onEdit}) => {
   return (
     <div className={`worker-card ${estadoT ? '' : 'inactive'}`}>
       <img src={fotoDePerfil || 'https://via.placeholder.com/150'} alt={`${nombreT} ${apellidoT}`} className="worker-image" />
@@ -16,7 +16,12 @@ const WorkerCard = ({tid, nombreT, dpi, apellidoT, correoT, telefonoT, rendimien
       <div>
         {isAdmin && (
           <div className="admin-actions">
-            <button className="delete-worker-button" onClick={() => onDelete(tid)}>Eliminar</button>
+            <button className="edit-worker-button" onClick={() => onEdit && onEdit()}>
+              Editar
+            </button>
+            <button className="delete-worker-button" onClick={() => onDelete(tid)}>
+              Eliminar
+            </button>
           </div>
         )}
       </div>
@@ -34,6 +39,7 @@ WorkerCard.propTypes = {
   role: PropTypes.oneOf(['EMPLEADO_ROLE', 'ADMIN_ROLE']).isRequired,
   fotoDePerfil: PropTypes.string,
   estadoT: PropTypes.bool.isRequired,
+  onEdit: PropTypes.func,
 };
 
 export default WorkerCard;

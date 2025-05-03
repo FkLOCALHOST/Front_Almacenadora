@@ -181,7 +181,7 @@ export const generarPDFTrabajadores = async () => {
 
 export const actualizarEmpleado = async (tid, data) => {
   try {
-    return await apiAlmacenadora.put(`/actualizarEmpleado/${tid}`, data);
+    return await apiAlmacenadora.put(`/trabajador/actualizarEmpleado/${tid}`, data);
   } catch (error) {
     return { error: true, message: error.message };
   }
