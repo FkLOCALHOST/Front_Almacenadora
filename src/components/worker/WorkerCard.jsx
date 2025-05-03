@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const WorkerCard = ({nombreT, dpi, apellidoT, correoT, telefonoT, rendimientoT, role, fotoDePerfil, estadoT }) => {
+const WorkerCard = ({tid, nombreT, dpi, apellidoT, correoT, telefonoT, rendimientoT, role, fotoDePerfil, estadoT, isAdmin, onDelete}) => {
   return (
     <div className={`worker-card ${estadoT ? '' : 'inactive'}`}>
       <img src={fotoDePerfil || 'https://via.placeholder.com/150'} alt={`${nombreT} ${apellidoT}`} className="worker-image" />
@@ -12,6 +12,13 @@ const WorkerCard = ({nombreT, dpi, apellidoT, correoT, telefonoT, rendimientoT, 
         <p className="worker-role">Rol: {role}</p>
         <p className="worker-role">DPI: {dpi}</p>
         <p className="worker-performance">Rendimiento: {rendimientoT}</p>
+      </div>
+      <div>
+        {isAdmin && (
+          <div className="admin-actions">
+            <button className="delete-worker-button" onClick={() => onDelete(tid)}>Eliminar</button>
+          </div>
+        )}
       </div>
     </div>
   );

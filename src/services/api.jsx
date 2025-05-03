@@ -165,6 +165,20 @@ export const obtenerTrabajadores = async () => {
   }
 };
 
+export const generarPDFTrabajadores = async () => {
+  try {
+    const response = await apiAlmacenadora.get(
+      "/trabajador/generarPDFTrabajadores",
+      {
+        responseType: "blob",
+      }
+    );
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+}
+
 export const actualizarEmpleado = async (tid, data) => {
   try {
     return await apiAlmacenadora.put(`/actualizarEmpleado/${tid}`, data);
@@ -175,11 +189,12 @@ export const actualizarEmpleado = async (tid, data) => {
 
 export const eliminarEmpleado = async (tid) => {
   try {
-    return await apiAlmacenadora.delete(`/eliminarEmpleado/${tid}`);
+    return await apiAlmacenadora.delete(`/trabajador/eliminarEmpleado/${tid}`);
   } catch (error) {
     return { error: true, message: error.message };
   }
 };
+
 
 export const agregarProducto = async (data) => {
   try {

@@ -91,3 +91,31 @@
 .worker-card-wrapper {
   position: relative;
 }
+.delete-worker-button {
+  background-color: rgb(253, 25, 25);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-worker-button:hover {
+  background-color: rgb(172, 2, 2);
+}
+
+.edit-worker-button {
+  background-color: rgb(55, 55, 255);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 3%
+}
+
+.edit-worker-button:hover {
+  background-color: darkblue;
+}
