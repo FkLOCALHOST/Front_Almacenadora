@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import WorkerCard from "../../components/worker/WorkerCard";
-import { obtenerTrabajadores, generarPDFTrabajadores, eliminarEmpleado, actualizarEmpleado, register } from "../../services/api";
+import { obtenerTrabajadores, generarPDFTrabajadores, eliminarEmpleado, actualizarEmpleado } from "../../services/api";
 import ConfirmDialog from "../../components/worker/ConfirmDialog";
 import AddWorkerForm from "../../components/worker/AddWorkerForm";
 import { ToastContainer, toast } from 'react-toastify';
@@ -47,6 +47,15 @@ const WorkerPage = () => {
   }, []);
 
   const handleDeleteWorker = (tid) => {
+    // Actualiza isAdmin antes de proceder
+    const trabajadorDetails = localStorage.getItem("Trabajador");
+    if (trabajadorDetails) {
+      const userDetails = JSON.parse(trabajadorDetails);
+      if (userDetails && userDetails.userDetails) {
+        const { role } = userDetails.userDetails;
+        setIsAdmin(role === "ADMIN_ROLE");
+      }
+    }
     const worker = workers.find((w) => w.tid === tid);
     if (worker && worker.role === "ADMIN_ROLE") {
       toast.error("No se puede eliminar un trabajador con rol ADMIN.");
@@ -130,21 +139,12 @@ const WorkerPage = () => {
             setErrorMessage('Error al actualizar el trabajador.');
           }
         }
-      } else {
-        // Agregar nuevo trabajador
-        const response = await register(workerData);
-        if (!response.error) {
-          setWorkers((prevWorkers) => [...prevWorkers, response.data]);
-        } else {
-          setErrorMessage('Error al agregar el trabajador.');
-        }
       }
     } catch (error) {
       setErrorMessage('Error al conectar con el servidor.');
     }
     setShowForm(false);
     setWorkerToEdit(null);
-
   };
 
   return (
@@ -158,9 +158,6 @@ const WorkerPage = () => {
             </button>
           )}
         </div>
-        <button className="add-worker-button" onClick={handleAddWorker}>
-          Agregar Trabajador
-        </button>
       </div>
       <div className="workers-grid">
         {errorMessage ? (
@@ -182,7 +179,6 @@ const WorkerPage = () => {
               isAdmin={isAdmin}
               onDelete={handleDeleteWorker}
               onEdit={() => handleEditWorker(worker)}
-
             />
           ))
         )}
@@ -206,7 +202,6 @@ const WorkerPage = () => {
         </>
       )}
       <ToastContainer position="top-right" autoClose={3000} />
-
     </div>
   );
 };
