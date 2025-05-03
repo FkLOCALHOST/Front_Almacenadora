@@ -38,7 +38,8 @@
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    height: 100%; /* Use 100% of the viewport height */
+    height: 100vh; /* Use 100% of the viewport height */
+
     box-sizing: border-box;
   }
   

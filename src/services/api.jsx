@@ -56,7 +56,8 @@ export const login = async (data) => {
 
 export const agregarClientes = async (data) => {
   try {
-    return await apiAlmacenadora.post("clientes/agregarClientes", data);
+    return await apiAlmacenadora.post("/clientes/agregarClientes", data);
+
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -107,7 +108,7 @@ export const generarPDFClientes = async () => {
 
 export const agregarProveedor = async (data) => {
   try {
-    return await apiAlmacenadora.post("proveedor/agregar", data);
+    return await apiAlmacenadora.post("/proveedor/agregar", data);
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -115,7 +116,7 @@ export const agregarProveedor = async (data) => {
 
 export const actualizarProveedor = async (id, data) => {
   try {
-    return await apiAlmacenadora.put(`/proveedor/actualizar/${id}`, data);
+    return await apiAlmacenadora.put(`/proveedor/modificar/${id}`, data);
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -176,9 +177,23 @@ export const obtenerTrabajadores = async () => {
   }
 };
 
+export const generarPDFTrabajadores = async () => {
+  try {
+    const response = await apiAlmacenadora.get(
+      "/trabajador/generarPDFTrabajadores",
+      {
+        responseType: "blob",
+      }
+    );
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+}
+
 export const actualizarEmpleado = async (tid, data) => {
   try {
-    return await apiAlmacenadora.put(`/actualizarEmpleado/${tid}`, data);
+    return await apiAlmacenadora.put(`/trabajador/actualizarEmpleado/${tid}`, data);
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -186,11 +201,12 @@ export const actualizarEmpleado = async (tid, data) => {
 
 export const eliminarEmpleado = async (tid) => {
   try {
-    return await apiAlmacenadora.delete(`/eliminarEmpleado/${tid}`);
+    return await apiAlmacenadora.delete(`/trabajador/eliminarEmpleado/${tid}`);
   } catch (error) {
     return { error: true, message: error.message };
   }
 };
+
 
 export const agregarProducto = async (data) => {
   try {
