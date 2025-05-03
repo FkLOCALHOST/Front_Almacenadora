@@ -10,12 +10,21 @@ const AddProveedorForm = ({
     initialData = null,
     isAdmin
 }) => {
+<<<<<<< Updated upstream
     const [formData, setFormData] = useState({
         nombre: "",
         direccion: "",
         telefono: "",
         estado: true,
     });
+=======
+  const [formData, setFormData] = useState({
+    nombre: "",
+    direccion: "",
+    telefono: "",
+  });
+  const [error, setError] = useState(""); 
+>>>>>>> Stashed changes
 
     useEffect(() => {
         if(initialData){
@@ -36,6 +45,7 @@ const AddProveedorForm = ({
         }));
     };
 
+<<<<<<< Updated upstream
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -114,6 +124,104 @@ return (
                 <button type="button" className="form-button cancel-button" onClick={onClose}>
                     Cancelar
                 </button>
+=======
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(""); 
+
+    const telefonoNumerico = Number(formData.telefono);
+    if (isNaN(telefonoNumerico)) {
+      setError("El teléfono debe contener solo números.");
+      return;
+    }
+
+    try {
+      let response;
+      const dataToSend = {
+        nombre: formData.nombre.trim(),
+        direccion: formData.direccion.trim(),
+        telefono: telefonoNumerico,
+      };
+
+      if (initialData && initialData._id) {
+        response = await actualizarProveedor(initialData._id, dataToSend);
+      } else {
+        response = await agregarProveedor(dataToSend);
+      }
+
+      if (!response.error) {
+        await fetchProveedores();
+        onSubmit(response.data);
+        onClose();
+      } else {
+        setError(response.message || "Error al procesar la solicitud.");
+        console.error("Error al procesar la solicitud:", response.message);
+      }
+    } catch (error) {
+      setError("Error al conectar con el servidor.");
+      console.error("Error al conectar con el servidor: ", error);
+    }
+  };
+
+  return (
+    <div className="add-proveedor-form-container">
+      <div className="add-proveedor-form-content">
+        <h2 className="form-title">
+          {initialData ? "Actualizar Proveedor" : "Agregar Proveedor"}
+        </h2>
+        <form onSubmit={handleSubmit}>
+          <div className="input-group">
+            <input
+              type="text"
+              name="nombre"
+              value={formData.nombre}
+              onChange={handleChange}
+              placeholder="Nombre del Proveedor"
+              required
+            />
+          </div>
+          <div className="input-group">
+            <input
+              type="text"
+              name="direccion"
+              value={formData.direccion}
+              onChange={handleChange}
+              placeholder="Dirección del Proveedor"
+              required
+            />
+          </div>
+          <div className="input-group">
+            <input
+              type="text"
+              name="telefono"
+              value={formData.telefono}
+              onChange={handleChange}
+              placeholder="Teléfono del Proveedor"
+              required
+            />
+          </div>
+
+          {/* Mostrar error si ocurre alguno */}
+          {error && <div className="error-message">{error}</div>}
+
+          {isAdmin && (
+            <button type="submit" className="form-button">
+              {initialData ? "Actualizar" : "Agregar"}
+            </button>
+          )}
+          <button
+            type="button"
+            className="form-button cancel-button"
+            onClick={onClose}
+          >
+            Cancelar
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+>>>>>>> Stashed changes
 
             </form>
        
