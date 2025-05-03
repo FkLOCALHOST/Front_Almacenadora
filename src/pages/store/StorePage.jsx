@@ -1,31 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import StoreCard from '../../components/store/StoreCard';
-import AddStoreForm from '../../components/store/addStoreForm';
+import React, { useEffect, useState } from "react";
+import StoreCard from "../../components/store/StoreCard";
+import AddStoreForm from "../../components/store/addStoreForm";
 import ConfirmDialog from "../../components/cliente/ConfirmDialog";
-import { obtenerBodegas, agregarBodega, actualizarBodega, eliminarBodega, generarPDFBodega } from '../../services/api';
-import './StorePage.css';
+import {
+  obtenerBodegas,
+  agregarBodega,
+  actualizarBodega,
+  eliminarBodega,
+  generarPDFBodega,
+} from "../../services/api";
+import "./StorePage.css";
 
 const StorePage = () => {
   const [stores, setStores] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState("");
   const [showForm, setShowForm] = useState(false);
-    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-    const [storeToDelete, setStoreToDelete] = useState(null);
-    const [storeToEdit, setStoreToEdit] = useState(null);
-    const [isAdmin, setIsAdmin] = useState(false); 
-
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [storeToDelete, setStoreToDelete] = useState(null);
+  const [storeToEdit, setStoreToEdit] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-      const trabajadorDetails = localStorage.getItem("Trabajador");
-      if (trabajadorDetails) {
-        const userDetails = JSON.parse(trabajadorDetails);
-        if (userDetails && userDetails.userDetails) {
-          const { role } = userDetails.userDetails;
-          setIsAdmin(role === "ADMIN_ROLE");
-        }
+    const trabajadorDetails = localStorage.getItem("Trabajador");
+    if (trabajadorDetails) {
+      const userDetails = JSON.parse(trabajadorDetails);
+      if (userDetails && userDetails.userDetails) {
+        const { role } = userDetails.userDetails;
+        setIsAdmin(role === "ADMIN_ROLE");
       }
-    }, []);
-
+    }
+  }, []);
 
   useEffect(() => {
     const fetchStores = async () => {
@@ -45,18 +49,18 @@ const StorePage = () => {
   }, []);
 
   const handleAddStore = () => {
-    setStoreToEdit(null); 
+    setStoreToEdit(null);
     setShowForm(true);
   };
 
   const handleEditStore = (store) => {
-    setStoreToEdit(store); 
-    setShowForm(true); 
+    setStoreToEdit(store);
+    setShowForm(true);
   };
 
   const handleFormClose = () => {
     setShowForm(false);
-    setStoreToEdit(null); 
+    setStoreToEdit(null);
   };
 
   const handleFormSubmit = async (storeData) => {
@@ -93,103 +97,89 @@ const StorePage = () => {
     setShowForm(false);
     setStoreToEdit(null);
   };
-  
-    const handleDeleteStore = (id) => {
-      setStoreToDelete(id);
-      setShowConfirmDialog(true);
-    };
-  
-    const confirmDeleteStore = async () => {
-      try {
-        const response = await eliminarBodega(storeToDelete);
-        if (!response.error) {
-          setStores((prevStore) =>
-            prevStore.filter((store) => store._id !== storeToDelete)
-          );
-        } else {
-          setErrorMessage("Error al eliminar la bodega.");
-        }
-      } catch (error) {
-        setErrorMessage("Error al conectar con el servidor.");
+
+  const handleDeleteStore = (id) => {
+    setStoreToDelete(id);
+    setShowConfirmDialog(true);
+  };
+
+  const confirmDeleteStore = async () => {
+    try {
+      const response = await eliminarBodega(storeToDelete);
+      if (!response.error) {
+        setStores((prevStore) =>
+          prevStore.filter((store) => store._id !== storeToDelete)
+        );
+      } else {
+        setErrorMessage("Error al eliminar la bodega.");
       }
-      setShowConfirmDialog(false);
-      setStoreToDelete(null);
-    };
+    } catch (error) {
+      setErrorMessage("Error al conectar con el servidor.");
+    }
+    setShowConfirmDialog(false);
+    setStoreToDelete(null);
+  };
 
-    const cancelDeleteStore = () => {
-        setShowConfirmDialog(false);
-        setStoreToDelete(null);
-      };
-    
-      const handleGenerateReport = async () => {
-        try {
-          const response = await generarPDFBodega();
-          if (!response.error) {
-            const blob = response.data;
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "Bodegas.pdf"; 
-            a.click();
-            window.URL.revokeObjectURL(url);
-          } else {
-            setErrorMessage("Error al generar el informe.");
-          }
-        } catch (error) {
-          setErrorMessage("Error al conectar con el servidor.");
-        }
-      };
+  const cancelDeleteStore = () => {
+    setShowConfirmDialog(false);
+    setStoreToDelete(null);
+  };
 
+  const handleGenerateReport = async () => {
+    try {
+      const response = await generarPDFBodega();
+      if (!response.error) {
+        const blob = response.data;
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Bodegas.pdf";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } else {
+        setErrorMessage("Error al generar el informe.");
+      }
+    } catch (error) {
+      setErrorMessage("Error al conectar con el servidor.");
+    }
+  };
 
   return (
-    <div className="store-page-container">
-      <div className="store-header">
-        <h1 className="store-title">Bodegas</h1>
-        <button className="add-store-button" onClick={handleAddWStore}>
-          Agregar Bodega
+    <div className="proveedor-page-container">
+      <div className="proveedores-header">
+        <h1 className="proveedores-title">Proveedores</h1>
+        <button className="add-proveedor-button" onClick={handleAddProveedor}>
+          Agregar Proveedor
         </button>
-
+        <div className="proveedores-headers-buttons">
+          {isAdmin && (
+            <button
+              className="add-proveedor-button"
+              onClick={handleAddProveedor}
+            >
+              Agregar
+            </button>
+          )}
           <button className="report-button" onClick={handleGenerateReport}>
             Informe
           </button>
         </div>
       </div>
-      <div className="store-grid">
-        {errorMessage ? (
-          <p className="error-message">{errorMessage}</p>
-        ) : (
-          stores.map((store) => (
-            <StoreCard
-              key={store._id}
-              id={store._id}
-              numeroBodega={store.numeroBodega}
-              fechaIngreso={store.fechaIngreso}
-              fechaSalida={store.fechaSalida}
-              lote={store.lote}
-              trabajador={store.trabajador}
-              estado={store.estado}
-              isAdmin={isAdmin}
-              onDelete={handleDeleteStore}
-              onEdit={() => handleEditStore(store)}
-            />
-          ))
-        )}
-      </div>
       {showForm && isAdmin && (
-              <AddStoreForm
-                onClose={handleFormClose}
-                onSubmit={handleFormSubmit}
-                initialData={storeToEdit} //
-                isAdmin={isAdmin}
-              />
-            )}
-            {showConfirmDialog && (
-              <ConfirmDialog
-                message="¿Está seguro de que desea eliminar esta bodega?"
-                onConfirm={confirmDeleteStore}
-                onCancel={cancelDeleteStore}
-              />
-            )}
+        <AddStoreForm
+          onClose={handleFormClose}
+          onSubmit={handleFormSubmit}
+          initialData={storeToEdit} //
+          isAdmin={isAdmin}
+        />
+      )}
+      {showConfirmDialog && (
+        <ConfirmDialog
+          message="¿Está seguro de que desea eliminar esta bodega?"
+          onConfirm={confirmDeleteStore}
+          onCancel={cancelDeleteStore}
+        />
+      )}
     </div>
   );
 };
