@@ -15,6 +15,7 @@ const AddProveedorForm = ({
     direccion: "",
     telefono: "",
   });
+  const [errorMessage, setErrorMessage] = useState(""); // Estado para el mensaje de error
 
   useEffect(() => {
     if (initialData) {
@@ -39,7 +40,7 @@ const AddProveedorForm = ({
 
     const telefonoNumerico = Number(formData.telefono);
     if (isNaN(telefonoNumerico)) {
-      alert("El teléfono debe contener solo números.");
+      setErrorMessage("El teléfono debe contener solo números.");
       return;
     }
 
@@ -61,11 +62,13 @@ const AddProveedorForm = ({
         await fetchProveedores();
         onSubmit(response.data);
         onClose();
+        setErrorMessage(""); // Limpiar el mensaje de error si la solicitud es exitosa
       } else {
-        console.error("Error al procesar la solicitud:", response.message);
+        setErrorMessage(response.message || "Error al procesar la solicitud.");
       }
     } catch (error) {
-      console.error("Error al conectar con el servidor: ", error);
+      setErrorMessage("Error al conectar con el servidor: " + error.message);
+
     }
   };
 
@@ -75,6 +78,8 @@ const AddProveedorForm = ({
         <h2 className="form-title">
           {initialData ? "Actualizar Proveedor" : "Agregar Proveedor"}
         </h2>
+        {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Mostrar el mensaje de error */}
+
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <input

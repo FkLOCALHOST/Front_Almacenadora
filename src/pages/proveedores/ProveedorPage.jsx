@@ -13,7 +13,24 @@ import './ProveedorPage.css';
 
 const ProveedorPage = () => {
   const [proveedores, setProveedores] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [proveedorToDelete, setProveedorToDelete] = useState(null);
+  const [proveedorToEdit, setProveedorToEdit] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const fetchProveedores = async () => {
+    const response = await listarProveedores();
+    if (!response.error && response.data?.proveedores) {
+      setProveedores(response.data.proveedores.filter((proveedor) => proveedor.estado));
+      setErrorMessage(""); 
+    } else {
+      setProveedores([]);
+      setErrorMessage("Error al cargar los proveedores.");
+    }
+  };
+
 
   useEffect(() => {
     const fetchProveedores = async () => {
@@ -133,7 +150,7 @@ const ProveedorPage = () => {
       </div>
 
       <div className="proveedores-grid">
-        {errorMessage ? (
+        {errorMessage && proveedores.length === 0 ? (
 
           <p className="error-message">{errorMessage}</p>
         ) : (
