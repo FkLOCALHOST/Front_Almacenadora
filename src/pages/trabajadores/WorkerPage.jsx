@@ -3,6 +3,8 @@ import WorkerCard from "../../components/worker/WorkerCard";
 import { obtenerTrabajadores, generarPDFTrabajadores, eliminarEmpleado, actualizarEmpleado, register } from "../../services/api";
 import ConfirmDialog from "../../components/worker/ConfirmDialog";
 import AddWorkerForm from "../../components/worker/AddWorkerForm";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./WorkerPage.css";
 
 const WorkerPage = () => {
@@ -45,6 +47,11 @@ const WorkerPage = () => {
   }, []);
 
   const handleDeleteWorker = (tid) => {
+    const worker = workers.find((w) => w.tid === tid);
+    if (worker && worker.role === "ADMIN_ROLE") {
+      toast.error("No se puede eliminar un trabajador con rol ADMIN.");
+      return;
+    }
     setWorkerToDelete(tid);
     setShowConfirmDialog(true);
   };
@@ -90,11 +97,6 @@ const WorkerPage = () => {
     }
   };
 
-  const handleAddWorker = () => {
-    setWorkerToEdit(null);
-    setShowForm(true);
-  };
-
   const handleEditWorker = (worker) => {
     setWorkerToEdit(worker);
     setShowForm(true);
@@ -108,6 +110,11 @@ const WorkerPage = () => {
   const handleFormSubmit = async (workerData) => {
     try {
       if (workerToEdit) {
+        // Si se intenta cambiar el rol de ADMIN a EMPLEADO
+        if (workerToEdit.role === 'ADMIN_ROLE' && workerData.role === 'EMPLEADO_ROLE') {
+          toast.error('No tienes permisos para cambiar el rol de un ADMIN a EMPLEADO.');
+          return;
+        }
         // Actualizar trabajador existente
         const response = await actualizarEmpleado(workerToEdit.tid, workerData);
         if (!response.error) {
@@ -117,7 +124,11 @@ const WorkerPage = () => {
             )
           );
         } else {
-          setErrorMessage("Error al actualizar el trabajador.");
+          if (response.status === 401 || (response.message && response.message.includes('401'))) {
+            toast.error('No tienes permisos para cambiar el rol de un ADMIN a EMPLEADO.');
+          } else {
+            setErrorMessage('Error al actualizar el trabajador.');
+          }
         }
       } else {
         // Agregar nuevo trabajador
@@ -125,11 +136,11 @@ const WorkerPage = () => {
         if (!response.error) {
           setWorkers((prevWorkers) => [...prevWorkers, response.data]);
         } else {
-          setErrorMessage("Error al agregar el trabajador.");
+          setErrorMessage('Error al agregar el trabajador.');
         }
       }
     } catch (error) {
-      setErrorMessage("Error al conectar con el servidor.");
+      setErrorMessage('Error al conectar con el servidor.');
     }
     setShowForm(false);
     setWorkerToEdit(null);
@@ -179,13 +190,17 @@ const WorkerPage = () => {
         />
       )}
       {showForm && isAdmin && (
-        <AddWorkerForm
-          onClose={handleFormClose}
-          onSubmit={handleFormSubmit}
-          initialData={workerToEdit}
-          isAdmin={isAdmin}
-        />
+        <>
+          <AddWorkerForm
+            onClose={handleFormClose}
+            onSubmit={handleFormSubmit}
+            initialData={workerToEdit}
+            isAdmin={isAdmin}
+          />
+          <ToastContainer position="top-right" autoClose={3000} />
+        </>
       )}
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };

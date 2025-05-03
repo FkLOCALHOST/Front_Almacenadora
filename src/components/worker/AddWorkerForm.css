@@ -46,6 +46,24 @@
   color: #9ca3af;
 }
 
+.input-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: var(--card-background-color);
+  color: var(--text-color);
+  appearance: none;
+  outline: none;
+  margin-bottom: 0.5rem;
+}
+
+.input-group option {
+  background-color: var(--card-background-color);
+  color: var(--text-color);
+}
+
 .form-button {
   width: 100%;
   padding: 0.75rem;
@@ -95,4 +113,15 @@
 
 [data-theme='dark'] .input-group input::placeholder {
   color: #6b7280;
+}
+
+[data-theme='dark'] .input-group select {
+  background-color: #1f2937;
+  color: #e3f2f9;
+  border: 1px solid #444;
+}
+
+[data-theme='dark'] .input-group option {
+  background-color: #1f2937;
+  color: #e3f2f9;
 }

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { register, actualizarEmpleado } from '../../services/api';
+import { validateEmail, validateEmailMessage } from '../../shared/hooks/validators/validateEmail';
+import { validatePhone, validatePhoneMessage } from '../../shared/hooks/validators/validatePhone';
+import { validateDPI, validateDPIMessage } from '../../shared/hooks/validators/validateDpi';
 import './AddWorkerForm.css';
 
 const AddWorkerForm = ({ 
@@ -17,9 +20,10 @@ const AddWorkerForm = ({
     dpi: '',
     role: 'EMPLEADO_ROLE',
     estadoT: true,
-    contrasenaT: '', // Solo para agregar
     rendimientoT: 0,
   });
+
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (initialData) {
@@ -31,11 +35,30 @@ const AddWorkerForm = ({
         dpi: initialData.dpi || '',
         role: initialData.role || 'EMPLEADO_ROLE',
         estadoT: initialData.estadoT !== undefined ? initialData.estadoT : true,
-        contrasenaT: '', // No mostrar contraseña al editar
         rendimientoT: initialData.rendimientoT || 0,
       });
     }
   }, [initialData]);
+
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'correoT':
+        if (!validateEmail(value)) return validateEmailMessage;
+        break;
+      case 'telefonoT':
+        if (!validatePhone(value)) return validatePhoneMessage;
+        break;
+      case 'dpi':
+        if (!validateDPI(value)) return validateDPIMessage;
+        break;
+      case 'rendimientoT':
+        if (isNaN(value) || value < 0) return 'El rendimiento debe ser un número positivo';
+        break;
+      default:
+        if (!value) return 'Este campo es obligatorio';
+    }
+    return '';
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,16 +66,28 @@ const AddWorkerForm = ({
       ...prevData,
       [name]: name === 'rendimientoT' ? Number(value) : value,
     }));
+    const errorMsg = validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: errorMsg }));
+  };
+
+  const isFormValid = () => {
+    const newErrors = {};
+    Object.entries(formData).forEach(([name, value]) => {
+      const errorMsg = validateField(name, value);
+      if (errorMsg) newErrors[name] = errorMsg;
+    });
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isFormValid()) return;
     try {
       let response;
       if (initialData && initialData.tid) {
         // Editar trabajador existente
-        const { contrasenaT, ...updateData } = formData; // No enviar contraseña si está vacía
-        response = await actualizarEmpleado(initialData.tid, updateData);
+        response = await actualizarEmpleado(initialData.tid, formData);
       } else {
         // Registrar nuevo trabajador
         response = await register(formData);
@@ -82,6 +117,7 @@ const AddWorkerForm = ({
               onChange={handleChange}
               required
             />
+            {errors.nombreT && <span className="error-message">{errors.nombreT}</span>}
           </div>
           <div className="input-group">
             <input
@@ -92,6 +128,7 @@ const AddWorkerForm = ({
               onChange={handleChange}
               required
             />
+            {errors.apellidoT && <span className="error-message">{errors.apellidoT}</span>}
           </div>
           <div className="input-group">
             <input
@@ -102,6 +139,7 @@ const AddWorkerForm = ({
               onChange={handleChange}
               required
             />
+            {errors.dpi && <span className="error-message">{errors.dpi}</span>}
           </div>
           <div className="input-group">
             <input
@@ -112,6 +150,7 @@ const AddWorkerForm = ({
               onChange={handleChange}
               required
             />
+            {errors.correoT && <span className="error-message">{errors.correoT}</span>}
           </div>
           <div className="input-group">
             <input
@@ -122,6 +161,7 @@ const AddWorkerForm = ({
               onChange={handleChange}
               required
             />
+            {errors.telefonoT && <span className="error-message">{errors.telefonoT}</span>}
           </div>
           <div className="input-group">
             <input
@@ -133,24 +173,16 @@ const AddWorkerForm = ({
               min="0"
               required
             />
+            {errors.rendimientoT && <span className="error-message">{errors.rendimientoT}</span>}
           </div>
-          {!initialData && (
-            <div className="input-group">
-              <input
-                type="password"
-                name="contrasenaT"
-                placeholder="Contraseña"
-                value={formData.contrasenaT}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          )}
           <div className="input-group">
-            <select name="role" value={formData.role} onChange={handleChange} required>
+            <select name="role" value={formData.role} onChange={handleChange} required
+              disabled={initialData && initialData.role === 'ADMIN_ROLE'}
+            >
               <option value="EMPLEADO_ROLE">Empleado</option>
               <option value="ADMIN_ROLE">Administrador</option>
             </select>
+            {errors.role && <span className="error-message">{errors.role}</span>}
           </div>
           {isAdmin && (
             <button type="submit" className="form-button">

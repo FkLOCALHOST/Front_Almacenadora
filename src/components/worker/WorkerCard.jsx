@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const WorkerCard = ({tid, nombreT, dpi, apellidoT, correoT, telefonoT, rendimientoT, role, fotoDePerfil, estadoT, isAdmin, onDelete, onEdit}) => {
+const WorkerCard = ({tid, nombreT, fotoDePerfi, dpi, apellidoT, correoT, telefonoT, rendimientoT, role, fotoDePerfil, estadoT, isAdmin, onDelete, onEdit}) => {
   return (
     <div className={`worker-card ${estadoT ? '' : 'inactive'}`}>
-      <img src={fotoDePerfil || 'https://via.placeholder.com/150'} alt={`${nombreT} ${apellidoT}`} className="worker-image" />
+      <img src={fotoDePerfi} alt={`${nombreT} ${apellidoT}`} className="worker-image" />
       <div className="worker-details">
         <h3 className="worker-title">{`${nombreT} ${apellidoT}`}</h3>
         <p className="worker-description">Correo: {correoT}</p>
