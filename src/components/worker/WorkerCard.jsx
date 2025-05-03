@@ -24,6 +24,7 @@ const WorkerCard = ({tid, nombreT, fotoDePerfi, dpi, apellidoT, correoT, telefon
             </button>
           </div>
         )}
+
       </div>
     </div>
   );

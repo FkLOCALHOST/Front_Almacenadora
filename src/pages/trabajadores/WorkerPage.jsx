@@ -144,6 +144,7 @@ const WorkerPage = () => {
     }
     setShowForm(false);
     setWorkerToEdit(null);
+
   };
 
   return (
@@ -157,6 +158,9 @@ const WorkerPage = () => {
             </button>
           )}
         </div>
+        <button className="add-worker-button" onClick={handleAddWorker}>
+          Agregar Trabajador
+        </button>
       </div>
       <div className="workers-grid">
         {errorMessage ? (
@@ -178,6 +182,7 @@ const WorkerPage = () => {
               isAdmin={isAdmin}
               onDelete={handleDeleteWorker}
               onEdit={() => handleEditWorker(worker)}
+
             />
           ))
         )}
@@ -201,6 +206,7 @@ const WorkerPage = () => {
         </>
       )}
       <ToastContainer position="top-right" autoClose={3000} />
+
     </div>
   );
 };

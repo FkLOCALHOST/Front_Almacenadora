@@ -57,6 +57,7 @@ export const login = async (data) => {
 export const agregarClientes = async (data) => {
   try {
     return await apiAlmacenadora.post("/clientes/agregarClientes", data);
+
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -113,7 +114,7 @@ export const agregarProveedor = async (data) => {
   }
 };
 
-export const modificarProveedor = async (id, data) => {
+export const actualizarProveedor = async (id, data) => {
   try {
     return await apiAlmacenadora.put(`/proveedor/modificar/${id}`, data);
   } catch (error) {
@@ -147,7 +148,18 @@ export const listarProveedores = async () => {
 
 export const buscarProveedor = async (id) => {
   try {
-    return await apiAlmacenadora.get(`/buscar/${id}`);
+    return await apiAlmacenadora.get(`proveedor/buscar/${nombre}`);
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const generarPDFProveedores = async () => {
+  try {
+    const response = await apiAlmacenadora.get("proveedor/generarReporte", {
+      responseType: "blob", 
+    });
+    return response;
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -237,9 +249,134 @@ export const eliminarProducto = async (idProducto) => {
   }
 };
 
+export const agregarBodega = async (data) => {
+  try {
+    return await apiAlmacenadora.post("/bodega/agregarBodega", data);
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
 export const obtenerBodegas = async () => {
   try {
     return await apiAlmacenadora.get("/bodega/");
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const crearLote = async (data) => {
+  try {
+    return await apiAlmacenadora.post("lote/crearLote", data);
+
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+    
+ export const actualizarBodega = async (idBodega, data) => {
+  try {
+    return await apiAlmacenadora.put(`/bodega/actualizarBodega/${idBodega}`, data);
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const buscarLote = async (idLote) => {
+  try {
+    return await apiAlmacenadora.get(`lote/obtenerLotePorId/${idLote}`);
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+    
+export const eliminarBodega = async (idBodega) => {
+  try {
+    return await apiAlmacenadora.delete(`/bodega/eliminarBodega/${idBodega}`);
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const listarLote = async () => {
+  try {
+    return await apiAlmacenadora.get("lote/");
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const generarPDFBodega = async () => {
+  try {
+    const response = await apiAlmacenadora.get("/bodega/pdf", {
+      responseType: "blob",
+    });
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const eliminarLote = async (idLote) => {
+  try {
+    return await apiAlmacenadora.delete(`lote/eliminarLote/${idLote}`);
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+    
+export const listarLotes = async () => {
+  try {
+    return await apiAlmacenadora.get("/lote/");
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const actualizarLote = async (idLote, data) => {
+  try {
+    return await apiAlmacenadora.put(`lote/actualizarLote/${idLote}`, data);
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+    
+export const listarTrabajadores = async () => {
+  try {
+    return await apiAlmacenadora.get("/trabajador/obtenerTrabajadores");
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const generarPDFLotes = async () => {
+  try {
+    const response = await apiAlmacenadora.get("lote/generarPDFLotes", {
+      responseType: "blob", // Ensure the response is treated as a file
+    });
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const generarPDFCantidadProductos = async () => {
+  try {
+    const response = await apiAlmacenadora.get("lote/totalProductos", {
+      responseType: "blob", // Ensure the response is treated as a file
+    });
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const generarPDFCantidadTotalProductos = async () => {
+  try {
+    const response = await apiAlmacenadora.get("lote/CantidadTotalProductos", {
+      responseType: "blob", // Ensure the response is treated as a file
+    });
+    return response;
   } catch (error) {
     return { error: true, message: error.message };
   }
