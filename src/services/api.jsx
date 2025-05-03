@@ -109,7 +109,10 @@ export const agregarProveedor = async (data) => {
   try {
     return await apiAlmacenadora.post("proveedor/agregar", data);
   } catch (error) {
-    return { error: true, message: error.message };
+    return {
+      error: true,
+      message: error.response?.data?.errors?.map(err => err.msg) || [error.message || "Error desconocido"],
+    };
   }
 };
 
@@ -117,7 +120,10 @@ export const actualizarProveedor = async (id, data) => {
   try {
     return await apiAlmacenadora.put(`/proveedor/actualizar/${id}`, data);
   } catch (error) {
-    return { error: true, message: error.message };
+    return {
+      error: true,
+      message: error.response?.data?.errors?.map(err => err.msg) || [error.message || "Error desconocido"],
+    };
   }
 };
 
