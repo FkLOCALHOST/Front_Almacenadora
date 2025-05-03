@@ -56,7 +56,7 @@ export const login = async (data) => {
 
 export const agregarClientes = async (data) => {
   try {
-    return await apiAlmacenadora.post("/clientes/agregarClientes", data);
+    return await apiAlmacenadora.post("clientes/agregarClientes", data);
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -107,15 +107,15 @@ export const generarPDFClientes = async () => {
 
 export const agregarProveedor = async (data) => {
   try {
-    return await apiAlmacenadora.post("/proveedor/agregar", data);
+    return await apiAlmacenadora.post("proveedor/agregar", data);
   } catch (error) {
     return { error: true, message: error.message };
   }
 };
 
-export const modificarProveedor = async (id, data) => {
+export const actualizarProveedor = async (id, data) => {
   try {
-    return await apiAlmacenadora.put(`/proveedor/modificar/${id}`, data);
+    return await apiAlmacenadora.put(`/proveedor/actualizar/${id}`, data);
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -147,7 +147,18 @@ export const listarProveedores = async () => {
 
 export const buscarProveedor = async (id) => {
   try {
-    return await apiAlmacenadora.get(`/buscar/${id}`);
+    return await apiAlmacenadora.get(`proveedor/buscar/${nombre}`);
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const generarPDFProveedores = async () => {
+  try {
+    const response = await apiAlmacenadora.get("proveedor/generarReporte", {
+      responseType: "blob", 
+    });
+    return response;
   } catch (error) {
     return { error: true, message: error.message };
   }
