@@ -229,3 +229,76 @@ export const obtenerBodegas = async () => {
     return { error: true, message: error.message };
   }
 };
+
+export const crearLote = async (data) => {
+  try {
+    return await apiAlmacenadora.post("lote/crearLote", data);
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const buscarLote = async (idLote) => {
+  try {
+    return await apiAlmacenadora.get(`lote/obtenerLotePorId/${idLote}`);
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const listarLote = async () => {
+  try {
+    return await apiAlmacenadora.get("lote/");
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const eliminarLote = async (idLote) => {
+  try {
+    return await apiAlmacenadora.delete(`lote/eliminarLote/${idLote}`);
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const actualizarLote = async (idLote, data) => {
+  try {
+    return await apiAlmacenadora.put(`lote/actualizarLote/${idLote}`, data);
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const generarPDFLotes = async () => {
+  try {
+    const response = await apiAlmacenadora.get("lote/generarPDFLotes", {
+      responseType: "blob", // Ensure the response is treated as a file
+    });
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const generarPDFCantidadProductos = async () => {
+  try {
+    const response = await apiAlmacenadora.get("lote/totalProductos", {
+      responseType: "blob", // Ensure the response is treated as a file
+    });
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const generarPDFCantidadTotalProductos = async () => {
+  try {
+    const response = await apiAlmacenadora.get("lote/CantidadTotalProductos", {
+      responseType: "blob", // Ensure the response is treated as a file
+    });
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
