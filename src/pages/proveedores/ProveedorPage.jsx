@@ -23,7 +23,7 @@ const ProveedorPage = () => {
   const fetchProveedores = async () => {
     const response = await listarProveedores();
     if (!response.error && response.data?.proveedores) {
-      setProveedores(response.data.proveedores);
+      setProveedores(response.data.proveedores.filter((proveedor) => proveedor.estado));
       setErrorMessage(""); 
     } else {
       setProveedores([]);
@@ -125,8 +125,6 @@ const ProveedorPage = () => {
     }
   };
 
-  const proveedoresActivos = proveedores.filter((proveedor) => proveedor.estado);
-
   return (
     <div className="proveedor-page-container">
       <div className="proveedores-header">
@@ -144,10 +142,10 @@ const ProveedorPage = () => {
       </div>
 
       <div className="proveedores-grid">
-        {errorMessage && proveedoresActivos.length === 0 ? (
+        {errorMessage && proveedores.length === 0 ? (
           <p className="error-message">{errorMessage}</p>
         ) : (
-          proveedoresActivos.map((proveedor) => (
+          proveedores.map((proveedor) => (
             <ProveedorCard
               key={proveedor._id}
               id={proveedor._id}
@@ -161,7 +159,6 @@ const ProveedorPage = () => {
             />
           ))
         )}
-
       </div>
 
       {showForm && isAdmin && (
@@ -170,6 +167,7 @@ const ProveedorPage = () => {
           onSubmit={handleFormSubmit}
           initialData={proveedorToEdit}
           isAdmin={isAdmin}
+          fetchProveedores={fetchProveedores}
         />
       )}
 
