@@ -1,22 +1,35 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom"; // Import useLocation
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { FaSun, FaMoon } from "react-icons/fa";
 import "./navBar.css";
 
 const NavBar = ({ theme, toggleTheme }) => {
-  const location = useLocation(); // Get current location
-  const isLoginPage = location.pathname === "/auth/login"; // Check if on login page
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/auth/login";
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const trabajadorDetails = localStorage.getItem("Trabajador");
+    if (trabajadorDetails) {
+      const userDetails = JSON.parse(trabajadorDetails);
+      if (userDetails && userDetails.userDetails) {
+        const { role } = userDetails.userDetails;
+        setIsAdmin(role === "ADMIN_ROLE");
+      }
+    }
+  }, []);
 
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <img src="../logo.png" alt="Logo" /> {/* Corrected the path */}
+        <img src="../logo.png" alt="Logo" />
       </div>
       <div className="navbar-right">
-        {!isLoginPage && ( // Hide links if on login page
+        {!isLoginPage && (
           <div className="navbar-links">
-
-            <Link to="/trabajadores/obtenerTrabajadores">Trabajadores</Link>
+            {isAdmin && (
+              <Link to="/trabajadores/obtenerTrabajadores">Trabajadores</Link>
+            )}
             <Link to="/proveedores">Proveedores</Link>
             <Link to="/bodegas/listarBodegas">Bodega</Link>
             <Link to="/productos/listarProductos">Producto</Link>

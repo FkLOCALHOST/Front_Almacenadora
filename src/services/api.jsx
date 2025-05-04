@@ -216,7 +216,7 @@ export const eliminarEmpleado = async (tid) => {
 
 export const agregarProducto = async (data) => {
   try {
-    return await apiAlmacenadora.post("/agregarProducto", data);
+    return await apiAlmacenadora.post("/productos/agregarProducto", data);
   } catch (error) {
     return { error: true, message: error.message };
   }

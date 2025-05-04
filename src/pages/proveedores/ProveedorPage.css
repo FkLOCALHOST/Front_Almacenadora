@@ -36,7 +36,7 @@
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100%;
   box-sizing: border-box;
 }
 
@@ -61,6 +61,7 @@
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-right: 10px;
 }
 
 .add-proveedor-button:hover {

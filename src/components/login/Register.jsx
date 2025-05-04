@@ -16,14 +16,14 @@ import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { register } from '../../services/api';
 import { ThemeContext } from '../../themeContext'; 
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import { validateEmail, validateEmailMessage } from '../../shared/hooks/validators/validateEmail';
-import { validatecontrasenaT, validatecontrasenaTMessage } from '../../shared/hooks/validators/validatePassword';
-import { validateDPI, validateDPIMessage } from '../../shared/hooks/validators/validateDpi';
-import { validatePhone, validatePhoneMessage } from '../../shared/hooks/validators/validatePhone';
-import { validateMayuscula, validateMayusculaMessage } from '../../shared/hooks/validators/validatePasswordMayus';
-import { validateMinuscula, validateMinusculaMessage } from '../../shared/hooks/validators/validatePasswordMinus';
-import { validateNumero, validateNumeroMessage } from '../../shared/hooks/validators/validatePasswordNumber';
-import { validateSigno, validateSignoMessage } from '../../shared/hooks/validators/validatePasswordSymbol';
+import { validateEmail, validateEmailMessage } from '../../shared/validators/validateEmail';
+import { validatecontrasenaT, validatecontrasenaTMessage } from '../../shared/validators/validatePassword';
+import { validateDPI, validateDPIMessage } from '../../shared/validators/validateDpi';
+import { validatePhone, validatePhoneMessage } from '../../shared/validators/validatePhone';
+import { validateMayuscula, validateMayusculaMessage } from '../../shared/validators/validatePasswordMayus';
+import { validateMinuscula, validateMinusculaMessage } from '../../shared/validators/validatePasswordMinus';
+import { validateNumero, validateNumeroMessage } from '../../shared/validators/validatePasswordNumber';
+import { validateSigno, validateSignoMessage } from '../../shared/validators/validatePasswordSymbol';
 
 
 const CFaUserAlt = chakra(FaUserAlt);
