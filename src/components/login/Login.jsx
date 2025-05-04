@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { login } from '../../services/api';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import { validateEmail, validateEmailMessage } from '../../shared/hooks/validators/validateEmail';
-import { validatecontrasenaT, validatecontrasenaTMessage } from '../../shared/hooks/validators/validatePassword';
+import { validateEmail, validateEmailMessage } from '../../shared/validators/validateEmail';
+import { validatecontrasenaT, validatecontrasenaTMessage } from '../../shared/validators/validatePassword';
 import { ThemeContext } from '../../themeContext'; // Import ThemeContext
 
 const Login = ({ switchAuthHandler, onLoginSuccess }) => {

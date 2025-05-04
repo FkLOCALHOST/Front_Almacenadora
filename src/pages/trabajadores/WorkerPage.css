@@ -45,7 +45,7 @@
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Usa el 100% de la altura del viewport */
+  height:100%;
   box-sizing: border-box;
 }
 
