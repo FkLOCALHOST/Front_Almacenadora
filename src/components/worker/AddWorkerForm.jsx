@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { register, actualizarEmpleado } from '../../services/api';
-import { validateEmail, validateEmailMessage } from '../../shared/hooks/validators/validateEmail';
-import { validatePhone, validatePhoneMessage } from '../../shared/hooks/validators/validatePhone';
-import { validateDPI, validateDPIMessage } from '../../shared/hooks/validators/validateDpi';
-import './AddWorkerForm.css';
+import { validateEmail, validateEmailMessage } from '../../shared/validators/validateEmail';
+import { validatePhone, validatePhoneMessage } from '../../shared/validators/validatePhone';
+import { validateDPI, validateDPIMessage } from '../../shared/validators/validateDpi';
+import './AddWorkerForm.css'; 
 
 const AddWorkerForm = ({ 
   onClose, 
