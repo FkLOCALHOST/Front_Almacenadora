@@ -8,6 +8,8 @@ import {
   actualizarLote, 
   crearLote,
   generarPDFLotes,
+  generarPDFCantidadProductos,
+  generarPDFCantidadTotalProductos
 } from '../../services/api';
 import './HomePage.css';
 
@@ -136,7 +138,45 @@ const HomePage = () => {
                 setErrorMessage("Error al conectar con el servidor.");
               }
             };
+
+            const handleGenerateCantidadProductos = async () => {
+              try {
+                const response = await generarPDFCantidadProductos();
+                if (!response.error) {
+                  const blob = response.data;
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = "CantidadProductos.pdf";
+                  a.click();
+                  window.URL.revokeObjectURL(url);
+                } else {
+                  setErrorMessage("Error al generar el informe.");
+                }
+              } catch (error) {
+                setErrorMessage("Error al conectar con el servidor.");
+              }
+            };
           
+
+            const handleGenerateCantidadTotalProductos = async (nombreProducto) => {
+              try {
+                const response = await generarPDFCantidadTotalProductos({ nombreProducto }); // Enviar el nombre del producto
+                if (!response.error) {
+                  const blob = new Blob([response.data], { type: "application/pdf" });
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `${nombreProducto}_CantidadTotalProductos.pdf`; // Usar el nombre del producto en el archivo
+                  a.click();
+                  window.URL.revokeObjectURL(url);
+                } else {
+                  setErrorMessage("Error al generar el informe.");
+                }
+              } catch (error) {
+                setErrorMessage("Error al conectar con el servidor.");
+              }
+            };
         
   
   return (
@@ -153,6 +193,12 @@ const HomePage = () => {
                 )}
                 <button className="report-button" onClick={handleGenerateReport}>
                   Informe de Lotes
+                </button>
+                <button className="report-button" onClick={handleGenerateCantidadProductos}>
+                  Informe de Cantidad de Productos
+                </button>
+                <button className="report-button" onClick={handleGenerateCantidadTotalProductos}>
+                  Informe de Cantidad Total de Productos
                 </button>
               </div>
             </div>

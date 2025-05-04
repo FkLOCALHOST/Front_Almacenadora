@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Select from 'react-select';
 import { crearLote, actualizarLote } from '../../services/api';
 import '../cliente/AddClientForm.css';
 

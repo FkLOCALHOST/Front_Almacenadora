@@ -355,10 +355,10 @@ export const generarPDFCantidadProductos = async () => {
   }
 };
 
-export const generarPDFCantidadTotalProductos = async () => {
+export const generarPDFCantidadTotalProductos = async (data) => {
   try {
-    const response = await apiAlmacenadora.get("lote/CantidadTotalProductos", {
-      responseType: "blob", // Ensure the response is treated as a file
+    const response = await apiAlmacenadora.post("lote/CantidadTotalProductos", data, {
+      responseType: "blob", 
     });
     return response;
   } catch (error) {
