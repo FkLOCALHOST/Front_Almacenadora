@@ -23,7 +23,7 @@ const ProveedorPage = () => {
   const fetchProveedores = async () => {
     const response = await listarProveedores();
     if (!response.error && response.data?.proveedores) {
-      setProveedores(response.data.proveedores);
+      setProveedores(response.data.proveedores.filter((proveedor) => proveedor.estado));
       setErrorMessage(""); 
     } else {
       setProveedores([]);
@@ -35,14 +35,34 @@ const ProveedorPage = () => {
     const trabajadorDetails = localStorage.getItem("Trabajador");
     if (trabajadorDetails) {
       const userDetails = JSON.parse(trabajadorDetails);
-      if (userDetails?.userDetails?.role) {
-        setIsAdmin(userDetails.userDetails.role === "ADMIN_ROLE");
+      if (userDetails && userDetails.userDetails) {
+        const { role } = userDetails.userDetails;
+        setIsAdmin(role === "ADMIN_ROLE");
+      }
+    }
+  }, []);
+
+
+
+  useEffect(() => {
+    const fetchProveedores = async () => {
+      const response = await listarProveedores();
+      if (!response.error) {
+        if (response.data.proveedores.length === 0) {
+          setErrorMessage("Sin datos en la base de datos.");
+        } else {
+          setProveedores(response.data.proveedores);
+        }
+      } else {
+        setErrorMessage("Error al cargar los proveedores.");
+
       }
     }
     fetchProveedores(); 
   }, []);
 
   const handleAddProveedor = () => {
+
     setProveedorToEdit(null);
     setShowForm(true);
   };
@@ -125,8 +145,6 @@ const ProveedorPage = () => {
     }
   };
 
-  const proveedoresActivos = proveedores.filter((proveedor) => proveedor.estado);
-
   return (
     <div className="proveedor-page-container">
       <div className="proveedores-header">
@@ -144,24 +162,24 @@ const ProveedorPage = () => {
       </div>
 
       <div className="proveedores-grid">
-        {errorMessage && proveedoresActivos.length === 0 ? (
+        {errorMessage && proveedores.length === 0 ? (
+
           <p className="error-message">{errorMessage}</p>
         ) : (
-          proveedoresActivos.map((proveedor) => (
+          proveedores.map((proveedor) => (
             <ProveedorCard
               key={proveedor._id}
               id={proveedor._id}
+              isAdmin={isAdmin}
               nombre={proveedor.nombre}
               direccion={proveedor.direccion}
               telefono={proveedor.telefono}
-              estado={proveedor.estado}
-              isAdmin={isAdmin}
               onDelete={handleDeleteProveedor}
               onEdit={() => handleEditProveedor(proveedor)}
+              estado={proveedor.estado}
             />
           ))
         )}
-
       </div>
 
       {showForm && isAdmin && (
@@ -170,6 +188,7 @@ const ProveedorPage = () => {
           onSubmit={handleFormSubmit}
           initialData={proveedorToEdit}
           isAdmin={isAdmin}
+          fetchProveedores={fetchProveedores}
         />
       )}
 
