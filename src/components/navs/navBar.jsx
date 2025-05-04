@@ -7,6 +7,7 @@ const NavBar = ({ theme, toggleTheme }) => {
   const location = useLocation();
   const isLoginPage = location.pathname === "/auth/login";
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Nuevo estado para verificar si está logueado
 
   useEffect(() => {
     const trabajadorDetails = localStorage.getItem("Trabajador");
@@ -15,6 +16,7 @@ const NavBar = ({ theme, toggleTheme }) => {
       if (userDetails && userDetails.userDetails) {
         const { role } = userDetails.userDetails;
         setIsAdmin(role === "ADMIN_ROLE");
+        setIsLoggedIn(true); // Usuario logueado
       }
     }
   }, []);
@@ -22,7 +24,13 @@ const NavBar = ({ theme, toggleTheme }) => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <img src="../logo.png" alt="Logo" />
+        {isLoggedIn ? (
+          <Link to="/home">
+            <img src="../logo.png" alt="Logo" />
+          </Link>
+        ) : (
+          <img src="../logo.png" alt="Logo" /> // Solo mostrar el logo sin enlace
+        )}
       </div>
       <div className="navbar-right">
         {!isLoginPage && (
