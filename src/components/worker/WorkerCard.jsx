@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const WorkerCard = ({nombreT, dpi, apellidoT, correoT, telefonoT, rendimientoT, role, fotoDePerfil, estadoT }) => {
+const WorkerCard = ({tid, nombreT, fotoDePerfi, dpi, apellidoT, correoT, telefonoT, rendimientoT, role, fotoDePerfil, estadoT, isAdmin, onDelete, onEdit}) => {
   return (
     <div className={`worker-card ${estadoT ? '' : 'inactive'}`}>
-      <img src={fotoDePerfil || 'https://via.placeholder.com/150'} alt={`${nombreT} ${apellidoT}`} className="worker-image" />
+      <img src={fotoDePerfi} alt={`${nombreT} ${apellidoT}`} className="worker-image" />
       <div className="worker-details">
         <h3 className="worker-title">{`${nombreT} ${apellidoT}`}</h3>
         <p className="worker-description">Correo: {correoT}</p>
@@ -12,6 +12,19 @@ const WorkerCard = ({nombreT, dpi, apellidoT, correoT, telefonoT, rendimientoT, 
         <p className="worker-role">Rol: {role}</p>
         <p className="worker-role">DPI: {dpi}</p>
         <p className="worker-performance">Rendimiento: {rendimientoT}</p>
+      </div>
+      <div>
+        {isAdmin && (
+          <div className="admin-actions">
+            <button className="edit-worker-button" onClick={() => onEdit && onEdit()}>
+              Editar
+            </button>
+            <button className="delete-worker-button" onClick={() => onDelete(tid)}>
+              Eliminar
+            </button>
+          </div>
+        )}
+
       </div>
     </div>
   );
@@ -27,6 +40,7 @@ WorkerCard.propTypes = {
   role: PropTypes.oneOf(['EMPLEADO_ROLE', 'ADMIN_ROLE']).isRequired,
   fotoDePerfil: PropTypes.string,
   estadoT: PropTypes.bool.isRequired,
+  onEdit: PropTypes.func,
 };
 
 export default WorkerCard;
