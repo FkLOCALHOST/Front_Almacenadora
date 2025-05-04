@@ -140,3 +140,29 @@
 .report-button:hover {
   background-color: darkorange;
 }
+
+.stats-cards {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px;
+}
+
+.stat-card {
+  padding: 15px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  width: 30%;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+}
+
+.stat-card h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.stat-card p {
+  font-size: 1.1rem;
+  color: #333;
+}

@@ -1,5 +1,4 @@
-html,
-body {
+html, body {
   height: 100%;
   margin: 0;
   background-color: var(--background-color); /* tema dinámico */
@@ -29,9 +28,9 @@ body {
   transition: all 0.3s ease; /* Global transition */
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   --background-color: #000000; /* Dark background */
-  --bacbackground-color-404: #000000;
+  --bacbackground-color-404:#000000;
   --text-color: #e3f2f9; /* Light text */
   --card-background-color: #000000;
   --button-bg-color: #47a9da;
