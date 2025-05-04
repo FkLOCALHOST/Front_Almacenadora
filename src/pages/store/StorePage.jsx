@@ -49,18 +49,18 @@ const StorePage = () => {
   }, []);
 
   const handleAddStore = () => {
-    setStoreToEdit(null);
+    setStoreToEdit(null); 
     setShowForm(true);
   };
 
   const handleEditStore = (store) => {
-    setStoreToEdit(store);
-    setShowForm(true);
+    setStoreToEdit(store); 
+    setShowForm(true); 
   };
 
   const handleFormClose = () => {
     setShowForm(false);
-    setStoreToEdit(null);
+    setStoreToEdit(null); 
   };
 
   const handleFormSubmit = async (storeData) => {
@@ -68,28 +68,25 @@ const StorePage = () => {
       if (storeToEdit) {
         const response = await actualizarBodega(storeToEdit._id, storeData);
         if (!response.error) {
-          const fetchResponse = await obtenerBodegaPorId(storeToEdit._id);
-          if (!fetchResponse.error) {
             setStores((prevStore) =>
               prevStore.map((store) =>
                 store._id === storeToEdit._id
-                  ? fetchResponse.data.bodega
+                  ? { ...store, ...storeData }
                   : store
               )
             );
-          } else {
-            setErrorMessage("Error al obtener la bodega actualizada.");
-          }
+            handleRefresh();
         } else {
           setErrorMessage("Error al actualizar la bodega.");
         }
       } else {
         const response = await agregarBodega(storeData);
         if (!response.error) {
-          setClients((prevStore) => [...prevStore, response.data]);
+          setStores((prevStore) => [...prevStore, response.data]);
         } else {
           setErrorMessage("Error al agregar la bodega.");
         }
+        handleRefresh();
       }
     } catch (error) {
       setErrorMessage("Error al conectar con el servidor.");
@@ -125,6 +122,10 @@ const StorePage = () => {
     setStoreToDelete(null);
   };
 
+  const handleRefresh = () => {
+    window.location.reload();
+  }
+
   const handleGenerateReport = async () => {
     try {
       const response = await generarPDFBodega();
@@ -145,19 +146,16 @@ const StorePage = () => {
   };
 
   return (
-    <div className="proveedor-page-container">
-      <div className="proveedores-header">
-        <h1 className="proveedores-title">Proveedores</h1>
-        <button className="add-proveedor-button" onClick={handleAddProveedor}>
-          Agregar Proveedor
-        </button>
-        <div className="proveedores-headers-buttons">
+    <div className="store-page-container">
+      <div className="store-header">
+        <h1 className="store-title">Bodegas</h1>
+        <div className="store-headers-buttons">
           {isAdmin && (
             <button
-              className="add-proveedor-button"
-              onClick={handleAddProveedor}
+              className="add-store-button"
+              onClick={handleAddStore}
             >
-              Agregar
+              Agregar Bodega  
             </button>
           )}
           <button className="report-button" onClick={handleGenerateReport}>
@@ -165,6 +163,27 @@ const StorePage = () => {
           </button>
         </div>
       </div>
+      <div className="store-grid">
+         {errorMessage ? (
+          <p className="error-message">{errorMessage}</p>
+        ) : (stores.map((store) => (
+             <StoreCard
+               key={store._id}
+               id={store._id}
+               numeroBodega={store.numeroBodega}
+               fechaIngreso={store.fechaIngreso}
+               fechaSalida={store.fechaSalida}
+               lote={store.lote}
+               trabajador={store.trabajador}
+               estado={store.estado}
+               isAdmin={isAdmin}
+               onDelete={handleDeleteStore}
+               onEdit={() => handleEditStore(store)}
+             />
+           ))
+         )}
+       </div>
+
       {showForm && isAdmin && (
         <AddStoreForm
           onClose={handleFormClose}
