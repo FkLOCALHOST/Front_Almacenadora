@@ -50,3 +50,12 @@
     padding: 0 1rem;
     transition: color 0.3s ease; /* Transición suave */
 }
+
+.navbar-logo img {
+    background-color: transparent; 
+    width: 25%; 
+    height: 25%; 
+  }
+  .navbar-logo {
+    background-color: transparent;
+  }

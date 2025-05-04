@@ -109,7 +109,7 @@ const addStoreForm = ({ onClose, onSubmit, initialData = null, isAdmin, stores }
       return;
     }
   
-    setErrorMessage(""); // Limpia error si todo está bien
+    setErrorMessage("");
 
 
     const payload = {
