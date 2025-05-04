@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
 import { crearLote, actualizarLote } from '../../services/api';
 import '../cliente/AddClientForm.css';
 
@@ -41,16 +40,19 @@ const AddLoteForm = ({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const payload = {
+          ...formData
+        };
         try {
             let response;
             if (initialData && initialData._id) {
-                response = await actualizarLote(initialData._id, formData);
+                response = await actualizarLote(initialData._id, payload);
             } else {
-                response = await crearLote(formData);
+                response = await crearLote(payload);
             }
     
             if (!response.error) {
-                onSubmit(formData); 
+                onSubmit(payload); 
                 onClose();
             } else {
                 console.error('Error al procesar el lote:', response.message);
