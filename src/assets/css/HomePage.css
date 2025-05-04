@@ -166,3 +166,62 @@
   font-size: 1.1rem;
   color: #333;
 }
+
+lote-card {
+  background-color: #0ea5e9; /* Fondo azul para la tarjeta */
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+[data-theme="dark"] .lote-card {
+  background-color: #059669; /* Fondo verde en tema oscuro */
+}
+
+.lote-card:hover {
+  transform: scale(1.05);
+}
+
+
+.lotes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.lotes-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* Estilos para el contenedor de la gráfica */
+.product-chart {
+  background-color: none; /* La gráfica no debe tener fondo */
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: none; /* Sin sombra */
+  transition: none; /* Sin transiciones */
+}
+
+.product-chart .recharts-wrapper {
+  background-color: transparent !important; /* Asegura que no haya fondo en la gráfica */
+}
+
+/* Estilo para el botón de orden dentro de la gráfica */
+.toggle-order-button {
+  background-color: orange;  /* Color de fondo naranja */
+  color: white;               /* Color de texto blanco */
+  border: none;               /* Sin borde */
+  padding: 10px 20px;         /* Espaciado adecuado */
+  font-size: 16px;            /* Tamaño de la fuente */
+  cursor: pointer;           /* Cursor de puntero */
+  margin: 10px 0;             /* Espaciado alrededor del botón */
+  border-radius: 5px;         /* Bordes redondeados */
+  transition: background-color 0.3s ease; /* Transición suave */
+}
+
+.toggle-order-button:hover {
+  background-color: darkorange; /* Color al hacer hover */
+}
