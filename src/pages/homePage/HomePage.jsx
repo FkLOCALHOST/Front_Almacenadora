@@ -8,14 +8,9 @@ import {
   actualizarLote,
   crearLote,
   generarPDFLotes,
-<<<<<<< HEAD
-  generarPDFCantidadProductos,
-  generarPDFCantidadTotalProductos
-=======
   // listarPorCantidadVentas, // Endpoint para productos top de ventas
   // obtenerInventarioTotal,  // Endpoint para inventario total de dinero
   // obtenerLotesPorVencer,   // Endpoint para lotes por vencer
->>>>>>> origin/cmorales-2021365
 } from '../../services/api';
 import './HomePage.css';
 
@@ -178,123 +173,6 @@ const HomePage = () => {
     }
   };
 
-<<<<<<< HEAD
-      const handleFormSubmit = async (loteData) => {
-        try {
-          if (loteToEdit) {
-            const response = await actualizarLote(loteToEdit._id, loteData);
-            if (!response.error && response.data.success) {
-              setlotes((prevLotes) =>
-                prevLotes.map((lote) =>
-                  lote._id === loteToEdit._id ? response.data.lote : lote
-                )
-              );
-            } else {
-              setErrorMessage(response.data?.msg || 'Error al actualizar el lote.');
-            }
-          } else {
-            const response = await crearLote(loteData);
-            if (!response.error && response.data.success) {
-              setlotes((prevLotes) => [...prevLotes, response.data.lote]);
-            } else {
-              setErrorMessage(response.data?.msg || 'Error al agregar el lote.');
-            }
-          }
-        } catch (error) {
-          setErrorMessage('Error al conectar con el servidor.');
-        }
-        setShowForm(false); // Cerrar el formulario
-        setloteToEdit(null); // Limpiar el lote a editar
-      };
-
-        const handleDeleteLote = (id) => {
-          setloteToDelete(id);
-          setShowConfirmDialog(true);
-        };
-
-        const confirmDeleteLote = async () => {
-            try {
-              const response = await eliminarLote(loteToDelete);
-              if (!response.error) {
-                setlotes((prevLotes) =>
-                  prevLotes.filter((lote) => lote._id !== loteToDelete)
-                );
-              } else {
-                setErrorMessage("Error al eliminar el lote.");
-              }
-            } catch (error) {
-              setErrorMessage("Error al conectar con el servidor.");
-            }
-            setShowConfirmDialog(false);
-            setloteToDelete(null);
-          };
-        
-          const cancelDeleteClient = () => {
-            setShowConfirmDialog(false);
-            setloteToDelete(null);
-          };
-
-          const handleGenerateReport = async () => {
-              try {
-                const response = await generarPDFLotes();
-                if (!response.error) {
-                  const blob = response.data;
-                  const url = window.URL.createObjectURL(blob);
-                  const a = document.createElement("a");
-                  a.href = url;
-                  a.download = "Lotes.pdf";
-                  a.click();
-                  window.URL.revokeObjectURL(url);
-                } else {
-                  setErrorMessage("Error al generar el informe.");
-                }
-              } catch (error) {
-                setErrorMessage("Error al conectar con el servidor.");
-              }
-            };
-
-            const handleGenerateCantidadProductos = async () => {
-              try {
-                const response = await generarPDFCantidadProductos();
-                if (!response.error) {
-                  const blob = response.data;
-                  const url = window.URL.createObjectURL(blob);
-                  const a = document.createElement("a");
-                  a.href = url;
-                  a.download = "CantidadProductos.pdf";
-                  a.click();
-                  window.URL.revokeObjectURL(url);
-                } else {
-                  setErrorMessage("Error al generar el informe.");
-                }
-              } catch (error) {
-                setErrorMessage("Error al conectar con el servidor.");
-              }
-            };
-          
-
-            const handleGenerateCantidadTotalProductos = async (nombreProducto) => {
-              try {
-                const response = await generarPDFCantidadTotalProductos({ nombreProducto }); // Enviar el nombre del producto
-                if (!response.error) {
-                  const blob = new Blob([response.data], { type: "application/pdf" });
-                  const url = window.URL.createObjectURL(blob);
-                  const a = document.createElement("a");
-                  a.href = url;
-                  a.download = `${nombreProducto}_CantidadTotalProductos.pdf`; // Usar el nombre del producto en el archivo
-                  a.click();
-                  window.URL.revokeObjectURL(url);
-                } else {
-                  setErrorMessage("Error al generar el informe.");
-                }
-              } catch (error) {
-                setErrorMessage("Error al conectar con el servidor.");
-              }
-            };
-        
-  
-=======
->>>>>>> origin/cmorales-2021365
   return (
     <div>
       <h1>Welcome to Almacenadora</h1>
@@ -318,63 +196,6 @@ const HomePage = () => {
       </div>
       
       <div className="client-page-container">
-<<<<<<< HEAD
-            <div className="clients-header">
-              <h1 className="clients-title">Lotes</h1>
-              <div className="clients-header-buttons">
-                {isAdmin && ( // Mostrar el botón de agregar solo si es admin
-                  <button className="add-client-button" onClick={handleAddLote}>
-                    Agregar Lote
-                  </button>
-                )}
-                <button className="report-button" onClick={handleGenerateReport}>
-                  Informe de Lotes
-                </button>
-                <button className="report-button" onClick={handleGenerateCantidadProductos}>
-                  Informe de Cantidad de Productos
-                </button>
-                <button className="report-button" onClick={handleGenerateCantidadTotalProductos}>
-                  Informe de Cantidad Total de Productos
-                </button>
-              </div>
-            </div>
-            <div className="clients-grid">
-              {errorMessage ? (
-                <p className="error-message">{errorMessage}</p>
-              ) : (
-                lotes
-                  .filter((lote) => lote.estado) // Filtrar clientes con estado: true
-                  .map((lote) => (
-                    <LoteCard
-                        key={lote._id}
-                        id={lote._id}
-                        numeroLote={lote.numeroLote}
-                        cantidad={lote.cantidad}
-                        fechaCaducidad={lote.fechaCaducidad}
-                        productos={lote.productos || []} // Asegúrate de que productos sea un array
-                        estado={lote.estado}
-                        isAdmin={isAdmin}
-                        onDelete={handleDeleteLote}
-                        onEdit={() => handleEditLote(lote)}
-                    />
-                  ))
-              )}
-            </div>
-            {showForm && isAdmin && (
-              <AddLoteForm
-                onClose={handleFormClose}
-                onSubmit={handleFormSubmit}
-                initialData={loteToEdit} // Pass initial data if editing
-                isAdmin={isAdmin} // Pasar el estado de admin al formulario
-              />
-            )}
-            {showConfirmDialog && (
-              <ConfirmDialog
-                message="¿Está seguro de que desea eliminar este lote?"
-                onConfirm={confirmDeleteLote}
-                onCancel={cancelDeleteClient}
-              />
-=======
         <div className="clients-header">
           <h1 className="clients-title">Lotes</h1>
           <div className="clients-header-buttons">
@@ -382,7 +203,6 @@ const HomePage = () => {
               <button className="add-client-button" onClick={handleAddLote}>
                 Agregar Lote
               </button>
->>>>>>> origin/cmorales-2021365
             )}
             <button className="report-button" onClick={handleGenerateReport}>
               Informe de Lotes
