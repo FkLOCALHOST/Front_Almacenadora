@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { crearLote, actualizarLote } from '../../services/api';
+import Select from 'react-select';
+import { crearLote, actualizarLote, listarProductos } from '../../services/api';
 import '../cliente/AddClientForm.css';
 
 const AddLoteForm = ({
@@ -13,7 +14,7 @@ const AddLoteForm = ({
         numeroLote: '',
         cantidad: '',
         fechaCaducidad: '',
-        nombreProducto: [],
+        nombreProducto: null,
         estado: true,
     });
 
@@ -23,7 +24,9 @@ const AddLoteForm = ({
                 numeroLote: initialData.numeroLote || '',
                 cantidad: initialData.cantidad || '',
                 fechaCaducidad: initialData.fechaCaducidad || '',
-                nombreProducto: initialData.productos?.map((producto) => producto.nombreProducto) || [],
+                nombreProducto: initialData.nombreProducto
+                ? { value: initialData.nombreProducto._id || initialData.nombreProducto, label: initialData.nombreProducto.productoId || initialData.nombreProducto }
+                : null,
                 estado: initialData.estado !== undefined ? initialData.estado : true,      
             });
         }
@@ -40,16 +43,19 @@ const AddLoteForm = ({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const payload = {
+          ...formData
+        };
         try {
             let response;
             if (initialData && initialData._id) {
-                response = await actualizarLote(initialData._id, formData);
+                response = await actualizarLote(initialData._id, payload);
             } else {
-                response = await crearLote(formData);
+                response = await crearLote(payload);
             }
     
             if (!response.error) {
-                onSubmit(formData); 
+                onSubmit(payload); 
                 onClose();
             } else {
                 console.error('Error al procesar el lote:', response.message);

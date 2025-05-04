@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import StoreCard from "../../components/store/StoreCard";
+import { validateDate, validateDateMessage, validateDateMessage2 } from "../../shared/validators/validateDate";
 import AddStoreForm from "../../components/store/addStoreForm";
 import ConfirmDialog from "../../components/cliente/ConfirmDialog";
 import {
@@ -19,6 +20,7 @@ const StorePage = () => {
   const [storeToDelete, setStoreToDelete] = useState(null);
   const [storeToEdit, setStoreToEdit] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const trabajadorDetails = localStorage.getItem("Trabajador");
@@ -126,6 +128,15 @@ const StorePage = () => {
     window.location.reload();
   }
 
+  const filteredStores = stores.filter((store) => {
+    const numero = store.numeroBodega?.toLowerCase() || '';
+    const lote = store.lote?.numeroLote?.toLowerCase() || '';
+    return (
+      numero.includes(searchTerm.toLowerCase()) ||
+      lote.includes(searchTerm.toLowerCase())
+    );
+  });
+
   const handleGenerateReport = async () => {
     try {
       const response = await generarPDFBodega();
@@ -150,6 +161,12 @@ const StorePage = () => {
       <div className="store-header">
         <h1 className="store-title">Bodegas</h1>
         <div className="store-headers-buttons">
+        <input className="search-bar-store"
+            type="text"
+            placeholder="Buscar bodega o lote"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            />
           {isAdmin && (
             <button
               className="add-store-button"
@@ -166,31 +183,36 @@ const StorePage = () => {
       <div className="store-grid">
          {errorMessage ? (
           <p className="error-message">{errorMessage}</p>
-        ) : (stores.map((store) => (
-             <StoreCard
-               key={store._id}
-               id={store._id}
-               numeroBodega={store.numeroBodega}
-               fechaIngreso={store.fechaIngreso}
-               fechaSalida={store.fechaSalida}
-               lote={store.lote}
-               trabajador={store.trabajador}
-               estado={store.estado}
-               isAdmin={isAdmin}
-               onDelete={handleDeleteStore}
-               onEdit={() => handleEditStore(store)}
-             />
-           ))
-         )}
-       </div>
+        ) : filteredStores.map((store) => (
+          <StoreCard
+            key={store._id}
+            id={store._id}
+            numeroBodega={store.numeroBodega}
+            fechaIngreso={store.fechaIngreso}
+            fechaSalida={store.fechaSalida}
+            lote={store.lote}
+            trabajador={store.trabajador}
+            estado={store.estado}
+            isAdmin={isAdmin}
+            onDelete={handleDeleteStore}
+            onEdit={() => handleEditStore(store)}
+          />
+        ))
+        }
+       </div>       
 
       {showForm && isAdmin && (
-        <AddStoreForm
-          onClose={handleFormClose}
-          onSubmit={handleFormSubmit}
-          initialData={storeToEdit} //
-          isAdmin={isAdmin}
-        />
+        <>
+          <AddStoreForm
+            onClose={handleFormClose}
+            onSubmit={handleFormSubmit}
+            initialData={storeToEdit} 
+            isAdmin={isAdmin}
+            errorMessage={errorMessage}
+            stores={stores}
+          />
+        </>
+        
       )}
       {showConfirmDialog && (
         <ConfirmDialog

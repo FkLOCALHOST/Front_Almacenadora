@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
+import { validateDate, validateDateMessage, validateDateMessage2 } from "../../shared/validators/validateDate";
 import { agregarBodega, actualizarBodega, listarLotes, listarTrabajadores } from '../../services/api';
 import './addStoreForm.css';
 
-const addStoreForm = ({ onClose, onSubmit, initialData = null, isAdmin }) => {
+const addStoreForm = ({ onClose, onSubmit, initialData = null, isAdmin, stores }) => {
   const [formData, setFormData] = useState({
     numeroBodega: '',
     fechaIngreso: '',
@@ -16,6 +17,8 @@ const addStoreForm = ({ onClose, onSubmit, initialData = null, isAdmin }) => {
 
   const [lotesOptions, setLotesOptions] = useState([]);
   const [trabajadoresOptions, setTrabajadoresOptions] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  
 
   useEffect(() => {
     if (initialData) {
@@ -84,6 +87,31 @@ const addStoreForm = ({ onClose, onSubmit, initialData = null, isAdmin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const existe = stores.some(
+      (s) =>
+        s.numeroBodega === formData.numeroBodega &&
+        (!initialData || s._id !== initialData._id)
+    );
+  
+    if (existe) {
+      setErrorMessage("El número de bodega ya existe.");
+      return;
+    }
+
+    if (!validateDate(formData.fechaIngreso) || !validateDate(formData.fechaSalida)) {
+      setErrorMessage(validateDateMessage);
+      return;
+    }
+  
+    if (new Date(formData.fechaSalida) < new Date(formData.fechaIngreso)) {
+      setErrorMessage(validateDateMessage2);
+      return;
+    }
+  
+    setErrorMessage("");
+
+
     const payload = {
       ...formData,
       lote: formData.lote?.value,
@@ -113,6 +141,13 @@ const addStoreForm = ({ onClose, onSubmit, initialData = null, isAdmin }) => {
     <div className="add-store-form-container">
       <div className="add-store-form-content">
         <h2 className="form-title">{initialData ? 'Actualizar Bodega' : 'Agregar Bodega'}</h2>
+        {errorMessage &&
+        <>
+        <span className="error-message">{errorMessage}</span>
+        <br />
+        <br />
+        </>
+        }
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <input
@@ -153,6 +188,7 @@ const addStoreForm = ({ onClose, onSubmit, initialData = null, isAdmin }) => {
               value={formData.lote}
               onChange={handleSelectChange}
               placeholder="Selecciona un lote"
+              required
             />
           </div>
             
@@ -166,6 +202,7 @@ const addStoreForm = ({ onClose, onSubmit, initialData = null, isAdmin }) => {
               value={formData.trabajador}
               onChange={handleSelectChange}
               placeholder="Selecciona un trabajador"
+              required
             />
           </div>
 

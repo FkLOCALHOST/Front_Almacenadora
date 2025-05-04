@@ -20,7 +20,12 @@ import {
   actualizarLote,
   crearLote,
   generarPDFLotes,
-} from "../../services/api";
+
+  listarPorCantidadVentas, // Endpoint para productos top de ventas
+  // obtenerInventarioTotal,  // Endpoint para inventario total de dinero
+  // obtenerLotesPorVencer,   // Endpoint para lotes por vencer
+} from '../../services/api';
+import './HomePage.css';
 
 const HomePage = () => {
   const [lotes, setLotes] = useState([]);
@@ -66,6 +71,34 @@ const HomePage = () => {
         setIsAdmin(role === "ADMIN_ROLE");
       }
     }
+  }, []);
+
+  useEffect(() => {
+
+    const fetchData = async () => {
+      const productosResponse = await listarPorCantidadVentas();
+      if (!productosResponse.error) {
+        setProductosTop(productosResponse.data);
+      } else {
+        setErrorMessage("Error al cargar productos top.");
+      }
+
+      /*const inventarioResponse = await obtenerInventarioTotal();
+      if (!inventarioResponse.error) {
+        setInventarioTotal(inventarioResponse.data);
+      } else {
+        setErrorMessage("Error al cargar inventario total.");
+      }
+
+      const lotesVencerResponse = await obtenerLotesPorVencer();
+      if (!lotesVencerResponse.error) {
+        setLotesPorVencer(lotesVencerResponse.data);
+      } else {
+        setErrorMessage("Error al cargar lotes por vencer.");
+      }*/
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
