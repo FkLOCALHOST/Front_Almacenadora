@@ -8,7 +8,7 @@ import {
   actualizarLote,
   crearLote,
   generarPDFLotes,
-  // listarPorCantidadVentas, // Endpoint para productos top de ventas
+  listarPorCantidadVentas, // Endpoint para productos top de ventas
   // obtenerInventarioTotal,  // Endpoint para inventario total de dinero
   // obtenerLotesPorVencer,   // Endpoint para lotes por vencer
 } from '../../services/api';
@@ -49,7 +49,7 @@ const HomePage = () => {
         setErrorMessage("Error al cargar productos top.");
       }
 
-      const inventarioResponse = await obtenerInventarioTotal();
+      /*const inventarioResponse = await obtenerInventarioTotal();
       if (!inventarioResponse.error) {
         setInventarioTotal(inventarioResponse.data);
       } else {
@@ -61,7 +61,7 @@ const HomePage = () => {
         setLotesPorVencer(lotesVencerResponse.data);
       } else {
         setErrorMessage("Error al cargar lotes por vencer.");
-      }
+      }*/
     };
 
     fetchData();
