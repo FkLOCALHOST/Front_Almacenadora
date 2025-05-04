@@ -293,7 +293,7 @@ export const obtenerBodegas = async () => {
 
 export const crearLote = async (data) => {
   try {
-    return await apiAlmacenadora.post("lote/crearLote", data);
+    return await apiAlmacenadora.post("/lote/crearLote", data);
 
   } catch (error) {
     return { error: true, message: error.message };
@@ -354,6 +354,14 @@ export const eliminarLote = async (idLote) => {
 export const listarLotes = async () => {
   try {
     return await apiAlmacenadora.get("/lote/");
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const listarProducto = async () => {
+  try {
+    return await apiAlmacenadora.get("/productos/listarProductos");
   } catch (error) {
     return { error: true, message: error.message };
   }

@@ -18,7 +18,8 @@ const LoteCard = ({
                 <h3 className="lote-number">Número: {numeroLote}</h3>
                 <p className="lote-cantidad">Cantidad del producto: {cantidad}</p>
                 <p className="lote-fechaCaducidad">Fecha de caducidad: {fechaCaducidad}</p>
-                <p className="lote-producto">Producto: {productos?.productoId}</p>
+                <p className="lote-producto">Nombre del producto: {productos?.nombreProducto || 'No especificado'}</p>
+
             </div>
             {isAdmin && (
                 <div className="admin-acctions">
