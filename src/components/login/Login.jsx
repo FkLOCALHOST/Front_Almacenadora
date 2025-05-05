@@ -1,14 +1,16 @@
 import React, { useState, useContext } from 'react';
-import { login } from '../../services/api';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { login } from '../../services/api'; // Llamada a la API para hacer login
+import { FiEye, FiEyeOff } from 'react-icons/fi'; // Iconos para mostrar/ocultar contraseña
 import { validateEmail, validateEmailMessage } from '../../shared/validators/validateEmail';
 import { validatecontrasenaT, validatecontrasenaTMessage } from '../../shared/validators/validatePassword';
-import { ThemeContext } from '../../themeContext'; // Import ThemeContext
+import { ThemeContext } from '../../themeContext'; // Obtener el contexto del tema
+import { useNavigate } from 'react-router-dom'; // Para redirigir después de login exitoso
 
 const Login = ({ switchAuthHandler, onLoginSuccess }) => {
-  const { theme } = useContext(ThemeContext); // Get current theme
-  const [correoT, setcorreoT] = useState('');
-  const [contrasenaT, setcontrasenaT] = useState('');
+  const { theme } = useContext(ThemeContext); // Obtener el tema actual
+  const navigate = useNavigate(); // Inicializar el hook de navegación
+  const [correoT, setCorreoT] = useState('');
+  const [contrasenaT, setContrasenaT] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -18,13 +20,13 @@ const Login = ({ switchAuthHandler, onLoginSuccess }) => {
     setError('');
     setSuccess('');
 
-    // Validate email
+    // Validación del correo electrónico
     if (!validateEmail(correoT)) {
       setError(validateEmailMessage);
       return;
     }
 
-    // Validate password
+    // Validación de la contraseña
     if (!validatecontrasenaT(contrasenaT)) {
       setError(validatecontrasenaTMessage);
       return;
@@ -36,8 +38,9 @@ const Login = ({ switchAuthHandler, onLoginSuccess }) => {
         setError('Inicio de sesión fallido. Verifica tus credenciales.');
       } else {
         setSuccess('¡Inicio de sesión exitoso!');
-        localStorage.setItem('Trabajador', JSON.stringify(response.data));
-        onLoginSuccess(); // Notify parent component of successful login
+        localStorage.setItem('Trabajador', JSON.stringify(response.data)); // Guardar los detalles del trabajador en localStorage
+        onLoginSuccess(); // Notificar al componente padre que el login fue exitoso
+        navigate("/home"); // Redirigir a la página de inicio después del login exitoso
       }
     } catch (err) {
       setError('Ocurrió un error inesperado. Intenta de nuevo.');
@@ -45,7 +48,7 @@ const Login = ({ switchAuthHandler, onLoginSuccess }) => {
   };
 
   return (
-    <div className={`login-container ${theme}`}> {/* Apply theme class */}
+    <div className={`login-container ${theme}`}> {/* Aplicar la clase del tema */}
       <div className="login-content">
         <h1 className="login-title">Almacenadora Virtual</h1>
         {error && <p style={{ color: 'red', marginBottom: '1rem' }}>{error}</p>}
@@ -56,7 +59,7 @@ const Login = ({ switchAuthHandler, onLoginSuccess }) => {
               type="text"
               placeholder="Correo Electrónico"
               value={correoT}
-              onChange={(e) => setcorreoT(e.target.value)}
+              onChange={(e) => setCorreoT(e.target.value)}
               required
             />
           </div>
@@ -65,7 +68,7 @@ const Login = ({ switchAuthHandler, onLoginSuccess }) => {
               type={showPassword ? 'text' : 'password'}
               placeholder="Contraseña"
               value={contrasenaT}
-              onChange={(e) => setcontrasenaT(e.target.value)}
+              onChange={(e) => setContrasenaT(e.target.value)}
               required
             />
             <span
