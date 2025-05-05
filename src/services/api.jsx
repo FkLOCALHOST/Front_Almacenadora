@@ -447,3 +447,12 @@ export const generarPDFCantidadTotalProductos = async () => {
     return { error: true, message: error.message };
   }
 };
+
+export const totalInventario = async () => {
+  try {
+    const response = await apiAlmacenadora.get("lote/sumarPrecioTotalLotes");
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
