@@ -19,7 +19,7 @@ import {
   actualizarLote,
   crearLote,
   generarPDFLotes,
-  listarPorCantidadVentas, // Endpoint para productos top de ventas
+  //listarPorCantidadVentas, // Endpoint para productos top de ventas
   // obtenerInventarioTotal,  // Endpoint para inventario total de dinero
 } from '../../services/api';
 
@@ -69,6 +69,7 @@ const HomePage = () => {
   }, []);
 
 
+
   useEffect(() => {
     const fetchLotes = async () => {
       const response = await listarLote();
@@ -108,19 +109,23 @@ const HomePage = () => {
         if (!response.error && response.data.success) {
           setLotes((prevLotes) =>
             prevLotes.map((lote) =>
-              lote._id === loteToEdit._id ? response.data.lote : lote
+              lote._id === loteToEdit._id 
+                ? { ... lote, loteData} 
+                : lote
             )
           );
+          handleRefresh();
         } else {
-          setErrorMessage(response.data?.msg || "Error al actualizar el lote.");
+          setErrorMessage('Error al actualizar el lote.');
         }
       } else {
         const response = await crearLote(loteData);
-        if (!response.error && response.data.success) {
-          setLotes((prevLotes) => [...prevLotes, response.data.lote]);
+        if (!response.error) {
+          setlotes((prevLotes) => [...prevLotes, response.data]);
         } else {
-          setErrorMessage(response.data?.msg || "Error al agregar el lote.");
+          setErrorMessage('Error al agregar el lote.');
         }
+        handleRefresh();
       }
     } catch (error) {
       setErrorMessage("Error al conectar con el servidor.");
@@ -155,6 +160,10 @@ const HomePage = () => {
     setShowConfirmDialog(false);
     setLoteToDelete(null);
   };
+
+  const handleRefresh = () => {
+    window.location.reload();
+  }
 
   const handleGenerateReport = async () => {
     try {
@@ -237,7 +246,6 @@ const HomePage = () => {
             <p className="error-message">{errorMessage}</p>
           ) : (
             lotes
-              .filter((lote) => lote.estado)
               .map((lote) => (
                 <LoteCard
                   key={lote._id}
@@ -245,7 +253,7 @@ const HomePage = () => {
                   numeroLote={lote.numeroLote}
                   cantidad={lote.cantidad}
                   fechaCaducidad={lote.fechaCaducidad}
-                  productos={lote.productos || []}
+                  productos={lote.productos}
                   estado={lote.estado}
                   isAdmin={isAdmin}
                   onDelete={handleDeleteLote}

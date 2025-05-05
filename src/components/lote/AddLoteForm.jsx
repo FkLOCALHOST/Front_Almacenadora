@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
-import { crearLote, actualizarLote, listarProductos } from '../../services/api';
+import { crearLote, actualizarLote, listarProducto } from '../../services/api';
 import '../cliente/AddClientForm.css';
 
 const AddLoteForm = ({
@@ -14,9 +14,11 @@ const AddLoteForm = ({
         numeroLote: '',
         cantidad: '',
         fechaCaducidad: '',
-        nombreProducto: null,
+        producto: null,
         estado: true,
     });
+
+    const [ProductosOptions, setProductosOptions] = useState([]);
 
     useEffect(() => {
         if (initialData) {
@@ -24,13 +26,30 @@ const AddLoteForm = ({
                 numeroLote: initialData.numeroLote || '',
                 cantidad: initialData.cantidad || '',
                 fechaCaducidad: initialData.fechaCaducidad || '',
-                nombreProducto: initialData.nombreProducto
-                ? { value: initialData.nombreProducto._id || initialData.nombreProducto, label: initialData.nombreProducto.productoId || initialData.nombreProducto }
+                producto: initialData.producto
+                ? { value: initialData.producto._id || initialData.producto, label: initialData.producto.nombreProducto || initialData.producto }
                 : null,
                 estado: initialData.estado !== undefined ? initialData.estado : true,      
             });
         }
     }, [initialData]);
+
+    useEffect(() => {
+      const fetchProductos = async () => {
+        const res = await listarProducto();
+        if (!res.error){
+          const options = res.data.productos.map(producto => ({
+            value: producto._id,  // Este es el ID del producto
+            label: producto.nombreProducto  // Este es el nombre del producto
+          }));
+          setProductosOptions(options);
+        } else {
+          console.error("Error al listar los lotes:", res.message);
+        }
+      };
+
+      fetchProductos();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -40,12 +59,21 @@ const AddLoteForm = ({
         }));
       };
 
+      const handleSelectChange = (selectedOption, {name}) => {
+        setFormData(perv => ({...perv, [name]: selectedOption}));
+      };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const payload = {
-          ...formData
+          numeroLote: formData.numeroLote,
+          cantidad: formData.cantidad,
+          fechaCaducidad: formData.fechaCaducidad,
+          productoId: formData.producto?.value, // <- este nombre es clave
+          estado: formData.estado,
+        
         };
+        
         try {
             let response;
             if (initialData && initialData._id) {
@@ -101,13 +129,13 @@ const AddLoteForm = ({
                   />
                 </div>
                 <div className="input-group">
-                  <input
-                    type="text"
-                    name="nombreProducto"
-                    placeholder="Nombre del priducto"
-                    value={formData.nombreProducto}
-                    onChange={handleChange}
-                    required
+                  <label>Producto</label>
+                  <Select
+                  name='producto'
+                  options={ProductosOptions}
+                  value={formData.producto}
+                  onChange={handleSelectChange}
+                  placeholder="Selecciona un producto"
                   />
                 </div>
                 {isAdmin && (

@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Flex,
@@ -100,6 +101,8 @@ const Register = ({ switchAuthHandler }) => {
       setTelefono('');
       setDpi('');
       setApellido('');
+
+      switchAuthHandler();
     }
   };
 
