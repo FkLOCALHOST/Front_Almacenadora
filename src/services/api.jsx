@@ -233,7 +233,7 @@ export const listarProductos = async () => {
 
 export const buscarProducto = async (idProducto) => {
   try {
-    return await apiAlmacenadora.get(`/buscarProducto/${idProducto}`);
+    return await apiAlmacenadora.get(`/productos/buscarProducto/${idProducto}`);
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -241,7 +241,7 @@ export const buscarProducto = async (idProducto) => {
 
 export const generarPDFProductos = async () => {
   try {
-    const response = await apiAlmacenadora.get("/generarPDFProductos", {
+    const response = await apiAlmacenadora.get("/productos/generarPDFProductos", {
       responseType: "blob", // Ensure the response is treated as a file
     });
     return response;
@@ -261,7 +261,7 @@ export const listarPorCantidadVentas = async () => {
 
 export const actualizarProducto = async (idProducto, data) => {
   try {
-    return await apiAlmacenadora.put(`/actualizarProducto/${idProducto}`, data);
+    return await apiAlmacenadora.put(`/productos/actualizarProducto/${idProducto}`, data);
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -269,7 +269,7 @@ export const actualizarProducto = async (idProducto, data) => {
 
 export const eliminarProducto = async (idProducto) => {
   try {
-    return await apiAlmacenadora.delete(`/eliminarProducto/${idProducto}`);
+    return await apiAlmacenadora.delete(`/productos/eliminarProducto/${idProducto}`);
   } catch (error) {
     return { error: true, message: error.message };
   }
