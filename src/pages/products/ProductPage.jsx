@@ -19,6 +19,7 @@ const ProductPage = () => {
   const [productToDelete, setProductToDelete] = useState(null);
   const [productToEdit, setProductToEdit] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const trabajadorDetails = localStorage.getItem("Trabajador");
@@ -66,7 +67,10 @@ const ProductPage = () => {
   const handleFormSubmit = async (productData) => {
     try {
       if (productToEdit) {
-        const response = await actualizarProducto(productToEdit._id, productData);
+        const response = await actualizarProducto(
+          productToEdit._id,
+          productData
+        );
         if (!response.error) {
           setProducts((prevProducts) =>
             prevProducts.map((product) =>
@@ -139,11 +143,24 @@ const ProductPage = () => {
     }
   };
 
+  const filteredProducts = products
+    .filter((product) => product.estado)
+    .filter((product) =>
+      product.nombreProducto.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
   return (
     <div className="product-page-container">
       <div className="products-header">
         <h1 className="products-title">Productos</h1>
         <div className="products-header-buttons">
+          <input
+            type="text"
+            className="search-bar-product"
+            placeholder="Buscar producto"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
           {isAdmin && (
             <button className="add-product-button" onClick={handleAddProduct}>
               Agregar Producto
@@ -158,23 +175,21 @@ const ProductPage = () => {
         {errorMessage ? (
           <p className="error-message">{errorMessage}</p>
         ) : (
-          products
-            .filter((product) => product.estado)
-            .map((product) => (
-              <ProductCard
-                key={product._id}
-                id={product._id}
-                nombreProducto={product.nombreProducto}
-                descripcion={product.descripcion}
-                precio={product.precio}
-                categoria={product.categoria}
-                urlImagen={product.urlImagen}
-                estado={product.estado}
-                isAdmin={isAdmin}
-                onDelete={handleDeleteProduct}
-                onEdit={() => handleEditProduct(product)}
-              />
-            ))
+          filteredProducts.map((product) => (
+            <ProductCard
+              key={product._id}
+              id={product._id}
+              nombreProducto={product.nombreProducto}
+              descripcion={product.descripcion}
+              precio={product.precio}
+              categoria={product.categoria}
+              urlImagen={product.urlImagen}
+              estado={product.estado}
+              isAdmin={isAdmin}
+              onDelete={handleDeleteProduct}
+              onEdit={() => handleEditProduct(product)}
+            />
+          ))
         )}
       </div>
       {showForm && isAdmin && (

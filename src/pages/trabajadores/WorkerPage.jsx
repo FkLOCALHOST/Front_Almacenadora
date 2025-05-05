@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
 import WorkerCard from "../../components/worker/WorkerCard";
-import { obtenerTrabajadores, generarPDFTrabajadores, eliminarEmpleado, actualizarEmpleado } from "../../services/api";
+import {
+  obtenerTrabajadores,
+  generarPDFTrabajadores,
+  eliminarEmpleado,
+  actualizarEmpleado,
+} from "../../services/api";
 import ConfirmDialog from "../../components/worker/ConfirmDialog";
 import AddWorkerForm from "../../components/worker/AddWorkerForm";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./WorkerPage.css";
 
 const WorkerPage = () => {
   const [workers, setWorkers] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false); // Estado para admin
+  const [isAdmin, setIsAdmin] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [workerToDelete, setWorkerToDelete] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [workerToEdit, setWorkerToEdit] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(""); 
 
   useEffect(() => {
     const trabajadorDetails = localStorage.getItem("Trabajador");
@@ -47,7 +53,6 @@ const WorkerPage = () => {
   }, []);
 
   const handleDeleteWorker = (tid) => {
-    // Actualiza isAdmin antes de proceder
     const trabajadorDetails = localStorage.getItem("Trabajador");
     if (trabajadorDetails) {
       const userDetails = JSON.parse(trabajadorDetails);
@@ -119,39 +124,59 @@ const WorkerPage = () => {
   const handleFormSubmit = async (workerData) => {
     try {
       if (workerToEdit) {
-        // Si se intenta cambiar el rol de ADMIN a EMPLEADO
-        if (workerToEdit.role === 'ADMIN_ROLE' && workerData.role === 'EMPLEADO_ROLE') {
-          toast.error('No tienes permisos para cambiar el rol de un ADMIN a EMPLEADO.');
+        if (
+          workerToEdit.role === "ADMIN_ROLE" &&
+          workerData.role === "EMPLEADO_ROLE"
+        ) {
+          toast.error("No tienes permisos para cambiar el rol de un ADMIN.");
           return;
         }
-        // Actualizar trabajador existente
         const response = await actualizarEmpleado(workerToEdit.tid, workerData);
         if (!response.error) {
           setWorkers((prevWorkers) =>
             prevWorkers.map((worker) =>
-              worker.tid === workerToEdit.tid ? { ...worker, ...workerData } : worker
+              worker.tid === workerToEdit.tid
+                ? { ...worker, ...workerData }
+                : worker
             )
           );
         } else {
-          if (response.status === 401 || (response.message && response.message.includes('401'))) {
-            toast.error('No tienes permisos para cambiar el rol de un ADMIN a EMPLEADO.');
+          if (
+            response.status === 401 ||
+            (response.message && response.message.includes("401"))
+          ) {
+            toast.error("No tienes permisos para cambiar el rol de un ADMIN.");
           } else {
-            setErrorMessage('Error al actualizar el trabajador.');
+            setErrorMessage("Error al actualizar el trabajador.");
           }
         }
       }
     } catch (error) {
-      setErrorMessage('Error al conectar con el servidor.');
+      setErrorMessage("Error al conectar con el servidor.");
     }
     setShowForm(false);
     setWorkerToEdit(null);
   };
+
+  const filteredWorkers = workers
+    .filter((worker) => worker.estadoT)
+    .filter((worker) => {
+      const fullName = `${worker.nombreT} ${worker.apellidoT}`.toLowerCase();
+      return fullName.includes(searchTerm.toLowerCase());
+    });
 
   return (
     <div className="worker-page-container">
       <div className="workers-header">
         <h1 className="workers-title">Trabajadores</h1>
         <div className="workers-header-buttons">
+          <input
+            className="search-bar-worker"
+            type="text"
+            placeholder="Buscar trabajador"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
           {isAdmin && (
             <button className="report-button" onClick={handleGenerateReport}>
               Informe
@@ -163,7 +188,7 @@ const WorkerPage = () => {
         {errorMessage ? (
           <p className="error-message">{errorMessage}</p>
         ) : (
-          workers.map((worker) => (
+          filteredWorkers.map((worker) => (
             <WorkerCard
               key={worker.tid || worker.dpi}
               tid={worker.tid}

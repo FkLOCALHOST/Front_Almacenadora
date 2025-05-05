@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import ProveedorCard from '../../components/proveedor/ProveedorCard';
-import AddProveedorForm from '../../components/proveedor/AddProveedorForm';
-import ConfirmDialog from '../../components/proveedor/ConfirmDialog';
+import React, { useEffect, useState } from "react";
+import ProveedorCard from "../../components/proveedor/ProveedorCard";
+import AddProveedorForm from "../../components/proveedor/AddProveedorForm";
+import ConfirmDialog from "../../components/proveedor/ConfirmDialog";
 import {
   listarProveedores,
   agregarProveedor,
   actualizarProveedor,
   eliminarProveedor,
-  generarPDFProveedores
-} from '../../services/api';
-import './ProveedorPage.css';
+  generarPDFProveedores,
+} from "../../services/api";
+import "./ProveedorPage.css";
 
 const ProveedorPage = () => {
   const [proveedores, setProveedores] = useState([]);
@@ -19,17 +19,7 @@ const ProveedorPage = () => {
   const [proveedorToDelete, setProveedorToDelete] = useState(null);
   const [proveedorToEdit, setProveedorToEdit] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-
-  const fetchProveedores = async () => {
-    const response = await listarProveedores();
-    if (!response.error && response.data?.proveedores) {
-      setProveedores(response.data.proveedores.filter((proveedor) => proveedor.estado));
-      setErrorMessage(""); 
-    } else {
-      setProveedores([]);
-      setErrorMessage("Error al cargar los proveedores.");
-    }
-  };
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const trabajadorDetails = localStorage.getItem("Trabajador");
@@ -42,27 +32,25 @@ const ProveedorPage = () => {
     }
   }, []);
 
-
-
   useEffect(() => {
     const fetchProveedores = async () => {
       const response = await listarProveedores();
       if (!response.error) {
-        if (response.data.proveedores.length === 0) {
+        const activos = response.data.proveedores.filter((p) => p.estado);
+        if (activos.length === 0) {
           setErrorMessage("Sin datos en la base de datos.");
         } else {
-          setProveedores(response.data.proveedores);
+          setProveedores(activos);
         }
       } else {
         setErrorMessage("Error al cargar los proveedores.");
-
       }
-    }
-    fetchProveedores(); 
+    };
+
+    fetchProveedores();
   }, []);
 
   const handleAddProveedor = () => {
-
     setProveedorToEdit(null);
     setShowForm(true);
   };
@@ -79,28 +67,36 @@ const ProveedorPage = () => {
 
   const handleFormSubmit = async (proveedorData) => {
     try {
-      let response;
       if (proveedorToEdit) {
-        response = await actualizarProveedor(proveedorToEdit._id, proveedorData);
+        const response = await actualizarProveedor(
+          proveedorToEdit._id,
+          proveedorData
+        );
+        if (!response.error) {
+          setProveedores((prev) =>
+            prev.map((p) =>
+              p._id === proveedorToEdit._id ? { ...p, ...proveedorData } : p
+            )
+          );
+        } else {
+          setErrorMessage("Error al actualizar el proveedor.");
+        }
       } else {
-        response = await agregarProveedor(proveedorData);
-      }
-
-      if (response && !response.error) {
-        await fetchProveedores(); 
-        setErrorMessage("");
-        setShowForm(false);
-        setProveedorToEdit(null);
-      } else {
-        setErrorMessage("Error al guardar el proveedor.");
+        const response = await agregarProveedor(proveedorData);
+        if (!response.error) {
+          setProveedores((prev) => [...prev, response.data]);
+        } else {
+          setErrorMessage("Error al agregar el proveedor.");
+        }
       }
     } catch (error) {
-      console.error(error);
       setErrorMessage("Error al conectar con el servidor.");
     }
+    setShowForm(false);
+    setProveedorToEdit(null);
   };
 
-  const handleDeleteProveedor = async (id) => {
+  const handleDeleteProveedor = (id) => {
     setProveedorToDelete(id);
     setShowConfirmDialog(true);
   };
@@ -109,8 +105,9 @@ const ProveedorPage = () => {
     try {
       const response = await eliminarProveedor(proveedorToDelete);
       if (!response.error) {
-        await fetchProveedores(); 
-        setErrorMessage("");
+        setProveedores((prev) =>
+          prev.filter((p) => p._id !== proveedorToDelete)
+        );
       } else {
         setErrorMessage("Error al eliminar el proveedor.");
       }
@@ -132,27 +129,41 @@ const ProveedorPage = () => {
       if (!response.error) {
         const blob = response.data;
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
-        a.download = 'Proveedores.pdf';
+        a.download = "Proveedores.pdf";
         a.click();
         window.URL.revokeObjectURL(url);
       } else {
-        setErrorMessage("Error al generar el reporte.");
+        setErrorMessage("Error al generar el informe.");
       }
     } catch (error) {
       setErrorMessage("Error al conectar con el servidor.");
     }
   };
 
+  const filteredProveedores = proveedores.filter((proveedor) =>
+    proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="proveedor-page-container">
       <div className="proveedores-header">
         <h1 className="proveedores-title">Proveedores</h1>
-        <div className="proveedores-headers-buttons">
+        <div className="proveedores-header-buttons">
+          <input
+            type="text"
+            className="search-bar-proveedor"
+            placeholder="Buscar proveedor"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
           {isAdmin && (
-            <button className="add-proveedor-button" onClick={handleAddProveedor}>
-              Agregar
+            <button
+              className="add-proveedor-button"
+              onClick={handleAddProveedor}
+            >
+              Agregar Proveedor
             </button>
           )}
           <button className="report-button" onClick={handleGenerateReport}>
@@ -160,41 +171,36 @@ const ProveedorPage = () => {
           </button>
         </div>
       </div>
-
       <div className="proveedores-grid">
-        {errorMessage && proveedores.length === 0 ? (
-
+        {errorMessage ? (
           <p className="error-message">{errorMessage}</p>
         ) : (
-          proveedores.map((proveedor) => (
+          filteredProveedores.map((proveedor) => (
             <ProveedorCard
               key={proveedor._id}
               id={proveedor._id}
-              isAdmin={isAdmin}
               nombre={proveedor.nombre}
               direccion={proveedor.direccion}
               telefono={proveedor.telefono}
+              estado={proveedor.estado}
+              isAdmin={isAdmin}
               onDelete={handleDeleteProveedor}
               onEdit={() => handleEditProveedor(proveedor)}
-              estado={proveedor.estado}
             />
           ))
         )}
       </div>
-
       {showForm && isAdmin && (
         <AddProveedorForm
           onClose={handleFormClose}
           onSubmit={handleFormSubmit}
           initialData={proveedorToEdit}
           isAdmin={isAdmin}
-          fetchProveedores={fetchProveedores}
         />
       )}
-
       {showConfirmDialog && (
         <ConfirmDialog
-          message="¿Estás seguro de que deseas eliminar este proveedor?"
+          message="¿Está seguro de que desea eliminar este proveedor?"
           onConfirm={confirmDeleteProveedor}
           onCancel={cancelDeleteProveedor}
         />

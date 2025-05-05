@@ -18,7 +18,8 @@ const ClientPage = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [clientToDelete, setClientToDelete] = useState(null);
   const [clientToEdit, setClientToEdit] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false); // Estado para almacenar si el usuario es admin
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // ✅ Búsqueda
 
   useEffect(() => {
     const trabajadorDetails = localStorage.getItem("Trabajador");
@@ -49,13 +50,13 @@ const ClientPage = () => {
   }, []);
 
   const handleAddCliente = () => {
-    setClientToEdit(null); // Clear any client being edited
+    setClientToEdit(null);
     setShowForm(true);
   };
 
   const handleEditClient = (client) => {
-    setClientToEdit(client); // Establecer el cliente a editar
-    setShowForm(true); // Mostrar el formulario
+    setClientToEdit(client);
+    setShowForm(true);
   };
 
   const handleFormClose = () => {
@@ -66,7 +67,6 @@ const ClientPage = () => {
   const handleFormSubmit = async (clientData) => {
     try {
       if (clientToEdit) {
-        // Actualizar cliente existente
         const response = await actualizarClientes(clientToEdit._id, clientData);
         if (!response.error) {
           setClients((prevClients) =>
@@ -80,7 +80,6 @@ const ClientPage = () => {
           setErrorMessage("Error al actualizar el cliente.");
         }
       } else {
-        // Agregar nuevo cliente
         const response = await agregarClientes(clientData);
         if (!response.error) {
           setClients((prevClients) => [...prevClients, response.data]);
@@ -91,8 +90,8 @@ const ClientPage = () => {
     } catch (error) {
       setErrorMessage("Error al conectar con el servidor.");
     }
-    setShowForm(false); // Cerrar el formulario
-    setClientToEdit(null); // Limpiar el cliente a editar
+    setShowForm(false);
+    setClientToEdit(null);
   };
 
   const handleDeleteClient = (id) => {
@@ -140,13 +139,25 @@ const ClientPage = () => {
       setErrorMessage("Error al conectar con el servidor.");
     }
   };
-
+  const filteredClients = clients
+    .filter((client) => client.estado)
+    .filter((client) => {
+      const fullName = `${client.nombre} ${client.apellido}`.toLowerCase();
+      return fullName.includes(searchTerm.toLowerCase());
+    });
   return (
     <div className="client-page-container">
       <div className="clients-header">
         <h1 className="clients-title">Clientes</h1>
         <div className="clients-header-buttons">
-          {isAdmin && ( // Mostrar el botón de agregar solo si es admin
+          <input
+            className="search-bar-client"
+            type="text"
+            placeholder="Buscar cliente"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {isAdmin && (
             <button className="add-client-button" onClick={handleAddCliente}>
               Agregar Cliente
             </button>
@@ -160,30 +171,28 @@ const ClientPage = () => {
         {errorMessage ? (
           <p className="error-message">{errorMessage}</p>
         ) : (
-          clients
-            .filter((client) => client.estado) // Filtrar clientes con estado: true
-            .map((client) => (
-              <ClientCard
-                key={client._id} // Asegurar que la clave sea única
-                id={client._id}
-                nombre={client.nombre}
-                apellido={client.apellido}
-                correo={client.correo}
-                telefono={client.telefono}
-                estado={client.estado}
-                isAdmin={isAdmin} // Pasar el estado de admin al componente
-                onDelete={handleDeleteClient}
-                onEdit={() => handleEditClient(client)}
-              />
-            ))
+          filteredClients.map((client) => (
+            <ClientCard
+              key={client._id}
+              id={client._id}
+              nombre={client.nombre}
+              apellido={client.apellido}
+              correo={client.correo}
+              telefono={client.telefono}
+              estado={client.estado}
+              isAdmin={isAdmin}
+              onDelete={handleDeleteClient}
+              onEdit={() => handleEditClient(client)}
+            />
+          ))
         )}
       </div>
       {showForm && isAdmin && (
         <AddClientForm
           onClose={handleFormClose}
           onSubmit={handleFormSubmit}
-          initialData={clientToEdit} // Pass initial data if editing
-          isAdmin={isAdmin} // Pasar el estado de admin al formulario
+          initialData={clientToEdit}
+          isAdmin={isAdmin}
         />
       )}
       {showConfirmDialog && (
