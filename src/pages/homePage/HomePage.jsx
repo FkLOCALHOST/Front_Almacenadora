@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from "react";
-import LoteCard from '../../components/lote/LoteCard';
+import LoteCard from "../../components/lote/LoteCard";
 import AddLoteForm from "../../components/lote/AddLoteForm";
 import ConfirmDialog from "../../components/cliente/ConfirmDialog";
+import ProductoMasVendido from "../../components/stats/mostSold";
+import ProductoMenosVendido from "../../components/stats/leastSold";
+import InventarioTotal from "../../components/stats/inventarioT";
+import LotesVencidos from "../../components/stats/lotesVencidos";
+import ProductChart from "../../components/graficas/ProductGrafic";
+import WorkerChart from "../../components/graficas/MejorRendimiento";
+import BodegaChart from "../../components/graficas/BodegaSalida";
+import useProductos from "../../shared/hooks/useProductos";
+import useTrabajadores from "../../shared/hooks/useTRabajadores";
+import useBodegas from "../../shared/hooks/useOrderBodega";
+import "../../assets/css/HomePage.css";
 import {
   listarLote,
   eliminarLote,
@@ -10,24 +21,41 @@ import {
   generarPDFLotes,
   //listarPorCantidadVentas, // Endpoint para productos top de ventas
   // obtenerInventarioTotal,  // Endpoint para inventario total de dinero
-  // obtenerLotesPorVencer,   // Endpoint para lotes por vencer
 } from '../../services/api';
-import './HomePage.css';
 
-// Componente de HomePage
 const HomePage = () => {
-  const [lotes, setlotes] = useState([]);
+  const [lotes, setLotes] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [loteToDelete, setloteToDelete] = useState(null);
-  const [loteToEdit, setloteToEdit] = useState(null);
+  const [loteToDelete, setLoteToDelete] = useState(null);
+  const [loteToEdit, setLoteToEdit] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-
-  // Nuevos estados para las tarjetas
-  const [productosTop, setProductosTop] = useState([]);
   const [inventarioTotal, setInventarioTotal] = useState(0);
-  const [lotesPorVencer, setLotesPorVencer] = useState(0);
+
+  const allProductos = lotes.flatMap((l) => l.productos || []);
+
+  const {
+    fechasConMasSalidas,
+    fechaConMasSalidas,
+    fechaConMenosSalidas,
+    errorMessage: bodegaErrorMessage,
+    toggleOrder,
+  } = useBodegas();
+
+  const {
+    productosOrdenados,
+    errorMessage: productosError,
+    toggleOrder: toggleOrderProductos,
+    ordenarPor,
+  } = useProductos(allProductos);
+
+  const {
+    trabajadoresOrdenados,
+    errorMessage: trabajadoresError,
+    toggleOrder: toggleOrderTrabajadores,
+    ordenarPor: ordenarPorTrabajadores,
+  } = useTrabajadores();
 
   useEffect(() => {
     const trabajadorDetails = localStorage.getItem("Trabajador");
@@ -40,32 +68,7 @@ const HomePage = () => {
     }
   }, []);
 
-  /*useEffect(() => {
-    const fetchData = async () => {
-      const productosResponse = await listarPorCantidadVentas();
-      if (!productosResponse.error) {
-        setProductosTop(productosResponse.data);
-      } else {
-        setErrorMessage("Error al cargar productos top.");
-      }
 
-     const inventarioResponse = await obtenerInventarioTotal();
-      if (!inventarioResponse.error) {
-        setInventarioTotal(inventarioResponse.data);
-      } else {
-        setErrorMessage("Error al cargar inventario total.");
-      }
-
-      const lotesVencerResponse = await obtenerLotesPorVencer();
-      if (!lotesVencerResponse.error) {
-        setLotesPorVencer(lotesVencerResponse.data);
-      } else {
-        setErrorMessage("Error al cargar lotes por vencer.");
-      }
-    };
-
-    fetchData();
-  }, []);*/
 
   useEffect(() => {
     const fetchLotes = async () => {
@@ -74,7 +77,7 @@ const HomePage = () => {
         if (response.data.lotes.length === 0) {
           setErrorMessage("Sin datos en la base de datos.");
         } else {
-          setlotes(response.data.lotes);
+          setLotes(response.data.lotes);
         }
       } else {
         setErrorMessage("Error al cargar los lotes.");
@@ -85,18 +88,18 @@ const HomePage = () => {
   }, []);
 
   const handleAddLote = () => {
-    setloteToEdit(null);
+    setLoteToEdit(null);
     setShowForm(true);
   };
 
   const handleEditLote = (lote) => {
-    setloteToEdit(lote);
+    setLoteToEdit(lote);
     setShowForm(true);
   };
 
   const handleFormClose = () => {
     setShowForm(false);
-    setloteToEdit(null);
+    setLoteToEdit(null);
   };
 
   const handleFormSubmit = async (loteData) => {
@@ -104,7 +107,7 @@ const HomePage = () => {
       if (loteToEdit) {
         const response = await actualizarLote(loteToEdit._id, loteData);
         if (!response.error && response.data.success) {
-          setlotes((prevLotes) =>
+          setLotes((prevLotes) =>
             prevLotes.map((lote) =>
               lote._id === loteToEdit._id 
                 ? { ... lote, loteData} 
@@ -125,14 +128,14 @@ const HomePage = () => {
         handleRefresh();
       }
     } catch (error) {
-      setErrorMessage('Error al conectar con el servidor.');
+      setErrorMessage("Error al conectar con el servidor.");
     }
     setShowForm(false);
-    setloteToEdit(null);
+    setLoteToEdit(null);
   };
 
   const handleDeleteLote = (id) => {
-    setloteToDelete(id);
+    setLoteToDelete(id);
     setShowConfirmDialog(true);
   };
 
@@ -140,7 +143,7 @@ const HomePage = () => {
     try {
       const response = await eliminarLote(loteToDelete);
       if (!response.error) {
-        setlotes((prevLotes) =>
+        setLotes((prevLotes) =>
           prevLotes.filter((lote) => lote._id !== loteToDelete)
         );
       } else {
@@ -150,12 +153,12 @@ const HomePage = () => {
       setErrorMessage("Error al conectar con el servidor.");
     }
     setShowConfirmDialog(false);
-    setloteToDelete(null);
+    setLoteToDelete(null);
   };
 
   const cancelDeleteClient = () => {
     setShowConfirmDialog(false);
-    setloteToDelete(null);
+    setLoteToDelete(null);
   };
 
   const handleRefresh = () => {
@@ -183,26 +186,46 @@ const HomePage = () => {
 
   return (
     <div>
-      <h1>Welcome to Almacenadora</h1>
+      <h1>Bienvenido a tu Almacenadora</h1>
+
       <div className="stats-cards">
-        <div className="stat-card">
-          <h2>Productos Top de Ventas</h2>
-          <p>{productosTop.length > 0 ? productosTop.map((producto) => `${producto.nombre}: ${producto.ventas}`).join(', ') : "Cargando..."}</p>
-        </div>
-        <div className="stat-card">
-          <h2>Inventario Total de Dinero</h2>
-          <p>${inventarioTotal.toFixed(2)}</p>
-        </div>
-        <div className="stat-card">
-          <h2>Lotes por Vencer</h2>
-          <p>{lotesPorVencer} lotes</p>
-        </div>
-        <div className="stat-card">
-          <h2>Lotes Vencidos</h2>
-          <p>{lotes.length} </p>
-        </div>
+        <ProductoMasVendido productoMasVendido={productosOrdenados[0]} />
+        <ProductoMenosVendido
+          productoMenosVendido={
+            productosOrdenados[productosOrdenados.length - 1]
+          }
+        />
+        <InventarioTotal inventarioTotal={inventarioTotal} />
+        <LotesVencidos lotes={lotes} />
       </div>
-      
+
+      <div className="stats-cards">
+        <p>
+          <strong>Fecha con más salidas:</strong> {fechaConMasSalidas.fecha} (
+          {fechaConMasSalidas.cantidad} salidas)
+        </p>
+        <p>
+          <strong>Fecha con menos salidas:</strong> {fechaConMenosSalidas.fecha}{" "}
+          ({fechaConMenosSalidas.cantidad} salidas)
+        </p>
+      </div>
+
+      <div className="product-chart">
+        <ProductChart productos={productosOrdenados} />
+      </div>
+      <div className="product-chart">
+          <BodegaChart bodegas={fechasConMasSalidas} />
+      </div>
+
+      <div className="product-chart">
+        <button onClick={toggleOrder}>
+          {ordenarPor === "mejorRendimiento"
+            ? "Mostrar Peor Rendimiento"
+            : "Mostrar Mejor Rendimiento"}
+        </button>
+        {isAdmin && <WorkerChart trabajadores={trabajadoresOrdenados} />}
+      </div>
+
       <div className="client-page-container">
         <div className="clients-header">
           <h1 className="clients-title">Lotes</h1>
