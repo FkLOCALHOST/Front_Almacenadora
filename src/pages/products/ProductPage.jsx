@@ -181,7 +181,7 @@ const ProductPage = () => {
               id={product._id}
               nombreProducto={product.nombreProducto}
               descripcion={product.descripcion}
-              precio={product.precio}
+              precio={Number(product.precio)}
               categoria={product.categoria}
               urlImagen={product.urlImagen}
               estado={product.estado}
