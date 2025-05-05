@@ -32,6 +32,8 @@ const HomePage = () => {
   const [loteToEdit, setLoteToEdit] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [inventarioTotal, setInventarioTotal] = useState(0); // Estado para el precio total del inventario
+  const [searchTerm, setSearchTerm] = useState('');
+
 
   const allProductos = lotes.flatMap((l) => l.productos || []);
 
@@ -177,6 +179,15 @@ const HomePage = () => {
     window.location.reload();
   };
 
+  const filteredLotes = lotes.filter((lote) => {
+    const numero = lote.numeroLote?.toLowerCase() || '';
+    const producto = lote.producto?.toLowerCase() || '';
+    return (
+      numero.includes(searchTerm.toLowerCase()) ||
+    producto.includes(searchTerm.toLowerCase())
+    );
+  });
+
   const handleGenerateReport = async () => {
     try {
       const response = await generarPDFLotes();
@@ -246,12 +257,11 @@ const HomePage = () => {
         <div className="clients-header">
           <h1 className="clients-title">Lotes</h1>
           <div className="clients-header-buttons">
-            <input
-              className="search-bar-lote"
-              type="text"
-              placeholder="Buscar lote"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+          <input className="search-bar-store"
+            type="text"
+            placeholder="Buscar lote"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             />
             {isAdmin && (
               <button className="add-client-button" onClick={handleAddLote}>

@@ -8,7 +8,8 @@ const AddLoteForm = ({
     onClose, 
     onSubmit, 
     initialData = null, 
-    isAdmin 
+    isAdmin,
+    productos = []
 }) => {
     const [formData, setFormData] = useState({
         numeroLote: '',
@@ -19,6 +20,7 @@ const AddLoteForm = ({
     });
 
     const [ProductosOptions, setProductosOptions] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         if (initialData) {
@@ -65,13 +67,27 @@ const AddLoteForm = ({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const existe = productos.some(
+          (p) =>
+            p.numeroLote === formData.numeroLote &&
+          (!initialData || p._id !== initialData._id)
+        );
+
+        if (existe) {
+          setErrorMessage("El número de lote ya existe.");
+          return;
+        }
+
+        setErrorMessage("");
+
+
         const payload = {
           numeroLote: formData.numeroLote,
           cantidad: formData.cantidad,
           fechaCaducidad: formData.fechaCaducidad,
           productoId: formData.producto?.value, // <- este nombre es clave
           estado: formData.estado,
-        
         };
         
         try {
@@ -97,6 +113,13 @@ const AddLoteForm = ({
           <div className="add-client-form-container">
             <div className="add-client-form-content">
               <h2 className="form-title">{initialData ? 'Actualizar Lote' : 'Agregar Lote'}</h2>
+              {errorMessage &&
+              <>
+              <span className="error-message">{errorMessage}</span>
+              <br />
+              <br />
+              </>
+              }
               <form onSubmit={handleSubmit}>
                 <div className="input-group">
                   <input
