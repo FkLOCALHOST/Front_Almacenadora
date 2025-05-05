@@ -32,6 +32,7 @@ const HomePage = () => {
   const [loteToEdit, setLoteToEdit] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [inventarioTotal, setInventarioTotal] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const allProductos = lotes.flatMap((l) => l.productos || []);
 
@@ -165,6 +166,15 @@ const HomePage = () => {
     window.location.reload();
   }
 
+  const filteredLotes = lotes.filter((lote) => {
+    const numero = lote.numeroLote?.toLowerCase() || '';
+    const producto = lote.producto?.toLowerCase() || '';
+    return (
+      numero.includes(searchTerm.toLowerCase()) ||
+    producto.includes(searchTerm.toLowerCase())
+    );
+  });
+
   const handleGenerateReport = async () => {
     try {
       const response = await generarPDFLotes();
@@ -230,6 +240,12 @@ const HomePage = () => {
         <div className="clients-header">
           <h1 className="clients-title">Lotes</h1>
           <div className="clients-header-buttons">
+          <input className="search-bar-store"
+            type="text"
+            placeholder="Buscar bodega"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            />
             {isAdmin && (
               <button className="add-client-button" onClick={handleAddLote}>
                 Agregar Lote
@@ -244,9 +260,7 @@ const HomePage = () => {
         <div className="clients-grid">
           {errorMessage ? (
             <p className="error-message">{errorMessage}</p>
-          ) : (
-            lotes
-              .map((lote) => (
+          ) : filteredLotes.map((lote) => (
                 <LoteCard
                   key={lote._id}
                   id={lote._id}
@@ -260,7 +274,7 @@ const HomePage = () => {
                   onEdit={() => handleEditLote(lote)}
                 />
               ))
-          )}
+          }
         </div>
 
         {showForm && isAdmin && (
