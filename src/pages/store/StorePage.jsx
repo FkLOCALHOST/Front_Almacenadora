@@ -163,7 +163,7 @@ const StorePage = () => {
         <div className="store-headers-buttons">
         <input className="search-bar-store"
             type="text"
-            placeholder="Buscar bodega o lote"
+            placeholder="Buscar bodega"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             />
