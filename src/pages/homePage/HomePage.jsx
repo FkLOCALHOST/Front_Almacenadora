@@ -5,7 +5,6 @@ import ConfirmDialog from "../../components/cliente/ConfirmDialog";
 import ProductoMasVendido from "../../components/stats/mostSold";
 import ProductoMenosVendido from "../../components/stats/leastSold";
 import InventarioTotal from "../../components/stats/inventarioT";
-import LotesPorVencer from "../../components/stats/lotesPorVencer";
 import LotesVencidos from "../../components/stats/lotesVencidos";
 import ProductChart from "../../components/graficas/ProductGrafic";
 import WorkerChart from "../../components/graficas/MejorRendimiento";
@@ -20,12 +19,9 @@ import {
   actualizarLote,
   crearLote,
   generarPDFLotes,
-
   listarPorCantidadVentas, // Endpoint para productos top de ventas
   // obtenerInventarioTotal,  // Endpoint para inventario total de dinero
-  // obtenerLotesPorVencer,   // Endpoint para lotes por vencer
 } from '../../services/api';
-import './HomePage.css';
 
 const HomePage = () => {
   const [lotes, setLotes] = useState([]);
@@ -36,7 +32,6 @@ const HomePage = () => {
   const [loteToEdit, setLoteToEdit] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [inventarioTotal, setInventarioTotal] = useState(0);
-  const [lotesPorVencer, setLotesPorVencer] = useState(0);
 
   const allProductos = lotes.flatMap((l) => l.productos || []);
 
@@ -73,33 +68,6 @@ const HomePage = () => {
     }
   }, []);
 
-  useEffect(() => {
-
-    const fetchData = async () => {
-      const productosResponse = await listarPorCantidadVentas();
-      if (!productosResponse.error) {
-        setProductosTop(productosResponse.data);
-      } else {
-        setErrorMessage("Error al cargar productos top.");
-      }
-
-      /*const inventarioResponse = await obtenerInventarioTotal();
-      if (!inventarioResponse.error) {
-        setInventarioTotal(inventarioResponse.data);
-      } else {
-        setErrorMessage("Error al cargar inventario total.");
-      }
-
-      const lotesVencerResponse = await obtenerLotesPorVencer();
-      if (!lotesVencerResponse.error) {
-        setLotesPorVencer(lotesVencerResponse.data);
-      } else {
-        setErrorMessage("Error al cargar lotes por vencer.");
-      }*/
-    };
-
-    fetchData();
-  }, []);
 
   useEffect(() => {
     const fetchLotes = async () => {
@@ -219,7 +187,6 @@ const HomePage = () => {
           }
         />
         <InventarioTotal inventarioTotal={inventarioTotal} />
-        <LotesPorVencer lotesPorVencer={lotesPorVencer} />
         <LotesVencidos lotes={lotes} />
       </div>
 
