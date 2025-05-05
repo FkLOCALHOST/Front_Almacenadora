@@ -19,20 +19,21 @@ import {
   actualizarLote,
   crearLote,
   generarPDFLotes,
-  //listarPorCantidadVentas, // Endpoint para productos top de ventas
-  // obtenerInventarioTotal,  // Endpoint para inventario total de dinero
-} from '../../services/api';
+  totalInventario, 
+} from "../../services/api";
 
 const HomePage = () => {
   const [lotes, setLotes] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [loteToDelete, setLoteToDelete] = useState(null);
   const [loteToEdit, setLoteToEdit] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [inventarioTotal, setInventarioTotal] = useState(0);
+  const [inventarioTotal, setInventarioTotal] = useState(0); // Estado para el precio total del inventario
   const [searchTerm, setSearchTerm] = useState('');
+
 
   const allProductos = lotes.flatMap((l) => l.productos || []);
 
@@ -40,37 +41,33 @@ const HomePage = () => {
     fechasConMasSalidas,
     fechaConMasSalidas,
     fechaConMenosSalidas,
-    errorMessage: bodegaErrorMessage,
     toggleOrder,
   } = useBodegas();
 
   const {
     productosOrdenados,
-    errorMessage: productosError,
     toggleOrder: toggleOrderProductos,
     ordenarPor,
   } = useProductos(allProductos);
 
   const {
     trabajadoresOrdenados,
-    errorMessage: trabajadoresError,
     toggleOrder: toggleOrderTrabajadores,
     ordenarPor: ordenarPorTrabajadores,
   } = useTrabajadores();
 
+  // Efecto para verificar si el usuario es administrador
   useEffect(() => {
     const trabajadorDetails = localStorage.getItem("Trabajador");
     if (trabajadorDetails) {
       const userDetails = JSON.parse(trabajadorDetails);
-      if (userDetails && userDetails.userDetails) {
-        const { role } = userDetails.userDetails;
-        setIsAdmin(role === "ADMIN_ROLE");
+      if (userDetails?.userDetails?.role === "ADMIN_ROLE") {
+        setIsAdmin(true);
       }
     }
   }, []);
 
-
-
+  // Efecto para obtener los lotes
   useEffect(() => {
     const fetchLotes = async () => {
       const response = await listarLote();
@@ -87,6 +84,24 @@ const HomePage = () => {
 
     fetchLotes();
   }, []);
+
+  // Efecto para obtener el precio total del inventario
+  useEffect(() => {
+    const fetchInventarioTotal = async () => {
+      try {
+        const response = await totalInventario(); // Hacemos la llamada a la API
+        if (!response.error && response.data) {
+          setInventarioTotal(response.data.precioTotal); // Asumimos que el precio total viene en response.data.precioTotal
+        } else {
+          console.error("Error al obtener el total del inventario");
+        }
+      } catch (error) {
+        console.error("Error en la solicitud:", error);
+      }
+    };
+
+    fetchInventarioTotal(); // Llamamos a la API al montar el componente
+  }, []); // Este useEffect se ejecuta solo una vez
 
   const handleAddLote = () => {
     setLoteToEdit(null);
@@ -110,23 +125,21 @@ const HomePage = () => {
         if (!response.error && response.data.success) {
           setLotes((prevLotes) =>
             prevLotes.map((lote) =>
-              lote._id === loteToEdit._id 
-                ? { ... lote, loteData} 
-                : lote
+              lote._id === loteToEdit._id ? { ...lote, ...loteData } : lote
             )
           );
           handleRefresh();
         } else {
-          setErrorMessage('Error al actualizar el lote.');
+          setErrorMessage("Error al actualizar el lote.");
         }
       } else {
         const response = await crearLote(loteData);
         if (!response.error) {
-          setlotes((prevLotes) => [...prevLotes, response.data]);
+          setLotes((prevLotes) => [...prevLotes, response.data]);
+          handleRefresh();
         } else {
-          setErrorMessage('Error al agregar el lote.');
+          setErrorMessage("Error al agregar el lote.");
         }
-        handleRefresh();
       }
     } catch (error) {
       setErrorMessage("Error al conectar con el servidor.");
@@ -164,7 +177,7 @@ const HomePage = () => {
 
   const handleRefresh = () => {
     window.location.reload();
-  }
+  };
 
   const filteredLotes = lotes.filter((lote) => {
     const numero = lote.numeroLote?.toLowerCase() || '';
@@ -193,6 +206,10 @@ const HomePage = () => {
       setErrorMessage("Error al conectar con el servidor.");
     }
   };
+
+  const lotesFiltrados = lotes.filter((lote) =>
+    lote.numeroLote?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
@@ -224,7 +241,7 @@ const HomePage = () => {
         <ProductChart productos={productosOrdenados} />
       </div>
       <div className="product-chart">
-          <BodegaChart bodegas={fechasConMasSalidas} />
+        <BodegaChart bodegas={fechasConMasSalidas} />
       </div>
 
       <div className="product-chart">
@@ -242,7 +259,7 @@ const HomePage = () => {
           <div className="clients-header-buttons">
           <input className="search-bar-store"
             type="text"
-            placeholder="Buscar bodega"
+            placeholder="Buscar lote"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -260,21 +277,22 @@ const HomePage = () => {
         <div className="clients-grid">
           {errorMessage ? (
             <p className="error-message">{errorMessage}</p>
-          ) : filteredLotes.map((lote) => (
-                <LoteCard
-                  key={lote._id}
-                  id={lote._id}
-                  numeroLote={lote.numeroLote}
-                  cantidad={lote.cantidad}
-                  fechaCaducidad={lote.fechaCaducidad}
-                  productos={lote.productos}
-                  estado={lote.estado}
-                  isAdmin={isAdmin}
-                  onDelete={handleDeleteLote}
-                  onEdit={() => handleEditLote(lote)}
-                />
-              ))
-          }
+          ) : (
+            lotesFiltrados.map((lote) => (
+              <LoteCard
+                key={lote._id}
+                id={lote._id}
+                numeroLote={lote.numeroLote}
+                cantidad={lote.cantidad}
+                fechaCaducidad={lote.fechaCaducidad}
+                productos={lote.productos}
+                estado={lote.estado}
+                isAdmin={isAdmin}
+                onDelete={handleDeleteLote}
+                onEdit={() => handleEditLote(lote)}
+              />
+            ))
+          )}
         </div>
 
         {showForm && isAdmin && (

@@ -1,5 +1,3 @@
-/* Existing styles for ProductPage... */
-
 .client-card {
   background-color: #0ea5e9; /* Fondo rojo para las tarjetas */
   border-radius: 8px;
@@ -140,4 +138,18 @@
 
 .report-button:hover {
   background-color: darkorange;
+}
+
+.search-bar-client {
+  max-width: 500px;
+  margin: 20px;
+  border: 2px solid #e0e0e0; 
+  border-radius: 5px; 
+  padding: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease
+}
+.search-bar-client::placeholder {
+  color: rgb(6, 0, 26); /* o usa un color personalizado como #800080 */
+  opacity: 1; /* para que se vea bien en todos los navegadores */
 }
