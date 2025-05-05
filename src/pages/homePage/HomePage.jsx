@@ -19,12 +19,11 @@ import {
   actualizarLote,
   crearLote,
   generarPDFLotes,
-  //listarPorCantidadVentas, // Endpoint para productos top de ventas
-  // obtenerInventarioTotal,  // Endpoint para inventario total de dinero
-} from '../../services/api';
+} from "../../services/api";
 
 const HomePage = () => {
   const [lotes, setLotes] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
@@ -39,20 +38,17 @@ const HomePage = () => {
     fechasConMasSalidas,
     fechaConMasSalidas,
     fechaConMenosSalidas,
-    errorMessage: bodegaErrorMessage,
     toggleOrder,
   } = useBodegas();
 
   const {
     productosOrdenados,
-    errorMessage: productosError,
     toggleOrder: toggleOrderProductos,
     ordenarPor,
   } = useProductos(allProductos);
 
   const {
     trabajadoresOrdenados,
-    errorMessage: trabajadoresError,
     toggleOrder: toggleOrderTrabajadores,
     ordenarPor: ordenarPorTrabajadores,
   } = useTrabajadores();
@@ -61,14 +57,11 @@ const HomePage = () => {
     const trabajadorDetails = localStorage.getItem("Trabajador");
     if (trabajadorDetails) {
       const userDetails = JSON.parse(trabajadorDetails);
-      if (userDetails && userDetails.userDetails) {
-        const { role } = userDetails.userDetails;
-        setIsAdmin(role === "ADMIN_ROLE");
+      if (userDetails?.userDetails?.role === "ADMIN_ROLE") {
+        setIsAdmin(true);
       }
     }
   }, []);
-
-
 
   useEffect(() => {
     const fetchLotes = async () => {
@@ -109,23 +102,21 @@ const HomePage = () => {
         if (!response.error && response.data.success) {
           setLotes((prevLotes) =>
             prevLotes.map((lote) =>
-              lote._id === loteToEdit._id 
-                ? { ... lote, loteData} 
-                : lote
+              lote._id === loteToEdit._id ? { ...lote, ...loteData } : lote
             )
           );
           handleRefresh();
         } else {
-          setErrorMessage('Error al actualizar el lote.');
+          setErrorMessage("Error al actualizar el lote.");
         }
       } else {
         const response = await crearLote(loteData);
         if (!response.error) {
-          setlotes((prevLotes) => [...prevLotes, response.data]);
+          setLotes((prevLotes) => [...prevLotes, response.data]);
+          handleRefresh();
         } else {
-          setErrorMessage('Error al agregar el lote.');
+          setErrorMessage("Error al agregar el lote.");
         }
-        handleRefresh();
       }
     } catch (error) {
       setErrorMessage("Error al conectar con el servidor.");
@@ -163,7 +154,7 @@ const HomePage = () => {
 
   const handleRefresh = () => {
     window.location.reload();
-  }
+  };
 
   const handleGenerateReport = async () => {
     try {
@@ -183,6 +174,10 @@ const HomePage = () => {
       setErrorMessage("Error al conectar con el servidor.");
     }
   };
+
+  const lotesFiltrados = lotes.filter((lote) =>
+    lote.numeroLote?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
@@ -214,7 +209,7 @@ const HomePage = () => {
         <ProductChart productos={productosOrdenados} />
       </div>
       <div className="product-chart">
-          <BodegaChart bodegas={fechasConMasSalidas} />
+        <BodegaChart bodegas={fechasConMasSalidas} />
       </div>
 
       <div className="product-chart">
@@ -230,6 +225,13 @@ const HomePage = () => {
         <div className="clients-header">
           <h1 className="clients-title">Lotes</h1>
           <div className="clients-header-buttons">
+            <input
+              className="search-bar-lote"
+              type="text"
+              placeholder="Buscar lote"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
             {isAdmin && (
               <button className="add-client-button" onClick={handleAddLote}>
                 Agregar Lote
@@ -245,21 +247,20 @@ const HomePage = () => {
           {errorMessage ? (
             <p className="error-message">{errorMessage}</p>
           ) : (
-            lotes
-              .map((lote) => (
-                <LoteCard
-                  key={lote._id}
-                  id={lote._id}
-                  numeroLote={lote.numeroLote}
-                  cantidad={lote.cantidad}
-                  fechaCaducidad={lote.fechaCaducidad}
-                  productos={lote.productos}
-                  estado={lote.estado}
-                  isAdmin={isAdmin}
-                  onDelete={handleDeleteLote}
-                  onEdit={() => handleEditLote(lote)}
-                />
-              ))
+            lotesFiltrados.map((lote) => (
+              <LoteCard
+                key={lote._id}
+                id={lote._id}
+                numeroLote={lote.numeroLote}
+                cantidad={lote.cantidad}
+                fechaCaducidad={lote.fechaCaducidad}
+                productos={lote.productos}
+                estado={lote.estado}
+                isAdmin={isAdmin}
+                onDelete={handleDeleteLote}
+                onEdit={() => handleEditLote(lote)}
+              />
+            ))
           )}
         </div>
 
