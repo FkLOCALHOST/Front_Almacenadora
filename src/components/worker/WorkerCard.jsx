@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const WorkerCard = ({tid, nombreT, fotoDePerfi, dpi, apellidoT, correoT, telefonoT, rendimientoT, role, fotoDePerfil, estadoT, isAdmin, onDelete, onEdit}) => {
+const WorkerCard = ({_id, nombreT, fotoDePerfil, dpi, apellidoT, correoT, telefonoT, rendimientoT, role, estadoT, isAdmin, onDelete, onEdit}) => {
   return (
     <div className={`worker-card ${estadoT ? '' : 'inactive'}`}>
-      <img src={fotoDePerfi} alt={`${nombreT} ${apellidoT}`} className="worker-image" />
+      <img src={fotoDePerfil} alt={`${nombreT} ${apellidoT}`} className="worker-image" />
       <div className="worker-details">
         <h3 className="worker-title">{`${nombreT} ${apellidoT}`}</h3>
         <p className="worker-description">Correo: {correoT}</p>
@@ -19,7 +19,7 @@ const WorkerCard = ({tid, nombreT, fotoDePerfi, dpi, apellidoT, correoT, telefon
             <button className="edit-worker-button" onClick={() => onEdit && onEdit()}>
               Editar
             </button>
-            <button className="delete-worker-button" onClick={() => onDelete(tid)}>
+            <button className="delete-worker-button" onClick={() => onDelete(_id)}>
               Eliminar
             </button>
           </div>
