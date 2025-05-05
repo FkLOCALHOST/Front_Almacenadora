@@ -1,0 +1,61 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    background-color: var(--card-background-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave */
+}
+  
+.navbar-left {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0; /* <-- evita que se expanda y cause centrado */
+}
+  
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+  
+.navbar-logo img {
+    height: 50px;
+    margin-right: 1rem;
+    object-fit: contain;
+    background-color: #f0f0f0; /* Optional fallback background */
+}
+  
+.navbar-links {
+    display: flex;
+    gap: 1rem;
+}
+  
+.navbar-links a {
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+    transition: color 0.3s ease; /* Transición suave */
+}
+  
+.navbar-links a:hover {
+    color: var(--button-hover-bg-color);
+}
+  
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+    transition: color 0.3s ease; /* Transición suave */
+}
+
+.navbar-logo img {
+    background-color: transparent; 
+    width: 25%; 
+    height: 25%; 
+  }
+  .navbar-logo {
+    background-color: transparent;
+  }

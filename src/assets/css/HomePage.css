@@ -1,0 +1,241 @@
+.lote-card {
+  background-color: #0ea5e9; /* Fondo rojo para las tarjetas */
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+[data-theme="dark"] .lote-card {
+  background-color: #059669; /* Fondo azul para las tarjetas en tema oscuro */
+}
+
+.lote-card:hover {
+  transform: scale(1.05);
+}
+
+.lotes-details {
+  margin-top: 1rem;
+}
+
+.lote-number {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.lote-cantidad,
+.lote-fechaCaducidad,
+.lote-producto {
+  margin: 0.5rem 0;
+}
+
+.inactive {
+  opacity: 0.5;
+}
+
+.lote-page-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.lote-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  height: 100vh;
+}
+
+.lotes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.lotes-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.add-lote-button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-lote-button:hover {
+  background-color: var(--primary-color-hover, #0056b3);
+}
+
+.lotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.lote-card-wrapper {
+  position: relative;
+}
+
+.delete-lote-button {
+  background-color: rgb(253, 25, 25);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-lote-button:hover {
+  background-color: rgb(172, 2, 2);
+}
+
+.edit-lote-button {
+  background-color: rgb(55, 55, 255);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 3%;
+}
+
+.edit-lote-button:hover {
+  background-color: darkblue;
+}
+
+.lote-card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.lotes-header-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.report-button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: orange;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.report-button:hover {
+  background-color: darkorange;
+}
+
+.stats-cards {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px;
+}
+
+.stat-card {
+  padding: 15px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  width: 30%;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+}
+
+.stat-card h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.stat-card p {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+lote-card {
+  background-color: #0ea5e9; /* Fondo azul para la tarjeta */
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+[data-theme="dark"] .lote-card {
+  background-color: #059669; /* Fondo verde en tema oscuro */
+}
+
+.lote-card:hover {
+  transform: scale(1.05);
+}
+
+
+.lotes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.lotes-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* Estilos para el contenedor de la gráfica */
+.product-chart {
+  background-color: none; /* La gráfica no debe tener fondo */
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: none; /* Sin sombra */
+  transition: none; /* Sin transiciones */
+}
+
+.product-chart .recharts-wrapper {
+  background-color: transparent !important; /* Asegura que no haya fondo en la gráfica */
+}
+
+/* Estilo para el botón de orden dentro de la gráfica */
+.toggle-order-button {
+  background-color: orange;  /* Color de fondo naranja */
+  color: white;               /* Color de texto blanco */
+  border: none;               /* Sin borde */
+  padding: 10px 20px;         /* Espaciado adecuado */
+  font-size: 16px;            /* Tamaño de la fuente */
+  cursor: pointer;           /* Cursor de puntero */
+  margin: 10px 0;             /* Espaciado alrededor del botón */
+  border-radius: 5px;         /* Bordes redondeados */
+  transition: background-color 0.3s ease; /* Transición suave */
+}
+
+.toggle-order-button:hover {
+  background-color: darkorange; /* Color al hacer hover */
+}
+
+.search-bar-lote {
+  max-width: 500px;
+  margin: 20px;
+  border: 2px solid #e0e0e0; 
+  border-radius: 5px; 
+  padding: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease
+}
+.search-bar-lote::placeholder {
+  color: rgb(6, 0, 26); /* o usa un color personalizado como #800080 */
+  opacity: 1; /* para que se vea bien en todos los navegadores */
+}

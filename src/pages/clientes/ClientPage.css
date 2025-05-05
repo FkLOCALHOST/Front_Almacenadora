@@ -1,0 +1,155 @@
+.client-card {
+  background-color: #0ea5e9; /* Fondo rojo para las tarjetas */
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+[data-theme="dark"] .client-card {
+  background-color: #059669; /* Fondo azul para las tarjetas en tema oscuro */
+}
+
+.client-card:hover {
+  transform: scale(1.05);
+}
+
+.client-details {
+  margin-top: 1rem;
+}
+
+.client-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.client-email,
+.client-phone {
+  margin: 0.5rem 0;
+}
+
+.inactive {
+  opacity: 0.5;
+}
+
+.client-page-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.client-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  height: 100vh;
+}
+
+.clients-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.clients-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.add-client-button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-client-button:hover {
+  background-color: var(--primary-color-hover, #0056b3);
+}
+
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.client-card-wrapper {
+  position: relative;
+}
+
+.delete-client-button {
+  background-color: rgb(253, 25, 25);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-client-button:hover {
+  background-color: rgb(172, 2, 2);
+}
+
+.edit-client-button {
+  background-color: rgb(55, 55, 255);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 3%;
+}
+
+.edit-client-button:hover {
+  background-color: darkblue;
+}
+
+.client-card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.clients-header-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.report-button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: orange;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.report-button:hover {
+  background-color: darkorange;
+}
+
+.search-bar-client {
+  max-width: 500px;
+  margin: 20px;
+  border: 2px solid #e0e0e0; 
+  border-radius: 5px; 
+  padding: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease
+}
+.search-bar-client::placeholder {
+  color: rgb(6, 0, 26); /* o usa un color personalizado como #800080 */
+  opacity: 1; /* para que se vea bien en todos los navegadores */
+}

@@ -1,0 +1,180 @@
+.store-card {
+  background-color: #0EA5E9; 
+   border-radius: 8px;
+   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+   padding: 1rem;
+   transition: transform 0.3s ease, background-color 0.3s ease;
+ }
+ 
+ [data-theme='dark'] .store-card {
+   background-color: #059669; 
+ }
+ 
+ .store-card:hover {
+   transform: scale(1.05);
+ }
+ 
+ .store-details {
+   margin-top: 1rem;
+ }
+ 
+ .store-title {
+   font-size: 1.2rem;
+   font-weight: bold;
+ }
+ 
+ .store-entryDate,
+ .store-departureDate,
+ .store-lote,
+ .store-worker {
+   margin: 0.5rem 0;
+ }
+ 
+ .inactive {
+   opacity: 0.5;
+ }
+ 
+ .store-page-container {
+   padding: 2rem;
+   display: flex;
+   flex-direction: column;
+   height: 100%;
+   height: 100vh; 
+   box-sizing: border-box;
+ }
+ 
+ .store-container {
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+   height: 100%;
+   height: 100vh; 
+ }
+ 
+ .store-header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 1rem;
+ }
+ 
+ .store-title {
+   font-size: 2rem;
+   font-weight: bold;
+ }
+ 
+ .add-store-button {
+   padding: 0.5rem 1rem;
+   font-size: 1rem;
+   background-color: var(--primary-color, #007bff);
+   color: white;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   transition: background-color 0.3s ease;
+   margin-right: 10px;
+ }
+ 
+ .add-store-button:hover {
+   background-color: var(--primary-color-hover, #0056b3);
+ }
+ 
+ .store-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+   gap: 1rem;
+ }
+ 
+ .store-card-wrapper {
+   position: relative;
+ }
+ 
+ .delete-store-button {
+ background-color: rgb(253, 25, 25);
+ color: white;
+ border: none;
+ padding: 0.5rem 1rem;
+ border-radius: 4px;
+ cursor: pointer;
+ transition: background-color 0.3s ease;
+ }
+ 
+ .delete-store-button:hover {
+ background-color: rgb(172, 2, 2);
+ }
+ 
+ .edit-store-button {
+ background-color: rgb(55, 55, 255);
+ color: white;
+ border: none;
+ padding: 0.5rem 1rem;
+ border-radius: 4px;
+ cursor: pointer;
+ transition: background-color 0.3s ease;
+ margin-right: 3%
+ }
+ 
+ .edit-store-button:hover {
+ background-color: darkblue;
+ }
+ 
+ .store-card-actions {
+ display: flex;
+ gap: 0.5rem;
+ }
+ 
+ .store-header-buttons {
+ display: flex;
+ gap: 1rem;
+ }
+ 
+ .report-button {
+ padding: 0.5rem 1rem;
+ font-size: 1rem;
+ background-color: orange;
+ color: white;
+ border: none;
+ border-radius: 4px;
+ cursor: pointer;
+ transition: background-color 0.3s ease;
+ }
+ 
+ .report-button:hover {
+ background-color: darkorange;
+ }
+
+ .search-bar-store {
+  max-width: 500px;
+  margin: 20px;
+  border: 2px solid #e0e0e0; 
+  border-radius: 5px; 
+  padding: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease
+}
+
+.search-bar-store:focus-within {
+  border-color: #0062ff;
+  box-shadow: 0 2px 12px rgba(66, 133, 244, 0.2);
+}
+
+
+.error-message {
+  color: #d9534f;  
+  background-color: #f2dede;
+  border: 1px solid #ebccd1;
+  padding: 8px 12px;
+  margin: 10px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 100%;
+  word-wrap: break-word;
+  white-space: normal;
+  box-sizing: border-box;
+}
+
+.search-bar-store::placeholder {
+  color: rgb(6, 0, 26); /* o usa un color personalizado como #800080 */
+  opacity: 1; /* para que se vea bien en todos los navegadores */
+}
