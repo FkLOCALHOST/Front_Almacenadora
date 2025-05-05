@@ -52,7 +52,7 @@ const WorkerPage = () => {
     fetchWorkers();
   }, []);
 
-  const handleDeleteWorker = (tid) => {
+  const handleDeleteWorker = (_id) => {
     const trabajadorDetails = localStorage.getItem("Trabajador");
     if (trabajadorDetails) {
       const userDetails = JSON.parse(trabajadorDetails);
@@ -61,12 +61,12 @@ const WorkerPage = () => {
         setIsAdmin(role === "ADMIN_ROLE");
       }
     }
-    const worker = workers.find((w) => w.tid === tid);
+    const worker = workers.find((w) => w._id === _id);
     if (worker && worker.role === "ADMIN_ROLE") {
       toast.error("No se puede eliminar un trabajador con rol ADMIN.");
       return;
     }
-    setWorkerToDelete(tid);
+    setWorkerToDelete(_id);
     setShowConfirmDialog(true);
   };
 
@@ -75,7 +75,7 @@ const WorkerPage = () => {
       const response = await eliminarEmpleado(workerToDelete);
       if (!response.error) {
         setWorkers((prevWorkers) =>
-          prevWorkers.filter((worker) => worker.tid !== workerToDelete)
+          prevWorkers.filter((worker) => worker._id !== workerToDelete)
         );
       } else {
         setErrorMessage("Error al eliminar el trabajador.");
@@ -131,11 +131,11 @@ const WorkerPage = () => {
           toast.error("No tienes permisos para cambiar el rol de un ADMIN.");
           return;
         }
-        const response = await actualizarEmpleado(workerToEdit.tid, workerData);
+        const response = await actualizarEmpleado(workerToEdit._id, workerData);
         if (!response.error) {
           setWorkers((prevWorkers) =>
             prevWorkers.map((worker) =>
-              worker.tid === workerToEdit.tid
+              worker._id === workerToEdit._id
                 ? { ...worker, ...workerData }
                 : worker
             )
@@ -190,8 +190,8 @@ const WorkerPage = () => {
         ) : (
           filteredWorkers.map((worker) => (
             <WorkerCard
-              key={worker.tid || worker.dpi}
-              tid={worker.tid}
+              key={worker._id || worker.dpi}
+              _id={worker._id}
               nombreT={worker.nombreT}
               dpi={worker.dpi}
               apellidoT={worker.apellidoT}

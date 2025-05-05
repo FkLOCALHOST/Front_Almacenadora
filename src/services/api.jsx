@@ -7,6 +7,7 @@ const apiAlmacenadora = axios.create({
 
 apiAlmacenadora.interceptors.request.use(
   (config) => {
+    // Excluir login y registro
     if (
       !config.url.includes("/auth/login") &&
       !config.url.includes("/auth/register")
@@ -14,22 +15,42 @@ apiAlmacenadora.interceptors.request.use(
       const trabajadorDetails = localStorage.getItem("Trabajador");
 
       if (trabajadorDetails) {
-        // Accede al token dentro de userDetails
         const token = JSON.parse(trabajadorDetails).userDetails.token;
+
         if (token) {
+          // Verificamos si está expirado
+          const [, payloadBase64] = token.split(".");
+          if (payloadBase64) {
+            try {
+              const payload = JSON.parse(atob(payloadBase64));
+              const now = Math.floor(Date.now() / 1000);
+              if (payload.exp < now) {
+                localStorage.clear();
+                window.location.href = "/auth/login"; 
+                return Promise.reject(new Error("Token expirado"));
+              }
+            } catch (e) {
+              localStorage.clear();
+              window.location.href = "/login";
+              return Promise.reject(new Error("Token inválido"));
+            }
+          }
+
           config.headers["Authorization"] = `Bearer ${token}`;
         } else {
-          console.error("No token found in localStorage");
+          console.error("No token found");
         }
       } else {
-        console.error("No trabajadorDetails found in localStorage");
+        console.error("No trabajadorDetails found");
+        window.location.href = "/auth/login"; 
+        return Promise.reject(new Error("No autorizado"));
       }
     }
+
     return config;
   },
   (error) => Promise.reject(error)
 );
-
 export const register = async (data) => {
   try {
     return await apiAlmacenadora.post("/auth/register", data);
@@ -57,7 +78,6 @@ export const login = async (data) => {
 export const agregarClientes = async (data) => {
   try {
     return await apiAlmacenadora.post("/clientes/agregarClientes", data);
-
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -89,7 +109,10 @@ export const eliminarClientes = async (id) => {
 
 export const actualizarClientes = async (id, data) => {
   try {
-    return await apiAlmacenadora.put(`/clientes/actualizarClientes/${id}`, data);
+    return await apiAlmacenadora.put(
+      `/clientes/actualizarClientes/${id}`,
+      data
+    );
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -112,7 +135,9 @@ export const agregarProveedor = async (data) => {
   } catch (error) {
     return {
       error: true,
-      message: error.response?.data?.errors?.map(err => err.msg) || [error.message || "Error desconocido"],
+      message: error.response?.data?.errors?.map((err) => err.msg) || [
+        error.message || "Error desconocido",
+      ],
     };
   }
 };
@@ -123,7 +148,9 @@ export const actualizarProveedor = async (id, data) => {
   } catch (error) {
     return {
       error: true,
-      message: error.response?.data?.errors?.map(err => err.msg) || [error.message || "Error desconocido"],
+      message: error.response?.data?.errors?.map((err) => err.msg) || [
+        error.message || "Error desconocido",
+      ],
     };
   }
 };
@@ -163,7 +190,7 @@ export const buscarProveedor = async (id) => {
 export const generarPDFProveedores = async () => {
   try {
     const response = await apiAlmacenadora.get("proveedor/generarReporte", {
-      responseType: "blob", 
+      responseType: "blob",
     });
     return response;
   } catch (error) {
@@ -173,7 +200,9 @@ export const generarPDFProveedores = async () => {
 
 export const obtenerTrabajadores = async () => {
   try {
-    const response = await apiAlmacenadora.get("/trabajador/obtenerTrabajadores");
+    const response = await apiAlmacenadora.get(
+      "/trabajador/obtenerTrabajadores"
+    );
     return response; // Ensure response.data contains the worker list
   } catch (error) {
     if (error.response && error.response.status === 404) {
@@ -195,11 +224,14 @@ export const generarPDFTrabajadores = async () => {
   } catch (error) {
     return { error: true, message: error.message };
   }
-}
+};
 
 export const actualizarEmpleado = async (tid, data) => {
   try {
-    return await apiAlmacenadora.put(`/trabajador/actualizarEmpleado/${tid}`, data);
+    return await apiAlmacenadora.put(
+      `/trabajador/actualizarEmpleado/${tid}`,
+      data
+    );
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -212,7 +244,6 @@ export const eliminarEmpleado = async (tid) => {
     return { error: true, message: error.message };
   }
 };
-
 
 export const agregarProducto = async (data) => {
   try {
@@ -248,7 +279,7 @@ export const generarPDFProductos = async () => {
   } catch (error) {
     return { error: true, message: error.message };
   }
-}
+};
 
 export const listarPorCantidadVentas = async () => {
   try {
@@ -256,8 +287,7 @@ export const listarPorCantidadVentas = async () => {
   } catch (error) {
     return { error: true, message: error.message };
   }
-}
-  
+};
 
 export const actualizarProducto = async (idProducto, data) => {
   try {
@@ -294,15 +324,17 @@ export const obtenerBodegas = async () => {
 export const crearLote = async (data) => {
   try {
     return await apiAlmacenadora.post("/lote/crearLote", data);
-
   } catch (error) {
     return { error: true, message: error.message };
   }
 };
-    
- export const actualizarBodega = async (idBodega, data) => {
+
+export const actualizarBodega = async (idBodega, data) => {
   try {
-    return await apiAlmacenadora.put(`/bodega/actualizarBodega/${idBodega}`, data);
+    return await apiAlmacenadora.put(
+      `/bodega/actualizarBodega/${idBodega}`,
+      data
+    );
   } catch (error) {
     return { error: true, message: error.message };
   }
@@ -315,7 +347,7 @@ export const buscarLote = async (idLote) => {
     return { error: true, message: error.message };
   }
 };
-    
+
 export const eliminarBodega = async (idBodega) => {
   try {
     return await apiAlmacenadora.delete(`/bodega/eliminarBodega/${idBodega}`);
@@ -350,7 +382,7 @@ export const eliminarLote = async (idLote) => {
     return { error: true, message: error.message };
   }
 };
-    
+
 export const listarLotes = async () => {
   try {
     return await apiAlmacenadora.get("/lote/");
@@ -374,7 +406,7 @@ export const actualizarLote = async (idLote, data) => {
     return { error: true, message: error.message };
   }
 };
-    
+
 export const listarTrabajadores = async () => {
   try {
     return await apiAlmacenadora.get("/trabajador/obtenerTrabajadores");
@@ -410,6 +442,15 @@ export const generarPDFCantidadTotalProductos = async () => {
     const response = await apiAlmacenadora.get("lote/CantidadTotalProductos", {
       responseType: "blob", // Ensure the response is treated as a file
     });
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const totalInventario = async () => {
+  try {
+    const response = await apiAlmacenadora.get("lote/sumarPrecioTotalLotes");
     return response;
   } catch (error) {
     return { error: true, message: error.message };

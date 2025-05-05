@@ -85,9 +85,9 @@ const AddWorkerForm = ({
     if (!isFormValid()) return;
     try {
       let response;
-      if (initialData && initialData.tid) {
+      if (initialData && initialData._id) {
         // Editar trabajador existente
-        response = await actualizarEmpleado(initialData.tid, formData);
+        response = await actualizarEmpleado(initialData._id, formData);
       } else {
         // Registrar nuevo trabajador
         response = await register(formData);
